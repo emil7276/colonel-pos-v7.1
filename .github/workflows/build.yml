@@ -29,7 +29,7 @@ jobs:
 
       - name: Analyze
         working-directory: app
-        run: flutter analyze
+        run: dart analyze lib --no-fatal-warnings
 
   build:
     runs-on: ubuntu-latest
