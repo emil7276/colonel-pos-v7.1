@@ -31,10 +31,12 @@ class PosPageState extends State<PosPage> {
   int discount = 0;
   String customerType = 'Retail';
   final TextEditingController customerNameController = TextEditingController();
+  final TextEditingController customerPhoneController = TextEditingController();
 
   @override
   void dispose() {
     customerNameController.dispose();
+    customerPhoneController.dispose();
     super.dispose();
   }
 
@@ -390,6 +392,7 @@ class PosPageState extends State<PosPage> {
       final id = await DB.createSale(
         cashier: widget.cashier,
         customerName: customerNameController.text,
+        customerPhone: customerPhoneController.text,
         customerType: customerType,
         items: cart,
         subtotal: subtotal,
@@ -438,6 +441,7 @@ class PosPageState extends State<PosPage> {
         cart.clear();
         discount = 0;
         customerNameController.clear();
+        customerPhoneController.clear();
         customerType = 'Retail';
       });
 
