@@ -19,6 +19,10 @@ jobs:
       - name: Generate Android platform files
         working-directory: app
         run: flutter create --platforms android .
+
+      - name: Remove generated default test
+        working-directory: app
+        run: rm -f test/widget_test.dart
       - name: Flutter pub get
         working-directory: app
         run: flutter pub get
@@ -43,6 +47,10 @@ jobs:
       - name: Generate Android platform files
         working-directory: app
         run: flutter create --platforms android .
+
+      - name: Remove generated default test
+        working-directory: app
+        run: rm -f test/widget_test.dart
       - name: Flutter pub get
         working-directory: app
         run: flutter pub get
