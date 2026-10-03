@@ -31,11 +31,14 @@ class PosPageState extends State<PosPage> {
   String customerType = 'Retail';
   final TextEditingController customerNameController = TextEditingController();
   final TextEditingController customerPhoneController = TextEditingController();
+  final TextEditingController searchController = TextEditingController();
+  String searchQuery = '';
 
   @override
   void dispose() {
     customerNameController.dispose();
     customerPhoneController.dispose();
+    searchController.dispose();
     super.dispose();
   }
 
@@ -599,9 +602,14 @@ class PosPageState extends State<PosPage> {
 
   @override
   Widget build(BuildContext context) {
-    final filtered = category == 'Semua'
-        ? products
-        : products.where((p) => p.category == category).toList();
+    final filtered = products.where((p) {
+      final categoryMatch =
+          category == 'Semua' || p.category == category;
+      final query = searchQuery.trim().toLowerCase();
+      final searchMatch = query.isEmpty ||
+          p.name.toLowerCase().contains(query);
+      return categoryMatch && searchMatch;
+    }).toList();
 
     return LayoutBuilder(
       builder: (context, c) {
@@ -614,10 +622,33 @@ class PosPageState extends State<PosPage> {
               padding: const EdgeInsets.fromLTRB(4, 2, 4, 7),
               child: Row(
                 children: [
-                  const Expanded(
-                    child: Text(
-                      'Transaksi',
-                      style: TextStyle(fontSize: 19, fontWeight: FontWeight.w900),
+                  Expanded(
+                    child: TextField(
+                      controller: searchController,
+                      onChanged: (value) {
+                        setState(() => searchQuery = value);
+                      },
+                      decoration: InputDecoration(
+                        hintText: 'Cari menu...',
+                        prefixIcon: const Icon(Icons.search),
+                        suffixIcon: searchQuery.isEmpty
+                            ? null
+                            : IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  searchController.clear();
+                                  setState(() => searchQuery = '');
+                                },
+                              ),
+                        isDense: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 12,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
                     ),
                   ),
                   Text(
@@ -689,7 +720,7 @@ class PosPageState extends State<PosPage> {
                   crossAxisCount: columns,
                   crossAxisSpacing: 8,
                   mainAxisSpacing: 8,
-                  childAspectRatio: tablet ? 1.72 : 1.48,
+                  childAspectRatio: tablet ? 2.05 : 1.75,
                 ),
                 itemCount: filtered.length,
                 itemBuilder: (_, i) {
