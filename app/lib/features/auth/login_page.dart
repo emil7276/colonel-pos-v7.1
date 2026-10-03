@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants.dart';
-import '../../core/utils.dart';
 import '../../core/widgets.dart';
 import '../../data/database.dart';
 import '../home/home_page.dart';

@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../core/constants.dart';
-import '../../core/utils.dart';
-import '../../core/widgets.dart';
-import '../../data/database.dart';
-import '../../models/models.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'dart:io';

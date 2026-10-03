@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants.dart';
 import '../../core/utils.dart';
-import '../../core/widgets.dart';
 import '../../data/database.dart';
 import '../../models/models.dart';
 import '../../services/receipt_service.dart';
