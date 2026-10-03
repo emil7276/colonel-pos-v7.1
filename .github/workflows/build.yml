@@ -1,14 +1,11 @@
-name: CP Colonel POS 6.5 MERAH
+name: CP POS V7.1
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main, cp65-skin-sound]
 
 jobs:
-  build:
+  analyze:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -16,47 +13,41 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.44.0'
+          flutter-version: '3.29.2'
           channel: stable
-          cache: true
 
-      - name: Generate Android platform files
-        working-directory: app
-        run: flutter create --platforms android .
-
-      - name: Set Android compile SDK 36
-        working-directory: app
-        shell: bash
-        run: |
-          if [ -f android/app/build.gradle.kts ]; then
-            sed -i 's/compileSdk = flutter.compileSdkVersion/compileSdk = 36/g' android/app/build.gradle.kts
-          fi
-          if [ -f android/app/build.gradle ]; then
-            sed -i 's/compileSdkVersion flutter.compileSdkVersion/compileSdkVersion 36/g' android/app/build.gradle
-            sed -i 's/compileSdk flutter.compileSdkVersion/compileSdk 36/g' android/app/build.gradle
-          fi
-
-      - name: Set Android app label
-        working-directory: app
-        run: sed -i 's/android:label="[^"]*"/android:label="CP Colonel POS MERAH"/' android/app/src/main/AndroidManifest.xml
-
-      - name: Get dependencies
+      - name: Flutter pub get
         working-directory: app
         run: flutter pub get
 
-      - name: Generate launcher icon
-        working-directory: app
-        run: dart run flutter_launcher_icons
-
       - name: Analyze
         working-directory: app
-        run: dart analyze lib --no-fatal-warnings
+        run: flutter analyze
+
+  build:
+    runs-on: ubuntu-latest
+    needs: analyze
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.2'
+          channel: stable
+
+      - name: Flutter pub get
+        working-directory: app
+        run: flutter pub get
 
       - name: Build APK
         working-directory: app
-        run: |
-          flutter build apk --release
-          mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/cp_pos_v.7.1.apk
+        run: flutter build apk --release
+
+      - name: Rename APK
+        working-directory: app
+        run: mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/cp_pos_v.7.1.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
