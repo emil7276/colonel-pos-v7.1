@@ -415,7 +415,7 @@ class PosPageState extends State<PosPage> {
     }
 
     await DB.createSale(
-      cashier: cashierName,
+      cashier: widget.cashier,
       customerName: customerNameController.text,
       customerPhone: customerPhoneController.text,
       customerType: customerType,
