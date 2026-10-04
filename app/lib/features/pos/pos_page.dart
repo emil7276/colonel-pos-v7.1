@@ -972,8 +972,8 @@ class PosPageState extends State<PosPage> {
                             x,
                             style: TextStyle(
                               color: selected ? red : Colors.black,
-                              fontWeight: FontWeight.w900,
-                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
                               decoration: selected
                                   ? TextDecoration.underline
                                   : TextDecoration.none,
