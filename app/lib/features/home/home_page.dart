@@ -405,23 +405,9 @@ String _trialLabel() {
             selectedIcon: Icon(Icons.dashboard_rounded),
             label: 'Dashboard',
           ),
-          NavigationDestination(
-            icon: Opacity(
-              opacity: 0.70,
-              child: Image.asset(
-                'assets/images/cp_pos_transaction.png',
-                width: 28,
-                height: 28,
-              ),
-            ),
-            selectedIcon: Opacity(
-              opacity: 0.70,
-              child: Image.asset(
-                'assets/images/cp_pos_transaction.png',
-                width: 28,
-                height: 28,
-              ),
-            ),
+          const NavigationDestination(
+            icon: Icon(Icons.shopping_cart_outlined),
+            selectedIcon: Icon(Icons.shopping_cart),
             label: 'Transaksi',
           ),
           const NavigationDestination(
