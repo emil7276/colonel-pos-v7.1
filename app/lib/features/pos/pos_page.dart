@@ -1009,7 +1009,7 @@ class PosPageState extends State<PosPage> {
                                     ? Icons.local_drink_rounded
                                     : p.category == 'Paket'
                                         ? Icons.inventory_2_rounded
-                                        : Icons.restaurant_rounded,
+                                        : Icons.category_rounded,
                                 size: 19,
                                 color: goldDeep,
                               ),
