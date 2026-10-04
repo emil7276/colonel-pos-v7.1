@@ -1,4 +1,4 @@
-name: CP POS V7.1
+name: Colonel POS V7.2
 
 on:
   workflow_dispatch:
@@ -23,6 +23,7 @@ jobs:
       - name: Remove generated default test
         working-directory: app
         run: rm -f test/widget_test.dart
+
       - name: Flutter pub get
         working-directory: app
         run: flutter pub get
@@ -51,6 +52,7 @@ jobs:
       - name: Remove generated default test
         working-directory: app
         run: rm -f test/widget_test.dart
+
       - name: Flutter pub get
         working-directory: app
         run: flutter pub get
@@ -61,7 +63,7 @@ jobs:
 
       - name: Set Android app label
         working-directory: app
-        run: sed -i 's/android:label="[^"]*"/android:label="CP POS v7.1"/' android/app/src/main/AndroidManifest.xml
+        run: sed -i 's/android:label="[^"]*"/android:label="Colonel POS v7.2"/' android/app/src/main/AndroidManifest.xml
 
       - name: Build APK
         working-directory: app
@@ -69,11 +71,11 @@ jobs:
 
       - name: Rename APK
         working-directory: app
-        run: mv "build/app/outputs/flutter-apk/app-release.apk" "build/app/outputs/flutter-apk/CP POS v7.1.apk"
+        run: mv "build/app/outputs/flutter-apk/app-release.apk" "build/app/outputs/flutter-apk/colonel-pos-v7.2.apk"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: CP POS v7.1
-          path: 'app/build/app/outputs/flutter-apk/CP POS v7.1.apk'
+          name: colonel-pos-v7.2
+          path: 'app/build/app/outputs/flutter-apk/colonel-pos-v7.2.apk'
           if-no-files-found: error
