@@ -114,6 +114,9 @@ class PosPageState extends State<PosPage> {
       (subtotal - discount)
           .clamp(0, 1 << 31);
 
+  int get totalItems =>
+      cart.fold(0, (sum, line) => sum + line.qty);
+
   void add(Product p) {
     final found = cart.where(
       (x) => x.product.id == p.id,
@@ -1047,6 +1050,51 @@ class PosPageState extends State<PosPage> {
                                 height: 1.0,
                               ),
                             ),
+                            Builder(
+                              builder: (_) {
+                                final currentQty = cart
+                                    .where((x) => x.product.id == p.id)
+                                    .fold<int>(0, (sum, x) => sum + x.qty);
+
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    IconButton(
+                                      onPressed: currentQty > 0
+                                          ? () {
+                                              final found = cart.firstWhere(
+                                                (x) => x.product.id == p.id,
+                                              );
+                                              minus(found);
+                                            }
+                                          : null,
+                                      icon: const Icon(
+                                        Icons.remove_circle,
+                                        color: Colors.red,
+                                        size: 24,
+                                      ),
+                                      visualDensity: VisualDensity.compact,
+                                    ),
+                                    Text(
+                                      '$currentQty',
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () => add(p),
+                                      icon: const Icon(
+                                        Icons.add_circle,
+                                        color: Colors.green,
+                                        size: 24,
+                                      ),
+                                      visualDensity: VisualDensity.compact,
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
                             Text(
                               'Stok ${p.stock}',
                               style: TextStyle(
@@ -1127,7 +1175,7 @@ class PosPageState extends State<PosPage> {
                           ),
                           const Spacer(),
                           Text(
-                            '${cart.length} produk',
+                            '$totalItems item',
                             style: const TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 12,
