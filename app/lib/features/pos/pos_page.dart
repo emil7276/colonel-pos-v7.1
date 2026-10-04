@@ -1176,7 +1176,7 @@ class PosPageState extends State<PosPage> {
                                       visualDensity: VisualDensity.compact,
                                     ),
                                   ],
-                                );
+                                ),
                               },
                             ),                          ],
                         ),
