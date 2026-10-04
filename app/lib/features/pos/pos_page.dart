@@ -1022,7 +1022,7 @@ class PosPageState extends State<PosPage> {
                               child: Padding(
                                 padding: const EdgeInsets.all(4),
                                 child: Image.asset(
-                                  'assets/images/cp_pos_transaction.png',
+                                  'assets/images/CP_POS_icon_256.png',
                                   fit: BoxFit.contain,
                                 ),
                               ),
