@@ -96,9 +96,9 @@ class _DashboardPageState extends State<DashboardPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Selamat datang, ${widget.username}', style: const TextStyle(color: Colors.white, fontSize: 19, fontWeight: FontWeight.w900)),
+                      const Text('AKTIVASI LISENSI', style: const TextStyle(color: Colors.white, fontSize: 19, fontWeight: FontWeight.w900)),
                       const SizedBox(height: 4),
-                      const Text('Ringkasan penjualan hari ini', style: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.w600)),
+                      const Text('Berlangganan Sekarang', style: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.w600)),
                     ],
                   ),
                 ),
