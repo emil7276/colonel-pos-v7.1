@@ -1116,12 +1116,25 @@ class PosPageState extends State<PosPage> {
                     CheckboxListTile(
                       contentPadding: EdgeInsets.zero,
                       dense: true,
-                      title: const Text(
-                        'Simpan pelanggan',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 12,
-                        ),
+                      title: Row(
+                        children: [
+                          const Text(
+                            'Simpan pelanggan',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 12,
+                            ),
+                          ),
+                          const Spacer(),
+                          Text(
+                            '${cart.length} produk',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 12,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ],
                       ),
                       value: saveCustomer,
                       controlAffinity: ListTileControlAffinity.leading,
@@ -1204,7 +1217,52 @@ class PosPageState extends State<PosPage> {
                                   onPressed: () => minus(line),
                                   icon: const Icon(Icons.remove_circle_outline, size: 21),
                                 ),
-                                Text('${line.qty}', style: const TextStyle(fontWeight: FontWeight.w800)),
+                                GestureDetector(
+                                  onTap: () async {
+                                    final c = TextEditingController(
+                                      text: line.qty.toString(),
+                                    );
+
+                                    final qty = await showDialog<int>(
+                                      context: context,
+                                      builder: (_) => AlertDialog(
+                                        title: const Text('Jumlah'),
+                                        content: TextField(
+                                          controller: c,
+                                          keyboardType: TextInputType.number,
+                                          autofocus: true,
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            child: const Text('Batal'),
+                                          ),
+                                          FilledButton(
+                                            onPressed: () => Navigator.pop(
+                                              context,
+                                              int.tryParse(c.text),
+                                            ),
+                                            child: const Text('OK'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+
+                                    if (qty != null && qty > 0) {
+                                      setState(() {
+                                        line.qty = qty;
+                                      });
+                                    }
+                                  },
+                                  child: Text(
+                                    '${line.qty}',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
                                 IconButton(
                                   visualDensity: VisualDensity.compact,
                                   padding: EdgeInsets.zero,
