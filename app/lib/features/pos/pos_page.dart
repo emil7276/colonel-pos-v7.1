@@ -1013,16 +1013,16 @@ class PosPageState extends State<PosPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              width: 34,
-                              height: 34,
+                              width: 28,
+                              height: 28,
                               decoration: BoxDecoration(
                                 color: goldSoft,
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.all(4),
+                                padding: const EdgeInsets.all(2),
                                 child: Image.asset(
-                                  'assets/images/cart_icon.png',
+                                  'assets/images/cart_icon.jpg',
                                   fit: BoxFit.contain,
                                 ),
                               ),
@@ -1129,7 +1129,7 @@ class PosPageState extends State<PosPage> {
                     ),
                     const SizedBox(height: 2),
                     SizedBox(
-                      height: 34,
+                      height: 28,
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
                         itemCount: 3,

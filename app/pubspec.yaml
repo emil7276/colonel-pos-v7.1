@@ -38,6 +38,7 @@ flutter:
     - assets/images/cp_logo.png
     - assets/images/cp_pos_transaction.png
     - assets/images/cart_icon.png
+    - assets/images/cart_icon.jpg
 
 flutter_launcher_icons:
   android: true
