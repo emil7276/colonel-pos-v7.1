@@ -36,6 +36,7 @@ flutter:
   assets:
     - assets/audio/
     - assets/images/cp_logo.png
+    - assets/images/cp_pos_transaction.png
 
 flutter_launcher_icons:
   android: true

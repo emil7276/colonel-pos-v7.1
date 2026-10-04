@@ -400,27 +400,35 @@ String _trialLabel() {
         selectedIndex: index,
         onDestinationSelected: selectPage,
         destinations: [
-          const NavigationDestination(icon: Icon(Icons.dashboard_outlined), selectedIcon: Icon(Icons.dashboard_rounded), label: 'Dashboard'),
+          const NavigationDestination(
+            icon: Icon(Icons.dashboard_outlined),
+            selectedIcon: Icon(Icons.dashboard_rounded),
+            label: 'Dashboard',
+          ),
           NavigationDestination(
             icon: Opacity(
-              opacity: 0.15,
+              opacity: 0.70,
               child: Image.asset(
-                'assets/images/cp_logo.png',
+                'assets/images/cp_pos_transaction.png',
                 width: 28,
                 height: 28,
               ),
             ),
             selectedIcon: Opacity(
-              opacity: 0.15,
+              opacity: 0.70,
               child: Image.asset(
-                'assets/images/cp_logo.png',
+                'assets/images/cp_pos_transaction.png',
                 width: 28,
                 height: 28,
               ),
             ),
             label: 'Transaksi',
           ),
-          const NavigationDestination(icon: Icon(Icons.analytics_outlined), selectedIcon: Icon(Icons.analytics_rounded), label: 'Laporan'),
+          const NavigationDestination(
+            icon: Icon(Icons.analytics_outlined),
+            selectedIcon: Icon(Icons.analytics_rounded),
+            label: 'Laporan',
+          ),
           if (widget.role == 'Administrator')
             const NavigationDestination(
               icon: Icon(Icons.settings_outlined),
