@@ -33,6 +33,7 @@ class PosPageState extends State<PosPage> {
   final TextEditingController customerPhoneController = TextEditingController();
   final TextEditingController searchController = TextEditingController();
   String searchQuery = '';
+  bool saveCustomer = false;
 
   @override
   void dispose() {
@@ -212,6 +213,253 @@ class PosPageState extends State<PosPage> {
         );
       });
     }
+  }
+
+
+  Future<void> customerDialog() async {
+    final nameController =
+        TextEditingController(text: customerNameController.text);
+    final phoneController =
+        TextEditingController(text: customerPhoneController.text);
+
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Simpan Pelanggan'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                labelText: 'Nama pelanggan',
+                prefixIcon: Icon(Icons.person_outline),
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: phoneController,
+              keyboardType: TextInputType.phone,
+              decoration: const InputDecoration(
+                labelText: 'Nomor HP',
+                prefixIcon: Icon(Icons.phone_outlined),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Batal'),
+          ),
+          FilledButton(
+            onPressed: () {
+              if (nameController.text.trim().isEmpty) return;
+
+              customerNameController.text = nameController.text.trim();
+              customerPhoneController.text = phoneController.text.trim();
+
+              Navigator.pop(context, true);
+            },
+            child: const Text('Simpan'),
+          ),
+        ],
+      ),
+    );
+
+    if (result != true && mounted) {
+      setState(() => saveCustomer = false);
+    }
+
+    nameController.dispose();
+    phoneController.dispose();
+  }
+
+  Future<void> payLater() async {
+    if (cart.isEmpty) return;
+
+    String method = 'Tunai';
+    final bankController = TextEditingController();
+    DateTime? dueDate;
+
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) {
+          return AlertDialog(
+            title: const Text('Bayar Nanti'),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Total: ${rp(total)}',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Metode pembayaran',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    children: [
+                      ChoiceChip(
+                        label: const Text('Tunai'),
+                        selected: method == 'Tunai',
+                        onSelected: (_) {
+                          setDialogState(() => method = 'Tunai');
+                        },
+                      ),
+                      ChoiceChip(
+                        label: const Text('Transfer'),
+                        selected: method == 'Transfer',
+                        onSelected: (_) {
+                          setDialogState(() => method = 'Transfer');
+                        },
+                      ),
+                    ],
+                  ),
+                  if (method == 'Transfer') ...[
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: bankController,
+                      decoration: const InputDecoration(
+                        labelText: 'Transfer ke Bank',
+                        hintText: 'Contoh: BCA',
+                        prefixIcon: Icon(Icons.account_balance),
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: 12),
+                  const Text(
+                    'Tgl Jatuh Tempo (opsional)',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          dueDate == null
+                              ? 'Tidak diisi'
+                              : '${dueDate!.day.toString().padLeft(2, '0')}/'
+                                '${dueDate!.month.toString().padLeft(2, '0')}/'
+                                '${dueDate!.year}',
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.calendar_month),
+                        onPressed: () async {
+                          final picked = await showDatePicker(
+                            context: context,
+                            initialDate: dueDate ?? DateTime.now(),
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime(2100),
+                          );
+
+                          if (picked != null) {
+                            setDialogState(() => dueDate = picked);
+                          }
+                        },
+                      ),
+                      if (dueDate != null)
+                        IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            setDialogState(() => dueDate = null);
+                          },
+                        ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Batal'),
+              ),
+              FilledButton(
+                onPressed: () {
+                  if (method == 'Transfer' &&
+                      bankController.text.trim().isEmpty) {
+                    return;
+                  }
+                  Navigator.pop(context, true);
+                },
+                child: const Text('Simpan'),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+
+    if (result != true) {
+      bankController.dispose();
+      return;
+    }
+
+    String dueDateText = '';
+    if (dueDate != null) {
+      dueDateText =
+          '${dueDate!.year.toString().padLeft(4, '0')}-'
+          '${dueDate!.month.toString().padLeft(2, '0')}-'
+          '${dueDate!.day.toString().padLeft(2, '0')}';
+    }
+
+    await DB.createSale(
+      cashier: cashierName,
+      customerName: customerNameController.text,
+      customerPhone: customerPhoneController.text,
+      customerType: customerType,
+      items: cart,
+      subtotal: subtotal,
+      discount: discount,
+      total: total,
+      cash: 0,
+      change: 0,
+      payment: 'Bayar Tunda',
+      transferBank:
+          method == 'Transfer' ? bankController.text.trim() : '',
+      dueDate: dueDateText,
+    );
+
+    bankController.dispose();
+
+    if (!mounted) return;
+
+    setState(() {
+      cart.clear();
+      discount = 0;
+
+      if (!saveCustomer) {
+        customerNameController.clear();
+        customerPhoneController.clear();
+      }
+
+      saveCustomer = false;
+    });
+
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Berhasil'),
+        content: const Text('Transaksi Bayar Nanti berhasil disimpan.'),
+        actions: [
+          FilledButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> payment() async {
@@ -442,8 +690,13 @@ class PosPageState extends State<PosPage> {
       setState(() {
         cart.clear();
         discount = 0;
-        customerNameController.clear();
-        customerPhoneController.clear();
+
+        if (!saveCustomer) {
+          customerNameController.clear();
+          customerPhoneController.clear();
+        }
+
+        saveCustomer = false;
         customerType = 'Retail';
       });
 
@@ -839,7 +1092,29 @@ class PosPageState extends State<PosPage> {
                       ),
                     ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
+                    CheckboxListTile(
+                      contentPadding: EdgeInsets.zero,
+                      dense: true,
+                      title: const Text(
+                        'Simpan pelanggan',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 12,
+                        ),
+                      ),
+                      value: saveCustomer,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      onChanged: (value) async {
+                        if (value == true) {
+                          setState(() => saveCustomer = true);
+                          await customerDialog();
+                        } else {
+                          setState(() => saveCustomer = false);
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 2),
                     SizedBox(
                       height: 34,
                       child: ListView.separated(
@@ -967,6 +1242,21 @@ class PosPageState extends State<PosPage> {
                               ),
                             ),
                             child: const Text('BAYAR'),
+                          ),
+                        ),
+                        const SizedBox(width: 7),
+                        Expanded(
+                          flex: 2,
+                          child: FilledButton(
+                            onPressed: cart.isEmpty ? null : payLater,
+                            style: FilledButton.styleFrom(
+                              backgroundColor: navy,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: const Text('BAYAR NANTI'),
                           ),
                         ),
                       ],
