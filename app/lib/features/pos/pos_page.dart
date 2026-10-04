@@ -522,6 +522,7 @@ class PosPageState extends State<PosPage> {
                           'QRIS',
                           'Transfer',
                           'Wallet (Platform)',
+                            'Bayar Nanti',
                         ])
                           ChoiceChip(
                             label: Text(x),
@@ -637,6 +638,11 @@ class PosPageState extends State<PosPage> {
     );
 
     if (result == null) return;
+
+    if (result['method'] == 'Bayar Nanti') {
+      await payLater();
+      return;
+    }
 
     try {
       final id = await DB.createSale(
@@ -1245,19 +1251,6 @@ class PosPageState extends State<PosPage> {
                           ),
                         ),
                         const SizedBox(width: 7),
-                        Expanded(
-                          flex: 2,
-                          child: FilledButton(
-                            onPressed: cart.isEmpty ? null : payLater,
-                            style: FilledButton.styleFrom(
-                              backgroundColor: navy,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            child: const Text('BAYAR NANTI'),
-                          ),
                         ),
                       ],
                     ),
