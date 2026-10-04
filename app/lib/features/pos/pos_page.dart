@@ -935,19 +935,19 @@ class PosPageState extends State<PosPage> {
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 2),
                 itemCount: categories.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 7),
+                separatorBuilder: (_, __) => const Padding(padding: EdgeInsets.symmetric(horizontal: 6), child: Text('|', style: TextStyle(fontWeight: FontWeight.w900))),
                 itemBuilder: (_, i) {
                   final x = categories[i];
                   final selected = category == x;
                   return InkWell(
-                    borderRadius: BorderRadius.circular(13),
+                    
                     onTap: () => setState(() => category = x),
-                    child: AnimatedContainer(
+                    child: Container(
                       duration: const Duration(milliseconds: 160),
                       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                       decoration: BoxDecoration(
                         color: selected ? red : Colors.white,
-                        borderRadius: BorderRadius.circular(13),
+                        
                         border: Border.all(
                           color: selected ? red : line,
                           width: 1,
@@ -971,9 +971,12 @@ class PosPageState extends State<PosPage> {
                           Text(
                             x,
                             style: TextStyle(
-                              color: selected ? Colors.white : ink,
-                              fontWeight: FontWeight.w800,
-                              fontSize: 13,
+                              color: selected ? red : Colors.black,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 14,
+                              decoration: selected
+                                  ? TextDecoration.underline
+                                  : TextDecoration.none,
                             ),
                           ),
                         ],
@@ -1001,7 +1004,7 @@ class PosPageState extends State<PosPage> {
                     elevation: 5,
                     shadowColor: gold.withValues(alpha: 0.38),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(13),
+                      
                       side: BorderSide(
                         color: goldDeep,
                         width: 1.1,
