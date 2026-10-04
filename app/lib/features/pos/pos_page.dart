@@ -1015,10 +1015,7 @@ class PosPageState extends State<PosPage> {
                             Container(
                               width: 28,
                               height: 28,
-                              decoration: BoxDecoration(
-                                color: goldSoft,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
+                              decoration: const BoxDecoration(),
                               child: Padding(
                                 padding: const EdgeInsets.all(2),
                                 child: Image.asset(
