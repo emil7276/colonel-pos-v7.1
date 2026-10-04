@@ -1015,19 +1015,7 @@ class PosPageState extends State<PosPage> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Container(
-                              width: 28,
-                              height: 28,
-                              decoration: const BoxDecoration(),
-                              child: Padding(
-                                padding: const EdgeInsets.all(2),
-                                child: Image.asset(
-                                  'assets/images/menu_card_icon.jpg',
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 3),
+
                             Text(
                               p.name,
                               maxLines: 2,
