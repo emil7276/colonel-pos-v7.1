@@ -1075,11 +1075,62 @@ class PosPageState extends State<PosPage> {
                                       ),
                                       visualDensity: VisualDensity.compact,
                                     ),
-                                    Text(
-                                      '$currentQty',
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w900,
+                                    GestureDetector(
+                                      onTap: () async {
+                                        final c = TextEditingController(
+                                          text: currentQty.toString(),
+                                        );
+
+                                        final qty = await showDialog<int>(
+                                          context: context,
+                                          builder: (_) => AlertDialog(
+                                            title: const Text('Jumlah'),
+                                            content: TextField(
+                                              controller: c,
+                                              keyboardType: TextInputType.number,
+                                              autofocus: true,
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                child: const Text('Batal'),
+                                              ),
+                                              FilledButton(
+                                                onPressed: () => Navigator.pop(
+                                                  context,
+                                                  int.tryParse(c.text),
+                                                ),
+                                                child: const Text('OK'),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+
+                                        if (qty != null && qty >= 0) {
+                                          setState(() {
+                                            final found = cart.where(
+                                              (x) => x.product.id == p.id,
+                                            );
+
+                                            if (qty == 0) {
+                                              cart.removeWhere(
+                                                (x) => x.product.id == p.id,
+                                              );
+                                            } else if (found.isEmpty) {
+                                              cart.add(CartLine(p, qty));
+                                            } else {
+                                              found.first.qty = qty;
+                                            }
+                                          });
+                                        }
+                                      },
+                                      child: Text(
+                                        '$currentQty',
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w900,
+                                        ),
                                       ),
                                     ),
                                     IconButton(
