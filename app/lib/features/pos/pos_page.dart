@@ -930,7 +930,7 @@ class PosPageState extends State<PosPage> {
               ),
             ),
             SizedBox(
-              height: 46,
+              height: 40,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 2),
