@@ -410,16 +410,16 @@ String _trialLabel() {
               opacity: 0.70,
               child: Image.asset(
                 'assets/images/cp_pos_transaction.png',
-                width: 22,
-                height: 22,
+                width: 28,
+                height: 28,
               ),
             ),
             selectedIcon: Opacity(
               opacity: 0.70,
               child: Image.asset(
                 'assets/images/cp_pos_transaction.png',
-                width: 22,
-                height: 22,
+                width: 28,
+                height: 28,
               ),
             ),
             label: 'Transaksi',
