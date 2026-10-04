@@ -300,7 +300,7 @@ class PosPageState extends State<PosPage> {
                     'Total: ${rp(total)}',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                      fontSize: 18,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -820,7 +820,7 @@ class PosPageState extends State<PosPage> {
                       child: Text(
                         'QRIS Pembayaran',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.w900,
                         ),
                       ),
@@ -914,7 +914,7 @@ class PosPageState extends State<PosPage> {
                         isDense: true,
                         contentPadding: const EdgeInsets.symmetric(
                           vertical: 10,
-                          horizontal: 18,
+                          horizontal: 12,
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -991,7 +991,7 @@ class PosPageState extends State<PosPage> {
                   crossAxisCount: columns,
                   crossAxisSpacing: 8,
                   mainAxisSpacing: 8,
-                  childAspectRatio: tablet ? 1.90 : 1.40,
+                  childAspectRatio: tablet ? 2.05 : 1.75,
                 ),
                 itemCount: filtered.length,
                 itemBuilder: (_, i) {
@@ -1056,100 +1056,9 @@ class PosPageState extends State<PosPage> {
                                     .where((x) => x.product.id == p.id)
                                     .fold<int>(0, (sum, x) => sum + x.qty);
 
-                                return Column(
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Stok ${p.stock}',
-                                          style: TextStyle(
-                                            color: p.stock <= 0
-                                                ? red
-                                                : Colors.green.shade700,
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 13,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () async {
-                                            final c = TextEditingController(
-                                              text: currentQty.toString(),
-                                            );
-
-                                            final qty = await showDialog<int>(
-                                              context: context,
-                                              builder: (_) => AlertDialog(
-                                                title: const Text('Jumlah'),
-                                                content: TextField(
-                                                  controller: c,
-                                                  keyboardType: TextInputType.number,
-                                                  autofocus: true,
-                                                ),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () =>
-                                                        Navigator.pop(context),
-                                                    child: const Text('Batal'),
-                                                  ),
-                                                  FilledButton(
-                                                    onPressed: () =>
-                                                        Navigator.pop(
-                                                      context,
-                                                      int.tryParse(c.text),
-                                                    ),
-                                                    child: const Text('OK'),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-
-                                            if (qty != null && qty >= 0) {
-                                              setState(() {
-                                                final found = cart.where(
-                                                  (x) =>
-                                                      x.product.id == p.id,
-                                                );
-
-                                                if (qty == 0) {
-                                                  cart.removeWhere(
-                                                    (x) =>
-                                                        x.product.id == p.id,
-                                                  );
-                                                } else if (found.isEmpty) {
-                                                  cart.add(CartLine(p, qty));
-                                                } else {
-                                                  found.first.qty = qty;
-                                                }
-                                              });
-                                            }
-                                          },
-                                          child: Container(
-                                            padding:
-                                                const EdgeInsets.symmetric(
-                                              horizontal: 18,
-                                              vertical: 8,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: Colors.amber.shade100,
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            child: Text(
-                                              '$currentQty',
-                                              style: const TextStyle(
-                                                fontSize: 24,
-                                                fontWeight: FontWeight.w900,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
                                     IconButton(
                                       onPressed: currentQty > 0
                                           ? () {
@@ -1162,23 +1071,90 @@ class PosPageState extends State<PosPage> {
                                       icon: const Icon(
                                         Icons.remove_circle,
                                         color: Colors.red,
-                                        size: 28,
+                                        size: 24,
                                       ),
                                       visualDensity: VisualDensity.compact,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        final c = TextEditingController(
+                                          text: currentQty.toString(),
+                                        );
+
+                                        final qty = await showDialog<int>(
+                                          context: context,
+                                          builder: (_) => AlertDialog(
+                                            title: const Text('Jumlah'),
+                                            content: TextField(
+                                              controller: c,
+                                              keyboardType: TextInputType.number,
+                                              autofocus: true,
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                child: const Text('Batal'),
+                                              ),
+                                              FilledButton(
+                                                onPressed: () => Navigator.pop(
+                                                  context,
+                                                  int.tryParse(c.text),
+                                                ),
+                                                child: const Text('OK'),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+
+                                        if (qty != null && qty >= 0) {
+                                          setState(() {
+                                            final found = cart.where(
+                                              (x) => x.product.id == p.id,
+                                            );
+
+                                            if (qty == 0) {
+                                              cart.removeWhere(
+                                                (x) => x.product.id == p.id,
+                                              );
+                                            } else if (found.isEmpty) {
+                                              cart.add(CartLine(p, qty));
+                                            } else {
+                                              found.first.qty = qty;
+                                            }
+                                          });
+                                        }
+                                      },
+                                      child: Text(
+                                        '$currentQty',
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
                                     ),
                                     IconButton(
                                       onPressed: () => add(p),
                                       icon: const Icon(
                                         Icons.add_circle,
                                         color: Colors.green,
-                                        size: 28,
+                                        size: 24,
                                       ),
                                       visualDensity: VisualDensity.compact,
                                     ),
                                   ],
                                 );
                               },
-                            ),                          ],
+                            ),
+                            Text(
+                              'Stok ${p.stock}',
+                              style: TextStyle(
+                                color: p.stock <= 0 ? red : Colors.green.shade700,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
