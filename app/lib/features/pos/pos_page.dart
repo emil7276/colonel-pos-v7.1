@@ -991,7 +991,7 @@ class PosPageState extends State<PosPage> {
                   crossAxisCount: columns,
                   crossAxisSpacing: 8,
                   mainAxisSpacing: 8,
-                  childAspectRatio: tablet ? 2.05 : 1.75,
+                  childAspectRatio: tablet ? 2.05 : 1.60,
                 ),
                 itemCount: filtered.length,
                 itemBuilder: (_, i) {
