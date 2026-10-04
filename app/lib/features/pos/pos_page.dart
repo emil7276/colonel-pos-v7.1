@@ -1259,8 +1259,6 @@ class PosPageState extends State<PosPage> {
                             child: const Text('BAYAR'),
                           ),
                         ),
-                        const SizedBox(width: 7),
-                        ),
                       ],
                     ),
                   ],
