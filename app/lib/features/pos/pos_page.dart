@@ -943,7 +943,7 @@ class PosPageState extends State<PosPage> {
                     
                     onTap: () => setState(() => category = x),
                     child: Container(
-                      duration: const Duration(milliseconds: 160),
+                      
                       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                       decoration: BoxDecoration(
                         color: selected ? red : Colors.white,
