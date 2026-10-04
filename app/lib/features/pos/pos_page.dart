@@ -1019,14 +1019,12 @@ class PosPageState extends State<PosPage> {
                                 color: goldSoft,
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              child: Icon(
-                                p.category == 'Minuman'
-                                    ? Icons.local_drink_rounded
-                                    : p.category == 'Paket'
-                                        ? Icons.inventory_2_rounded
-                                        : Icons.category_rounded,
-                                size: 19,
-                                color: goldDeep,
+                              child: Padding(
+                                padding: const EdgeInsets.all(4),
+                                child: Image.asset(
+                                  'assets/images/cp_logo.png',
+                                  fit: BoxFit.contain,
+                                ),
                               ),
                             ),
                             const SizedBox(height: 5),
