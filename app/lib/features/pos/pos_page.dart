@@ -527,7 +527,16 @@ class PosPageState extends State<PosPage> {
                           ChoiceChip(
                             label: Text(x),
                             selected: method == x,
-                            onSelected: (_) => setDialog(() => method = x),
+                            onSelected: (_) {
+                                    if (x == 'Bayar Nanti') {
+                                      Navigator.pop(
+                                        context,
+                                        {'method': 'Bayar Nanti'},
+                                      );
+                                      return;
+                                    }
+                                    setDialog(() => method = x);
+                                  },
                             selectedColor: goldSoft,
                             labelStyle: TextStyle(
                               color: method == x ? red : ink,
