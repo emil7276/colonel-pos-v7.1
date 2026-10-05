@@ -60,6 +60,18 @@ class _LoginPageState extends State<LoginPage> {
         return;
       }
 
+      final prefs = await SharedPreferences.getInstance();
+
+      await prefs.setBool('cp_logged_in', true);
+      await prefs.setString(
+        'cp_username',
+        u['username'] as String,
+      );
+      await prefs.setString(
+        'cp_role',
+        u['role'] as String,
+      );
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

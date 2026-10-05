@@ -102,7 +102,10 @@ String _trialLabel() {
     await prefs.remove('cp_username');
     await prefs.remove('cp_role');
 
+
     if (!mounted) return;
+
+
 
     Navigator.pushAndRemoveUntil(
       context,
