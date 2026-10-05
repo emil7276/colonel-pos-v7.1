@@ -27,6 +27,21 @@ class _DashboardPageState extends State<DashboardPage> {
   int omzet = 0, transaksi = 0, item = 0, pengeluaran = 0;
   List<SaleModel> recent = [];
 
+  DateTime selectedDate = DateTime.now();
+  DateTime? selectedEndDate;
+
+  DateTime get start =>
+      DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+
+  DateTime get end =>
+      selectedEndDate == null
+          ? start.add(const Duration(days: 1))
+          : DateTime(
+              selectedEndDate!.year,
+              selectedEndDate!.month,
+              selectedEndDate!.day,
+            ).add(const Duration(days: 1));
+
   @override
   void initState() {
     super.initState();
@@ -35,9 +50,6 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Future<void> load() async {
     final all = await DB.sales();
-    final now = DateTime.now();
-    final start = DateTime(now.year, now.month, now.day);
-    final end = start.add(const Duration(days: 1));
     var om = 0;
     var tr = 0;
 
@@ -81,6 +93,28 @@ class _DashboardPageState extends State<DashboardPage> {
     });
   }
 
+
+  Future<void> pickDateRange() async {
+    final r = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+      initialDateRange: DateTimeRange(
+        start: selectedDate,
+        end: selectedEndDate ?? selectedDate,
+      ),
+    );
+
+    if (r != null) {
+      setState(() {
+        selectedDate = r.start;
+        selectedEndDate = r.end;
+      });
+
+      await load();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -88,6 +122,36 @@ class _DashboardPageState extends State<DashboardPage> {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
         children: [
+
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Dashboard',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    Text(
+                      '${displayDate(start)} - ${displayDate(end.subtract(const Duration(days: 1)))}',
+                    ),
+                  ],
+                ),
+              ),
+              OutlinedButton.icon(
+                onPressed: pickDateRange,
+                icon: const Icon(Icons.calendar_month_outlined),
+                label: const Text('Pilih Rentang'),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 12),
+
           CpGradientCard(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             child: Row(
