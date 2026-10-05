@@ -13,6 +13,7 @@ class FinancePage extends StatefulWidget {
 class _FinancePageState extends State<FinancePage> {
   String period = 'Hari';
   DateTime selectedDate = DateTime.now();
+  DateTime? selectedEndDate;
 
   int income = 0;
   int expense = 0;
@@ -25,29 +26,17 @@ class _FinancePageState extends State<FinancePage> {
     _load();
   }
 
-  DateTime get from {
-    final d = DateTime(
-      selectedDate.year,
-      selectedDate.month,
-      selectedDate.day,
-    );
+  DateTime get from =>
+      DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
 
-    if (period == 'Hari') return d;
-    if (period == 'Minggu') {
-      return d.subtract(Duration(days: d.weekday - 1));
-    }
-    if (period == 'Bulan') {
-      return DateTime(d.year, d.month, 1);
-    }
-    return DateTime(d.year, 1, 1);
-  }
-
-  DateTime get to {
-    if (period == 'Hari') return from.add(const Duration(days: 1));
-    if (period == 'Minggu') return from.add(const Duration(days: 7));
-    if (period == 'Bulan') return DateTime(from.year, from.month + 1, 1);
-    return DateTime(from.year + 1, 1, 1);
-  }
+  DateTime get to =>
+      selectedEndDate == null
+          ? from.add(const Duration(days: 1))
+          : DateTime(
+              selectedEndDate!.year,
+              selectedEndDate!.month,
+              selectedEndDate!.day,
+            ).add(const Duration(days: 1));
 
   Future<void> _load() async {
     final results = await Future.wait([
@@ -68,33 +57,27 @@ class _FinancePageState extends State<FinancePage> {
   }
 
   String _periodLabel() {
-    if (period == 'Hari') {
-      return displayDate(from);
-    }
-
-    if (period == 'Minggu') {
-      final end = to.subtract(const Duration(days: 1));
-      return '${displayDate(from)} - ${displayDate(end)}';
-    }
-
-    if (period == 'Bulan') {
-      return displayDate(from);
-    }
-
-    return '${from.year}';
+    return '${displayDate(from)} - ${displayDate(to.subtract(const Duration(days: 1)))}';
   }
 
   Future<void> _pickDate() async {
-    final result = await showDatePicker(
+    final result = await showDateRangePicker(
       context: context,
-      initialDate: selectedDate,
       firstDate: DateTime(2020),
       lastDate: DateTime(2100),
+      initialDateRange: DateTimeRange(
+        start: selectedDate,
+        end: selectedEndDate ?? selectedDate,
+      ),
     );
 
     if (result == null) return;
 
-    setState(() => selectedDate = result);
+    setState(() {
+      selectedDate = result.start;
+      selectedEndDate = result.end;
+    });
+
     _load();
   }
 
@@ -331,36 +314,17 @@ class _FinancePageState extends State<FinancePage> {
             Row(
               children: [
                 Expanded(
-                  child: DropdownButtonFormField<String>(
-                    value: period,
+                  child: InputDecorator(
                     decoration: const InputDecoration(
-                      labelText: 'Periode',
+                      labelText: 'Rentang Tanggal',
                       border: OutlineInputBorder(),
                     ),
-                    items: const [
-                      DropdownMenuItem(
-                        value: 'Hari',
-                        child: Text('Hari'),
+                    child: Text(
+                      _periodLabel(),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
                       ),
-                      DropdownMenuItem(
-                        value: 'Minggu',
-                        child: Text('Minggu'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'Bulan',
-                        child: Text('Bulan'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'Tahun',
-                        child: Text('Tahun'),
-                      ),
-                    ],
-                    onChanged: (value) {
-                      if (value == null) return;
-
-                      setState(() => period = value);
-                      _load();
-                    },
+                    ),
                   ),
                 ),
                 const SizedBox(width: 10),
