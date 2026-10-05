@@ -35,8 +35,7 @@ class _IntroPageState extends State<IntroPage>
 
     final prefs = await SharedPreferences.getInstance();
 
-    final loggedIn =
-        prefs.getBool('cp_logged_in') ?? false;
+    final loggedIn = false;
 
     if (!mounted) return;
 
