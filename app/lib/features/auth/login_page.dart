@@ -16,7 +16,6 @@ class _LoginPageState extends State<LoginPage> {
   final user = TextEditingController();
   final pass = TextEditingController();
 
-  bool rememberMe = true;
 
   @override
   void initState() {
@@ -59,20 +58,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
         return;
-      }
-
-      if (rememberMe) {
-        final prefs = await SharedPreferences.getInstance();
-
-        await prefs.setBool('cp_logged_in', true);
-        await prefs.setString(
-          'cp_username',
-          u['username'] as String,
-        );
-        await prefs.setString(
-          'cp_role',
-          u['role'] as String,
-        );
       }
 
       Navigator.pushReplacement(
@@ -168,19 +153,6 @@ class _LoginPageState extends State<LoginPage> {
                               prefixIcon: Icon(Icons.lock_outline),
                             ),
                             onSubmitted: (_) => login(),
-                          ),
-
-                          CheckboxListTile(
-                            value: rememberMe,
-                            contentPadding: EdgeInsets.zero,
-                            controlAffinity:
-                                ListTileControlAffinity.leading,
-                            title: const Text('Ingat Saya'),
-                            onChanged: (v) {
-                              setState(() {
-                                rememberMe = v ?? true;
-                              });
-                            },
                           ),
 
                           const SizedBox(height: 18),
