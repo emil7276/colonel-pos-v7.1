@@ -621,19 +621,7 @@ class _ReportPageState extends State<ReportPage> {
                       label: const Text('Cetak'),
                     ),
                   ),
-                  if (widget.role == 'Administrator' && !s.returned) ...[
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: FilledButton.icon(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          authorizeReturn(s);
-                        },
-                        icon: const Icon(Icons.undo),
-                        label: const Text('Retur'),
-                      ),
-                    ),
-                  ],
+                      const SizedBox.shrink(),
                 ],
               ),
             ],

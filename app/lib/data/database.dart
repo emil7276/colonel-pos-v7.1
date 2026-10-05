@@ -479,65 +479,7 @@ class DB {
     int saleId,
     String adminUser,
   ) async {
-    final db = await database;
-
-    await db.transaction((txn) async {
-      final saleRows = await txn.query(
-        'sales',
-        where: 'id=?',
-        whereArgs: [saleId],
-        limit: 1,
-      );
-
-      if (saleRows.isEmpty) {
-        throw Exception(
-          'Transaksi tidak ditemukan.',
-        );
-      }
-
-      if (saleRows.first['returned'] == 1) {
-        throw Exception(
-          'Transaksi sudah diretur.',
-        );
-      }
-
-      final items = await txn.query(
-        'sale_items',
-        where: 'sale_id=?',
-        whereArgs: [saleId],
-      );
-
-      for (final item in items) {
-        final productId = item['product_id'];
-        final qty = item['qty'] as int;
-
-        if (productId != null) {
-          await txn.rawUpdate(
-            'UPDATE products '
-            'SET stock=stock+? WHERE id=?',
-            [qty, productId],
-          );
-
-          await txn.insert(
-            'stock_logs',
-            {
-              'product_id': productId,
-              'time': stamp(),
-              'type': 'RETUR',
-              'qty': qty,
-              'note': 'Retur oleh $adminUser',
-            },
-          );
-        }
-      }
-
-      await txn.update(
-        'sales',
-        {'returned': 1},
-        where: 'id=?',
-        whereArgs: [saleId],
-      );
-    });
+    throw Exception("Fitur retur sedang dinonaktifkan.");
   }
 
   static Future<List<Map<String, dynamic>>> bestSelling(
