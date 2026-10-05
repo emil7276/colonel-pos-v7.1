@@ -16,6 +16,7 @@ class _FinancePageState extends State<FinancePage> {
   DateTime? selectedEndDate;
 
   int income = 0;
+  int payLater = 0;
   int expense = 0;
   int debt = 0;
   List<Map<String, dynamic>> expenseRows = [];
@@ -41,6 +42,7 @@ class _FinancePageState extends State<FinancePage> {
   Future<void> _load() async {
     final results = await Future.wait([
       DB.omzet(from, to),
+      DB.payLaterTotal(from, to),
       DB.expenseTotal(from, to),
       DB.expenseDebtTotal(from, to),
       DB.expenses(from, to),
@@ -50,9 +52,10 @@ class _FinancePageState extends State<FinancePage> {
 
     setState(() {
       income = results[0] as int;
-      expense = results[1] as int;
-      debt = results[2] as int;
-      expenseRows = results[3] as List<Map<String, dynamic>>;
+      payLater = results[1] as int;
+      expense = results[2] as int;
+      debt = results[3] as int;
+      expenseRows = results[4] as List<Map<String, dynamic>>;
     });
   }
 
@@ -335,28 +338,31 @@ class _FinancePageState extends State<FinancePage> {
                 ),
               ],
             ),
-            const SizedBox(height: 6),
-            Text(
-              _periodLabel(),
-              style: const TextStyle(
-                fontWeight: FontWeight.w700,
-                color: inkMuted,
-              ),
-            ),
-            const SizedBox(height: 8),
 
             Row(
               children: [
-                _metric(
-                  'Pendapatan',
-                  income,
-                  Icons.trending_up_rounded,
+                Expanded(
+                  child: _metric(
+                    'Pendapatan',
+                    income,
+                    Icons.trending_up_rounded,
+                  ),
                 ),
                 const SizedBox(width: 8),
-                _metric(
-                  'Pengeluaran',
-                  expense,
-                  Icons.trending_down_rounded,
+                Expanded(
+                  child: _metric(
+                    'Bayar Tunda',
+                    payLater,
+                    Icons.schedule_rounded,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _metric(
+                    'Pengeluaran',
+                    expense,
+                    Icons.trending_down_rounded,
+                  ),
                 ),
               ],
             ),
