@@ -697,6 +697,27 @@ class DB {
     );
   }
 
+
+  static Future<List<String>> customerSuggestions(String keyword) async {
+    final db = await database;
+
+    final rows = await db.rawQuery(
+      '''
+      SELECT DISTINCT customer_name
+      FROM sales
+      WHERE TRIM(COALESCE(customer_name,'')) != ''
+        AND customer_name LIKE ?
+      ORDER BY customer_name
+      LIMIT 10
+      ''',
+      ['%$keyword%'],
+    );
+
+    return rows
+        .map((e) => e['customer_name'].toString())
+        .toList();
+  }
+
   static Future<int> omzet(
     DateTime from,
     DateTime to,

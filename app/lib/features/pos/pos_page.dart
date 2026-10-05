@@ -32,6 +32,8 @@ class PosPageState extends State<PosPage> {
   final TextEditingController customerNameController = TextEditingController();
   final TextEditingController customerPhoneController = TextEditingController();
   final TextEditingController searchController = TextEditingController();
+
+
   String searchQuery = '';
   bool saveCustomer = false;
 
@@ -1197,15 +1199,17 @@ class PosPageState extends State<PosPage> {
                           ),
                         ],
                       ),
-                      child: TextField(
+                        
+child: TextField(
                         controller: customerNameController,
-                      textInputAction: TextInputAction.done,
-                      decoration: const InputDecoration(
-                        labelText: 'Nama Pelanggan',
-                        hintText: 'Pelanggan umum / nama pelanggan tetap',
-                        prefixIcon: Icon(Icons.person_outline_rounded),
-                      ),
-                    ),
+                        textInputAction: TextInputAction.done,
+                        decoration: const InputDecoration(
+                          labelText: 'Nama Pelanggan',
+                          hintText: 'Pelanggan umum / nama pelanggan tetap',
+                          prefixIcon: Icon(Icons.person_outline_rounded),
+                        ),
+                      )
+),
                     ),
                     const SizedBox(height: 2),
                     CheckboxListTile(
