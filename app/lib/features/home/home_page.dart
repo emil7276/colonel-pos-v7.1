@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants.dart';
 import '../../core/trial_service.dart';
 import '../../core/license/license_service.dart';
@@ -95,6 +96,12 @@ String _trialLabel() {
   }
 
   Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.remove('cp_logged_in');
+    await prefs.remove('cp_username');
+    await prefs.remove('cp_role');
+
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (_) => const LoginPage()),
