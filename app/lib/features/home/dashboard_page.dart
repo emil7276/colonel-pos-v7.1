@@ -102,11 +102,60 @@ class _DashboardPageState extends State<DashboardPage> {
                     ],
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-                  decoration: BoxDecoration(color: Colors.white.withValues(alpha: .14), borderRadius: BorderRadius.circular(12)),
-                  child: const Icon(Icons.point_of_sale_rounded, color: Colors.white, size: 20),
-                ),
+                  FilledButton.icon(
+                    onPressed: () async {
+                      final controller = TextEditingController();
+
+                      final code = await showDialog<String>(
+                        context: context,
+                        builder: (dialogContext) => AlertDialog(
+                          title: const Text('Aktivasi Lisensi'),
+                          content: TextField(
+                            controller: controller,
+                            maxLines: 4,
+                            decoration: const InputDecoration(
+                              labelText: 'Kode Aktivasi',
+                              hintText: 'Tempel kode aktivasi di sini',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(dialogContext),
+                              child: const Text('BATAL'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () => Navigator.pop(
+                                dialogContext,
+                                controller.text.trim(),
+                              ),
+                              child: const Text('AKTIVASI'),
+                            ),
+                          ],
+                        ),
+                      );
+
+                      controller.dispose();
+
+                      if (code == null || code.isEmpty || !context.mounted) return;
+
+                      final ok = await LicenseService.saveLicense(code);
+
+                      if (!context.mounted) return;
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            ok
+                                ? 'Lisensi berhasil diaktifkan.'
+                                : 'Gagal: ${LicenseService.lastError}',
+                          ),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.key_rounded, size: 18),
+                    label: const Text('Aktivasi'),
+                  ),
               ],
             ),
           ),
@@ -140,71 +189,6 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
           const SizedBox(height: 8),
           const SizedBox(height: 4),
-                    Center(
-                      child: OutlinedButton.icon(
-                        onPressed: () async {
-                          final controller = TextEditingController();
-
-                          final code = await showDialog<String>(
-                            context: context,
-                            builder: (dialogContext) {
-                              return AlertDialog(
-                                title: const Text('Aktivasi Lisensi'),
-                                content: TextField(
-                                  controller: controller,
-                                  maxLines: 4,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Kode Aktivasi',
-                                    hintText: 'Tempel kode aktivasi di sini',
-                                    border: OutlineInputBorder(),
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(dialogContext);
-                                    },
-                                    child: const Text('BATAL'),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.pop(
-                                        dialogContext,
-                                        controller.text.trim(),
-                                      );
-                                    },
-                                    child: const Text('AKTIVASI'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-
-                          controller.dispose();
-
-                          if (code == null || code.isEmpty || !context.mounted) {
-                            return;
-                          }
-
-                          final ok = await LicenseService.saveLicense(code);
-
-                          if (!context.mounted) return;
-
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                ok
-                                    ? 'Lisensi berhasil diaktifkan.'
-                                    : 'Gagal: ${LicenseService.lastError}',
-                              ),
-                            ),
-                          );
-                        },
-                        icon: const Icon(Icons.key_outlined),
-                        label: const Text('Aktivasi Lisensi'),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
                     LayoutBuilder(
             builder: (context, c) {
               final cross = c.maxWidth > 700 ? 4 : 2;
