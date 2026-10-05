@@ -710,7 +710,7 @@ class DB {
       ORDER BY customer_name
       LIMIT 10
       ''',
-      ['%$keyword%'],
+      ['$keyword%'],
     );
 
     return rows

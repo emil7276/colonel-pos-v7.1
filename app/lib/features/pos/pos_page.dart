@@ -1190,14 +1190,38 @@ class PosPageState extends State<PosPage> {
                             ),
                           ],
                         ),
-                        child: TextField(
-                          controller: customerNameController,
-                          textInputAction: TextInputAction.done,
-                          decoration: const InputDecoration(
-                            labelText: 'Nama Pelanggan',
-                            hintText: 'Pelanggan umum / nama pelanggan tetap',
-                            prefixIcon: Icon(Icons.person_outline_rounded),
-                          ),
+                        child: Autocomplete<String>(
+                          optionsBuilder: (textEditingValue) {
+                            if (textEditingValue.text.trim().isEmpty) {
+                              return const Iterable<String>.empty();
+                            }
+                            return DB.customerSuggestions(
+                              textEditingValue.text.trim(),
+                            );
+                          },
+                          onSelected: (selection) {
+                            customerNameController.text = selection;
+                          },
+                          fieldViewBuilder: (
+                            context,
+                            textEditingController,
+                            focusNode,
+                            onFieldSubmitted,
+                          ) {
+                            return TextField(
+                              controller: textEditingController,
+                              focusNode: focusNode,
+                              textInputAction: TextInputAction.done,
+                              onChanged: (v) {
+                                customerNameController.text = v;
+                              },
+                              decoration: const InputDecoration(
+                                labelText: 'Nama Pelanggan',
+                                hintText: 'Pelanggan umum / nama pelanggan tetap',
+                                prefixIcon: Icon(Icons.person_outline_rounded),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     const SizedBox(height: 2),
