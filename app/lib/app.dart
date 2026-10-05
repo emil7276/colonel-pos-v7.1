@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'core/constants.dart';
-import 'features/auth/login_page.dart';
+import 'features/auth/intro_page.dart';
 
 class ColonelApp extends StatelessWidget {
   const ColonelApp({super.key});
@@ -129,7 +129,7 @@ class ColonelApp extends StatelessWidget {
           thickness: 1,
         ),
       ),
-      home: const LoginPage(),
+      home: const IntroPage(),
     );
   }
 }
