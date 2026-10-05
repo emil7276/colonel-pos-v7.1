@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/constants.dart';
 import '../../core/widgets.dart';
 import '../home/home_page.dart';
 import 'login_page.dart';
@@ -15,7 +16,6 @@ class IntroPage extends StatefulWidget {
 
 class _IntroPageState extends State<IntroPage>
     with SingleTickerProviderStateMixin {
-
   late final AnimationController _controller;
 
   @override
@@ -24,45 +24,36 @@ class _IntroPageState extends State<IntroPage>
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1600),
+      duration: const Duration(milliseconds: 1400),
     )..forward();
 
-    _goNext();
-  }
+    Timer(const Duration(seconds: 2), () async {
+      final prefs = await SharedPreferences.getInstance();
 
-  Future<void> _goNext() async {
-    await Future.delayed(const Duration(seconds: 2));
+      final loggedIn =
+          prefs.getBool('cp_logged_in') ?? false;
 
-    final prefs = await SharedPreferences.getInstance();
+      if (!mounted) return;
 
-    final loggedIn = false;
-
-    if (!mounted) return;
-
-    if (loggedIn) {
-      final username =
-          prefs.getString('cp_username') ?? '';
-
-      final role =
-          prefs.getString('cp_role') ?? 'Kasir';
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (_) => HomePage(
-            username: username,
-            role: role,
+      if (loggedIn) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => HomePage(
+              username:
+                  prefs.getString('cp_username') ?? '',
+              role:
+                  prefs.getString('cp_role') ?? 'Kasir',
+            ),
           ),
-        ),
-      );
-    } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (_) => const LoginPage(),
-        ),
-      );
-    }
+        );
+      } else {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => const LoginPage(),
+          ),
+        );
+      }
+    });
   }
 
   @override
@@ -74,37 +65,43 @@ class _IntroPageState extends State<IntroPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: pageBg,
       body: Center(
-        child: FadeTransition(
-          opacity: _controller,
-          child: ScaleTransition(
-            scale: Tween<double>(
-              begin: .85,
-              end: 1,
-            ).animate(
-              CurvedAnimation(
-                parent: _controller,
-                curve: Curves.easeOutCubic,
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (context, child) {
+            final scale = 0.92 + (_controller.value * 0.08);
+
+            return Opacity(
+              opacity: _controller.value,
+              child: Transform.scale(
+                scale: scale,
+                child: child,
               ),
-            ),
-            child: const Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CpLogo(size: 130),
-                SizedBox(height: 18),
-                Text(
-                  'COLONEL POS',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w900,
-                  ),
+            );
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              CpLogo(size: 140),
+              SizedBox(height: 24),
+              Text(
+                'COLONEL POS',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1,
                 ),
-                SizedBox(height: 6),
-                Text(
-                  'Professional Point of Sale',
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Kasir Modern untuk UMKM Indonesia',
+                style: TextStyle(
+                  color: inkMuted,
+                  fontWeight: FontWeight.w600,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
