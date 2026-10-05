@@ -826,6 +826,58 @@ class DB {
   }
 
 
+  
+
+  static Future<Map<String, dynamic>> rangeSummary(
+    DateTime from,
+    DateTime to,
+  ) async {
+    final db = await database;
+
+    final salesRows = await db.query(
+      'sales',
+      where: 'sale_time >= ? AND sale_time < ?',
+      whereArgs: [_dbDate(from), _dbDate(to)],
+      orderBy: 'sale_time DESC',
+    );
+
+    final valid = salesRows.where((x) => x['returned'] != 1).toList();
+    final returned = salesRows.where((x) => x['returned'] == 1).toList();
+
+    final itemRows = await db.rawQuery(
+      "SELECT COALESCE(SUM(si.qty),0) jumlah "
+      "FROM sale_items si "
+      "INNER JOIN sales s ON s.id=si.sale_id "
+      "WHERE s.sale_time >= ? "
+      "AND s.sale_time < ? "
+      "AND s.returned=0 "
+      "AND s.payment != 'Bayar Tunda'",
+      [_dbDate(from), _dbDate(to)],
+    );
+
+    final payments = <String,int>{};
+
+    for (final row in valid) {
+      final p = row['payment']?.toString() ?? 'Lainnya';
+      payments[p] = (payments[p] ?? 0) + 1;
+    }
+
+    return {
+      'sales': valid,
+      'returnedSales': returned,
+      'returned': returned.length,
+      'omzet': valid
+          .where((x) => x['payment'] != 'Bayar Tunda')
+          .fold<int>(0, (sum, x) => sum + (x['total'] as num).toInt()),
+      'transaksi': valid
+          .where((x) => x['payment'] != 'Bayar Tunda')
+          .length,
+      'item': (itemRows.first['jumlah'] as num).toInt(),
+      'payments': payments,
+    };
+  }
+
+
   static Future<List<Map<String, dynamic>>> expenses(
     DateTime from,
     DateTime to,

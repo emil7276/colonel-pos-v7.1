@@ -31,7 +31,7 @@ class _ReportPageState extends State<ReportPage> {
   Future<void> load() async {
     setState(() => loading = true);
     try {
-      final summary = await DB.daySummary(selectedDate);
+      final summary = await DB.rangeSummary(start, end);
       final b = await DB.bestSelling(start, end);
       final h = await DB.hourly(start, end);
       final month = await DB.monthOmzet(DateTime.now());
