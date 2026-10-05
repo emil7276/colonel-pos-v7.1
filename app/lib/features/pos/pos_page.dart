@@ -935,7 +935,12 @@ class PosPageState extends State<PosPage> {
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 2),
                 itemCount: categories.length,
-                separatorBuilder: (_, __) => const Padding(padding: EdgeInsets.symmetric(horizontal: 6), child: Text('|', style: TextStyle(fontWeight: FontWeight.w900))),
+                separatorBuilder: (_, __) => Container(
+                  width: 1,
+                  height: 28,
+                  color: Colors.black26,
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                ),
                 itemBuilder: (_, i) {
                   final x = categories[i];
                   final selected = category == x;
@@ -971,11 +976,11 @@ class PosPageState extends State<PosPage> {
                           Text(
                             x,
                             style: TextStyle(
-                              color: selected ? red : Colors.black,
+                              color: selected ? Colors.white : Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                               decoration: selected
-                                  ? TextDecoration.underline
+                                  ? TextDecoration.none
                                   : TextDecoration.none,
                             ),
                           ),
