@@ -742,6 +742,30 @@ class DB {
     return (rows.first['total'] as num).toInt();
   }
 
+  static Future<int> payLaterTotal(
+    DateTime from,
+    DateTime to,
+  ) async {
+    final db = await database;
+
+    final rows = await db.rawQuery(
+      '''
+      SELECT COALESCE(SUM(total),0) total
+      FROM sales
+      WHERE sale_time >= ?
+        AND sale_time < ?
+        AND returned=0
+        AND payment = 'Bayar Tunda'
+      ''',
+      [
+        _dbDate(from),
+        _dbDate(to),
+      ],
+    );
+
+    return (rows.first['total'] as num).toInt();
+  }
+
   static Future<void> saveUser({
     int? id,
     required String username,
