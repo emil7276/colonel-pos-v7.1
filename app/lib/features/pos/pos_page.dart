@@ -953,20 +953,11 @@ class PosPageState extends State<PosPage> {
                       
                       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                       decoration: BoxDecoration(
-                        color: selected ? red : Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        color: selected ? red : Colors.transparent,
                         
-                        border: Border.all(
-                          color: selected ? red : line,
-                          width: 1,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: (selected ? red : navy).withValues(alpha: 0.22),
-                            blurRadius: 7,
-                            spreadRadius: 1,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
+                        
+                        
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -1188,29 +1179,27 @@ class PosPageState extends State<PosPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(14),
-                        boxShadow: [
-                          BoxShadow(
-                            color: gold.withValues(alpha: 0.18),
-                            blurRadius: 7,
-                            spreadRadius: 1,
-                          ),
-                        ],
-                      ),
-                        
-child: TextField(
-                        controller: customerNameController,
-                        textInputAction: TextInputAction.done,
-                        decoration: const InputDecoration(
-                          labelText: 'Nama Pelanggan',
-                          hintText: 'Pelanggan umum / nama pelanggan tetap',
-                          prefixIcon: Icon(Icons.person_outline_rounded),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          boxShadow: [
+                            BoxShadow(
+                              color: gold.withValues(alpha: 0.18),
+                              blurRadius: 7,
+                              spreadRadius: 1,
+                            ),
+                          ],
                         ),
-                      )
-),
-                    ),
+                        child: TextField(
+                          controller: customerNameController,
+                          textInputAction: TextInputAction.done,
+                          decoration: const InputDecoration(
+                            labelText: 'Nama Pelanggan',
+                            hintText: 'Pelanggan umum / nama pelanggan tetap',
+                            prefixIcon: Icon(Icons.person_outline_rounded),
+                          ),
+                        ),
+                      ),
                     const SizedBox(height: 2),
                     CheckboxListTile(
                       contentPadding: EdgeInsets.zero,
