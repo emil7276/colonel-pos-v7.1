@@ -870,7 +870,19 @@ class DB {
 
     final rows = await db.rawQuery(
       '''
-      SELECT COALESCE(SUM(total),0) total
+      SELECT COALESCE(
+        SUM(
+          total - COALESCE(
+            (
+              SELECT SUM(si.returned_qty * si.price)
+              FROM sale_items si
+              WHERE si.sale_id = sales.id
+            ),
+            0
+          )
+        ),
+        0
+      ) total
       FROM sales
       WHERE sale_time >= ?
         AND sale_time < ?
@@ -988,7 +1000,19 @@ class DB {
     );
 
     final valid = salesRows.toList();
-    final returned = salesRows.where((x) => x['returned'] == 1).toList();
+    final returnedRows = await db.rawQuery(
+      '''
+      SELECT DISTINCT s.*
+      FROM sales s
+      INNER JOIN sale_items si ON si.sale_id = s.id
+      WHERE s.sale_time >= ?
+        AND s.sale_time < ?
+        AND si.returned_qty > 0
+      ORDER BY s.sale_time DESC
+      ''',
+      [_dbDate(start), _dbDate(end)],
+    );
+    final returned = returnedRows;
 
     final summaryRows = await db.rawQuery(
       "SELECT "
@@ -1051,7 +1075,19 @@ class DB {
     );
 
     final valid = salesRows.toList();
-    final returned = salesRows.where((x) => x['returned'] == 1).toList();
+    final returnedRows = await db.rawQuery(
+      '''
+      SELECT DISTINCT s.*
+      FROM sales s
+      INNER JOIN sale_items si ON si.sale_id = s.id
+      WHERE s.sale_time >= ?
+        AND s.sale_time < ?
+        AND si.returned_qty > 0
+      ORDER BY s.sale_time DESC
+      ''',
+      [_dbDate(from), _dbDate(to)],
+    );
+    final returned = returnedRows;
 
     final summaryRows = await db.rawQuery(
       "SELECT "
