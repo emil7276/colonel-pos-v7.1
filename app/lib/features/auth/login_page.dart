@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../core/constants.dart';
 import '../../core/widgets.dart';
 import '../../data/database.dart';
@@ -15,11 +16,15 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final user = TextEditingController();
   final pass = TextEditingController();
+  final _secureStorage = const FlutterSecureStorage();
+  bool rememberMe = false;
+  bool _checkingRememberedLogin = true;
 
   @override
   void initState() {
     super.initState();
     _showGreetingOnce();
+    _tryRememberedLogin();
   }
 
   Future<void> _showGreetingOnce() async {
@@ -37,6 +42,71 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     await prefs.setBool('cp_first_run_greeting_shown', true);
+  }
+
+  Future<void> _tryRememberedLogin() async {
+    try {
+      final savedRemember =
+          await _secureStorage.read(key: 'cp_remember_me');
+      final savedUser =
+          await _secureStorage.read(key: 'cp_remember_user');
+      final savedPass =
+          await _secureStorage.read(key: 'cp_remember_pass');
+
+      if (savedRemember == 'true' &&
+          savedUser != null &&
+          savedPass != null &&
+          savedUser.isNotEmpty) {
+        final u = await DB.login(savedUser, savedPass);
+
+        if (u != null && mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => HomePage(
+                username: u['username'] as String,
+                role: u['role'] as String,
+              ),
+            ),
+          );
+          return;
+        }
+
+        // Kredensial sudah tidak valid.
+        await _clearRememberedLogin();
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _checkingRememberedLogin = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _saveRememberedLogin() async {
+    if (rememberMe) {
+      await _secureStorage.write(
+        key: 'cp_remember_me',
+        value: 'true',
+      );
+      await _secureStorage.write(
+        key: 'cp_remember_user',
+        value: user.text.trim(),
+      );
+      await _secureStorage.write(
+        key: 'cp_remember_pass',
+        value: pass.text,
+      );
+    } else {
+      await _clearRememberedLogin();
+    }
+  }
+
+  Future<void> _clearRememberedLogin() async {
+    await _secureStorage.delete(key: 'cp_remember_me');
+    await _secureStorage.delete(key: 'cp_remember_user');
+    await _secureStorage.delete(key: 'cp_remember_pass');
   }
 
   Future<void> login() async {
@@ -58,6 +128,10 @@ class _LoginPageState extends State<LoginPage> {
         );
         return;
       }
+
+      await _saveRememberedLogin();
+
+      if (!mounted) return;
 
       Navigator.pushReplacement(
         context,
@@ -83,6 +157,14 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (_checkingRememberedLogin) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Scaffold(
       body: DecoratedBox(
         decoration: const BoxDecoration(
@@ -153,7 +235,20 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             onSubmitted: (_) => login(),
                           ),
-                          const SizedBox(height: 18),
+                          Row(
+                            children: [
+                              Checkbox(
+                                value: rememberMe,
+                                onChanged: (value) {
+                                  setState(() {
+                                    rememberMe = value ?? false;
+                                  });
+                                },
+                              ),
+                              const Text('Ingat saya'),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
                           SizedBox(
                             width: double.infinity,
                             child: FilledButton.icon(
