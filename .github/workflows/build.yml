@@ -72,6 +72,22 @@ jobs:
         working-directory: app
         run: sed -i 's/android:label="[^"]*"/android:label="Colonel POS v7.2"/' android/app/src/main/AndroidManifest.xml
 
+      - name: Setup release keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 --decode > app/android/app/colonel-pos-v7.2-release.jks
+
+          cat > app/android/key.properties <<EOF
+          storePassword=$KEYSTORE_PASSWORD
+          keyPassword=$KEY_PASSWORD
+          keyAlias=$KEY_ALIAS
+          storeFile=colonel-pos-v7.2-release.jks
+          EOF
+
       - name: Build APK
         working-directory: app
         run: flutter build apk --release
