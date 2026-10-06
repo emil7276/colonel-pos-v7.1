@@ -23,7 +23,7 @@ class DB {
 
     _db = await openDatabase(
       path.join(dir, 'colonel_pos_v64.db'),
-      version: 5,
+      version: 6,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE products(
@@ -64,7 +64,8 @@ class DB {
             customer_phone TEXT NOT NULL DEFAULT '',
             transfer_bank TEXT NOT NULL DEFAULT '',
             transfer_account TEXT NOT NULL DEFAULT '',
-            due_date TEXT NOT NULL DEFAULT ''
+            due_date TEXT NOT NULL DEFAULT '',
+            receivable_status TEXT NOT NULL DEFAULT 'Belum Lunas'
           )
         ''');
 
@@ -163,6 +164,12 @@ class DB {
         if (oldVersion < 5) {
           await db.execute(
             "ALTER TABLE sale_items ADD COLUMN returned_qty INTEGER NOT NULL DEFAULT 0",
+          );
+        }
+
+        if (oldVersion < 6) {
+          await db.execute(
+            "ALTER TABLE sales ADD COLUMN receivable_status TEXT NOT NULL DEFAULT 'Belum Lunas'",
           );
         }
       },
@@ -897,6 +904,60 @@ class DB {
     return (rows.first['total'] as num).toInt();
   }
 
+  static Future<List<Map<String, dynamic>>> receivables() async {
+    final db = await database;
+
+    return db.rawQuery(
+      '''
+      SELECT
+        s.*,
+        COALESCE(
+          (
+            SELECT SUM(si.returned_qty * si.price)
+            FROM sale_items si
+            WHERE si.sale_id = s.id
+          ),
+          0
+        ) AS returned_amount,
+        (
+          s.total - COALESCE(
+            (
+              SELECT SUM(si.returned_qty * si.price)
+              FROM sale_items si
+              WHERE si.sale_id = s.id
+            ),
+            0
+          )
+        ) AS outstanding_amount
+      FROM sales s
+      WHERE s.payment = 'Bayar Tunda'
+        AND s.receivable_status != 'Lunas'
+        AND (
+          s.total - COALESCE(
+            (
+              SELECT SUM(si.returned_qty * si.price)
+              FROM sale_items si
+              WHERE si.sale_id = s.id
+            ),
+            0
+          )
+        ) > 0
+      ORDER BY s.sale_time DESC
+      ''',
+    );
+  }
+
+  static Future<void> settleReceivable(int saleId) async {
+    final db = await database;
+
+    await db.update(
+      'sales',
+      {'receivable_status': 'Lunas'},
+      where: 'id=? AND payment=?',
+      whereArgs: [saleId, 'Bayar Tunda'],
+    );
+  }
+
   static Future<int> payLaterTotal(
     DateTime from,
     DateTime to,
@@ -905,12 +966,34 @@ class DB {
 
     final rows = await db.rawQuery(
       '''
-      SELECT COALESCE(SUM(total),0) total
-      FROM sales
-      WHERE sale_time >= ?
-        AND sale_time < ?
-        AND returned=0
-        AND payment = 'Bayar Tunda'
+      SELECT COALESCE(
+        SUM(
+          s.total - COALESCE(
+            (
+              SELECT SUM(si.returned_qty * si.price)
+              FROM sale_items si
+              WHERE si.sale_id = s.id
+            ),
+            0
+          )
+        ),
+        0
+      ) AS total
+      FROM sales s
+      WHERE s.sale_time >= ?
+        AND s.sale_time < ?
+        AND s.payment = 'Bayar Tunda'
+        AND s.receivable_status != 'Lunas'
+        AND (
+          s.total - COALESCE(
+            (
+              SELECT SUM(si.returned_qty * si.price)
+              FROM sale_items si
+              WHERE si.sale_id = s.id
+            ),
+            0
+          )
+        ) > 0
       ''',
       [
         _dbDate(from),

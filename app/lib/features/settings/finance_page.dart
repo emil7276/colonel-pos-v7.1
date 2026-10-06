@@ -19,6 +19,8 @@ class _FinancePageState extends State<FinancePage> {
   int payLater = 0;
   int expense = 0;
   int debt = 0;
+  int receivable = 0;
+  int payable = 0;
   List<Map<String, dynamic>> expenseRows = [];
 
   @override
@@ -55,6 +57,8 @@ class _FinancePageState extends State<FinancePage> {
       payLater = results[1] as int;
       expense = results[2] as int;
       debt = results[3] as int;
+      receivable = payLater;
+      payable = debt;
       expenseRows = results[4] as List<Map<String, dynamic>>;
     });
   }
@@ -362,6 +366,28 @@ class _FinancePageState extends State<FinancePage> {
                     'Pengeluaran',
                     expense,
                     Icons.trending_down_rounded,
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 8),
+
+            Row(
+              children: [
+                Expanded(
+                  child: _metric(
+                    'Piutang',
+                    receivable,
+                    Icons.account_balance_rounded,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _metric(
+                    'Hutang',
+                    payable,
+                    Icons.receipt_long_rounded,
                   ),
                 ),
               ],
