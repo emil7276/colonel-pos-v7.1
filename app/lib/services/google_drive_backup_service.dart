@@ -23,11 +23,6 @@ class GoogleDriveBackupService {
   static Future<GoogleSignInAccount> _getAccount() async {
     await _ensureInitialized();
 
-    final current = _googleSignIn.currentUser;
-    if (current != null) {
-      return current;
-    }
-
     if (!_googleSignIn.supportsAuthenticate()) {
       throw Exception(
         'Google Sign-In tidak didukung pada perangkat ini.',
@@ -142,6 +137,7 @@ class _GoogleAuthClient extends http.BaseClient {
     return _inner.send(request);
   }
 
+  @override
   void close() {
     _inner.close();
   }
