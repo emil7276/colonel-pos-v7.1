@@ -23,7 +23,7 @@ class DB {
 
     _db = await openDatabase(
       path.join(dir, 'colonel_pos_v64.db'),
-      version: 4,
+      version: 5,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE products(
@@ -75,7 +75,8 @@ class DB {
             product_id INTEGER,
             name TEXT NOT NULL,
             qty INTEGER NOT NULL,
-            price INTEGER NOT NULL
+            price INTEGER NOT NULL,
+            returned_qty INTEGER NOT NULL DEFAULT 0
           )
         ''');
 
@@ -158,6 +159,11 @@ class DB {
           await db.execute("ALTER TABLE sales ADD COLUMN due_date TEXT NOT NULL DEFAULT ''");
           await db.execute("ALTER TABLE expenses ADD COLUMN payment_status TEXT NOT NULL DEFAULT 'Sudah Dibayar'");
           await db.execute("ALTER TABLE expenses ADD COLUMN due_date TEXT NOT NULL DEFAULT ''");
+        }
+        if (oldVersion < 5) {
+          await db.execute(
+            "ALTER TABLE sale_items ADD COLUMN returned_qty INTEGER NOT NULL DEFAULT 0",
+          );
         }
       },
     );
@@ -426,6 +432,7 @@ class DB {
             'name': line.product.name,
             'qty': line.qty,
             'price': line.product.price,
+            'returned_qty': 0,
           },
         );
 
@@ -475,11 +482,16 @@ class DB {
     );
   }
 
-  static Future<void> returnSale(
+  static Future<void> returnSalePartial(
     int saleId,
     String adminUser,
+    Map<int, int> returnQtyByItem,
   ) async {
     final db = await database;
+
+    if (returnQtyByItem.isEmpty) {
+      throw Exception('Tidak ada item yang diretur.');
+    }
 
     await db.transaction((txn) async {
       final saleRows = await txn.query(
@@ -490,15 +502,7 @@ class DB {
       );
 
       if (saleRows.isEmpty) {
-        throw Exception(
-          'Transaksi tidak ditemukan.',
-        );
-      }
-
-      if (saleRows.first['returned'] == 1) {
-        throw Exception(
-          'Transaksi sudah diretur.',
-        );
+        throw Exception('Transaksi tidak ditemukan.');
       }
 
       final items = await txn.query(
@@ -507,15 +511,48 @@ class DB {
         whereArgs: [saleId],
       );
 
-      for (final item in items) {
+      if (items.isEmpty) {
+        throw Exception('Item transaksi tidak ditemukan.');
+      }
+
+      final itemById = <int, Map<String, dynamic>>{
+        for (final item in items)
+          (item['id'] as num).toInt(): item,
+      };
+
+      for (final entry in returnQtyByItem.entries) {
+        final itemId = entry.key;
+        final requested = entry.value;
+
+        if (requested < 0) {
+          throw Exception('Jumlah retur tidak boleh negatif.');
+        }
+
+        if (requested == 0) continue;
+
+        final item = itemById[itemId];
+        if (item == null) {
+          throw Exception('Item retur tidak ditemukan.');
+        }
+
+        final originalQty = (item['qty'] as num).toInt();
+        final returnedQty =
+            (item['returned_qty'] as num?)?.toInt() ?? 0;
+        final remainingQty = originalQty - returnedQty;
+
+        if (requested > remainingQty) {
+          throw Exception(
+            'Jumlah retur melebihi sisa item ${item['name']}. '
+            'Sisa yang dapat diretur: $remainingQty.',
+          );
+        }
+
         final productId = item['product_id'];
-        final qty = item['qty'] as int;
 
         if (productId != null) {
           await txn.rawUpdate(
-            'UPDATE products '
-            'SET stock=stock+? WHERE id=?',
-            [qty, productId],
+            'UPDATE products SET stock=stock+? WHERE id=?',
+            [requested, productId],
           );
 
           await txn.insert(
@@ -524,20 +561,87 @@ class DB {
               'product_id': productId,
               'time': stamp(),
               'type': 'RETUR',
-              'qty': qty,
+              'qty': requested,
               'note': 'Retur oleh $adminUser',
             },
           );
         }
+
+        await txn.rawUpdate(
+          'UPDATE sale_items '
+          'SET returned_qty = returned_qty + ? '
+          'WHERE id=?',
+          [requested, itemId],
+        );
       }
+
+      final remainingRows = await txn.rawQuery(
+        'SELECT COUNT(*) jumlah '
+        'FROM sale_items '
+        'WHERE sale_id=? AND returned_qty < qty',
+        [saleId],
+      );
+
+      final remaining =
+          (remainingRows.first['jumlah'] as num).toInt();
 
       await txn.update(
         'sales',
-        {'returned': 1},
+        {'returned': remaining == 0 ? 1 : 0},
         where: 'id=?',
         whereArgs: [saleId],
       );
     });
+  }
+
+  static Future<void> returnSale(
+    int saleId,
+    String adminUser,
+  ) async {
+    final items = await saleItems(saleId);
+
+    if (items.isEmpty) {
+      throw Exception('Item transaksi tidak ditemukan.');
+    }
+
+    final returnQtyByItem = <int, int>{};
+
+    for (final item in items) {
+      final id = (item['id'] as num).toInt();
+      final qty = (item['qty'] as num).toInt();
+      final returned =
+          (item['returned_qty'] as num?)?.toInt() ?? 0;
+      final remaining = qty - returned;
+
+      if (remaining > 0) {
+        returnQtyByItem[id] = remaining;
+      }
+    }
+
+    if (returnQtyByItem.isEmpty) {
+      throw Exception('Transaksi sudah diretur seluruhnya.');
+    }
+
+    await returnSalePartial(
+      saleId,
+      adminUser,
+      returnQtyByItem,
+    );
+  }
+
+  static Future<int> returnedAmount(int saleId) async {
+    final db = await database;
+
+    final rows = await db.rawQuery(
+      '''
+      SELECT COALESCE(SUM(returned_qty * price),0) amount
+      FROM sale_items
+      WHERE sale_id=?
+      ''',
+      [saleId],
+    );
+
+    return (rows.first['amount'] as num).toInt();
   }
 
   static Future<List<Map<String, dynamic>>> bestSelling(
@@ -549,18 +653,18 @@ class DB {
     return db.rawQuery(
       '''
       SELECT name,
-             SUM(qty) qty,
-             SUM(qty*price) omzet
+             SUM(qty - returned_qty) qty,
+             SUM((qty - returned_qty) * price) omzet
       FROM sale_items
       WHERE sale_id IN (
         SELECT id
         FROM sales
         WHERE sale_time >= ?
           AND sale_time < ?
-          AND returned=0
           AND payment != 'Bayar Tunda'
       )
       GROUP BY name
+      HAVING SUM(qty - returned_qty) > 0
       ORDER BY qty DESC
       ''',
       [
@@ -580,11 +684,19 @@ class DB {
       '''
       SELECT substr(sale_time,12,2) jam,
              COUNT(*) transaksi,
-             SUM(total) omzet
+             SUM((
+  total - COALESCE(
+    (
+      SELECT SUM(si.returned_qty * si.price)
+      FROM sale_items si
+      WHERE si.sale_id = sales.id
+    ),
+    0
+  )
+)) omzet
       FROM sales
       WHERE sale_time >= ?
         AND sale_time < ?
-        AND returned=0
         AND payment != 'Bayar Tunda'
       GROUP BY jam
       ORDER BY transaksi DESC
@@ -606,11 +718,19 @@ class DB {
       '''
       SELECT substr(sale_time,1,10) tanggal,
              COUNT(*) transaksi,
-             SUM(total) omzet
+             SUM((
+  total - COALESCE(
+    (
+      SELECT SUM(si.returned_qty * si.price)
+      FROM sale_items si
+      WHERE si.sale_id = sales.id
+    ),
+    0
+  )
+)) omzet
       FROM sales
       WHERE sale_time >= ?
         AND sale_time < ?
-        AND returned=0
         AND payment != 'Bayar Tunda'
       GROUP BY tanggal
       ORDER BY transaksi DESC
@@ -634,11 +754,19 @@ class DB {
         COALESCE(NULLIF(customer_name,''),'Pelanggan Umum') customer_name,
         COALESCE(NULLIF(customer_type,''),'Retail') customer_type,
         COUNT(*) transaksi,
-        COALESCE(SUM(total),0) omzet
+        COALESCE(SUM((
+  total - COALESCE(
+    (
+      SELECT SUM(si.returned_qty * si.price)
+      FROM sale_items si
+      WHERE si.sale_id = sales.id
+    ),
+    0
+  )
+)),0) omzet
       FROM sales
       WHERE sale_time >= ?
         AND sale_time < ?
-        AND returned=0
         AND payment != 'Bayar Tunda'
       GROUP BY customer_name, customer_type
       ORDER BY omzet DESC
@@ -662,11 +790,19 @@ class DB {
       '''
       SELECT substr(sale_time,1,7) periode,
              COUNT(*) transaksi,
-             COALESCE(SUM(total),0) omzet
+             COALESCE(SUM((
+  total - COALESCE(
+    (
+      SELECT SUM(si.returned_qty * si.price)
+      FROM sale_items si
+      WHERE si.sale_id = sales.id
+    ),
+    0
+  )
+)),0) omzet
       FROM sales
       WHERE sale_time >= ?
         AND sale_time < ?
-        AND returned=0
         AND payment != 'Bayar Tunda'
       GROUP BY periode
       ORDER BY periode
@@ -684,11 +820,19 @@ class DB {
       '''
       SELECT substr(sale_time,1,4) periode,
              COUNT(*) transaksi,
-             COALESCE(SUM(total),0) omzet
+             COALESCE(SUM((
+  total - COALESCE(
+    (
+      SELECT SUM(si.returned_qty * si.price)
+      FROM sale_items si
+      WHERE si.sale_id = sales.id
+    ),
+    0
+  )
+)),0) omzet
       FROM sales
       WHERE sale_time >= ?
         AND sale_time < ?
-        AND returned=0
         AND payment != 'Bayar Tunda'
       GROUP BY periode
       ORDER BY periode
@@ -730,7 +874,6 @@ class DB {
       FROM sales
       WHERE sale_time >= ?
         AND sale_time < ?
-        AND returned=0
         AND payment != 'Bayar Tunda'
       ''',
       [
@@ -836,21 +979,63 @@ class DB {
     final start = DateTime(day.year, day.month, day.day);
     final end = start.add(const Duration(days: 1));
     final db = await database;
-    final salesRows = await db.query('sales', where: 'sale_time >= ? AND sale_time < ?', whereArgs: [_dbDate(start), _dbDate(end)], orderBy: 'sale_time DESC');
-    final valid = salesRows.where((x) => x['returned'] != 1).toList();
+
+    final salesRows = await db.query(
+      'sales',
+      where: 'sale_time >= ? AND sale_time < ?',
+      whereArgs: [_dbDate(start), _dbDate(end)],
+      orderBy: 'sale_time DESC',
+    );
+
+    final valid = salesRows.toList();
     final returned = salesRows.where((x) => x['returned'] == 1).toList();
-    final itemRows = await db.rawQuery(
-      "SELECT COALESCE(SUM(si.qty),0) jumlah FROM sale_items si INNER JOIN sales s ON s.id=si.sale_id WHERE s.sale_time >= ? AND s.sale_time < ? AND s.returned=0 AND s.payment != 'Bayar Tunda'",
+
+    final summaryRows = await db.rawQuery(
+      "SELECT "
+      "COALESCE(SUM(si.qty - si.returned_qty),0) item, "
+      "COALESCE(SUM(si.returned_qty * si.price),0) returned_amount "
+      "FROM sale_items si "
+      "INNER JOIN sales s ON s.id=si.sale_id "
+      "WHERE s.sale_time >= ? "
+      "AND s.sale_time < ? "
+      "AND s.payment != 'Bayar Tunda'",
       [_dbDate(start), _dbDate(end)],
     );
-    final payments = <String,int>{};
-    for (final row in valid) { final p = row['payment']?.toString() ?? 'Lainnya'; payments[p] = (payments[p] ?? 0) + 1; }
-    return {'sales': valid,
-      'returnedSales': returned, 'returned': returned.length, 'omzet': valid.where((x) => x['payment'] != 'Bayar Tunda').fold<int>(0, (sum, x) => sum + (x['total'] as num).toInt()), 'transaksi': valid.where((x) => x['payment'] != 'Bayar Tunda').length, 'item': (itemRows.first['jumlah'] as num).toInt(), 'payments': payments};
+
+    final gross = valid
+        .where((x) => x['payment'] != 'Bayar Tunda')
+        .fold<int>(
+          0,
+          (sum, x) => sum + (x['total'] as num).toInt(),
+        );
+
+    final returnAmount =
+        (summaryRows.first['returned_amount'] as num).toInt();
+
+    final net = gross - returnAmount;
+
+    final payments = <String, int>{};
+
+    for (final row in valid) {
+      final payment = row['payment']?.toString() ?? 'Lainnya';
+      payments[payment] = (payments[payment] ?? 0) + 1;
+    }
+
+    return {
+      'sales': valid,
+      'returnedSales': returned,
+      'returned': returned.length,
+      'gross': gross,
+      'returnAmount': returnAmount,
+      'omzet': net,
+      'net': net,
+      'transaksi': valid
+          .where((x) => x['payment'] != 'Bayar Tunda')
+          .length,
+      'item': (summaryRows.first['item'] as num).toInt(),
+      'payments': payments,
+    };
   }
-
-
-  
 
   static Future<Map<String, dynamic>> rangeSummary(
     DateTime from,
@@ -865,42 +1050,55 @@ class DB {
       orderBy: 'sale_time DESC',
     );
 
-    final valid = salesRows.where((x) => x['returned'] != 1).toList();
+    final valid = salesRows.toList();
     final returned = salesRows.where((x) => x['returned'] == 1).toList();
 
-    final itemRows = await db.rawQuery(
-      "SELECT COALESCE(SUM(si.qty),0) jumlah "
+    final summaryRows = await db.rawQuery(
+      "SELECT "
+      "COALESCE(SUM(si.qty - si.returned_qty),0) item, "
+      "COALESCE(SUM(si.returned_qty * si.price),0) returned_amount "
       "FROM sale_items si "
       "INNER JOIN sales s ON s.id=si.sale_id "
       "WHERE s.sale_time >= ? "
       "AND s.sale_time < ? "
-      "AND s.returned=0 "
       "AND s.payment != 'Bayar Tunda'",
       [_dbDate(from), _dbDate(to)],
     );
 
-    final payments = <String,int>{};
+    final gross = valid
+        .where((x) => x['payment'] != 'Bayar Tunda')
+        .fold<int>(
+          0,
+          (sum, x) => sum + (x['total'] as num).toInt(),
+        );
+
+    final returnAmount =
+        (summaryRows.first['returned_amount'] as num).toInt();
+
+    final net = gross - returnAmount;
+
+    final payments = <String, int>{};
 
     for (final row in valid) {
-      final p = row['payment']?.toString() ?? 'Lainnya';
-      payments[p] = (payments[p] ?? 0) + 1;
+      final payment = row['payment']?.toString() ?? 'Lainnya';
+      payments[payment] = (payments[payment] ?? 0) + 1;
     }
 
     return {
       'sales': valid,
       'returnedSales': returned,
       'returned': returned.length,
-      'omzet': valid
-          .where((x) => x['payment'] != 'Bayar Tunda')
-          .fold<int>(0, (sum, x) => sum + (x['total'] as num).toInt()),
+      'gross': gross,
+      'returnAmount': returnAmount,
+      'omzet': net,
+      'net': net,
       'transaksi': valid
           .where((x) => x['payment'] != 'Bayar Tunda')
           .length,
-      'item': (itemRows.first['jumlah'] as num).toInt(),
+      'item': (summaryRows.first['item'] as num).toInt(),
       'payments': payments,
     };
   }
-
 
   static Future<List<Map<String, dynamic>>> expenses(
     DateTime from,
