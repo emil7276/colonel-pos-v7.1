@@ -645,37 +645,205 @@ class _ReportPageState extends State<ReportPage> {
 
   Future<void> authorizeReturn(SaleModel sale) async {
     final pass = TextEditingController();
+
     final ok = await showDialog<bool>(
       context: context,
-      builder: (_) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: const Text('Otorisasi Retur Admin'),
         content: TextField(
           controller: pass,
           obscureText: true,
-          decoration: const InputDecoration(labelText: 'Password Admin'),
+          decoration: const InputDecoration(
+            labelText: 'Password Admin',
+          ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Batal')),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Batal'),
+          ),
           FilledButton(
             onPressed: () async {
               final admin = await DB.login('admin', pass.text);
-              if (!context.mounted) return;
-              Navigator.pop(context, admin != null && admin['role'] == 'Administrator');
+              if (!dialogContext.mounted) return;
+
+              Navigator.pop(
+                dialogContext,
+                admin != null && admin['role'] == 'Administrator',
+              );
             },
             child: const Text('OTORISASI'),
           ),
         ],
       ),
     );
-    if (ok != true) return;
+
+    pass.dispose();
+
+    if (ok != true || !mounted) return;
+
+    final items = await DB.saleItems(sale.id);
+
+    if (!mounted) return;
+
+    final controllers = <int, TextEditingController>{};
+
+    for (final item in items) {
+      final itemId = (item['id'] as num).toInt();
+      controllers[itemId] = TextEditingController(text: '0');
+    }
+
+    final returnQty = await showDialog<Map<int, int>?>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text('Retur Sebagian #${sale.id}'),
+        content: SizedBox(
+          width: 500,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (final item in items)
+                  Builder(
+                    builder: (itemContext) {
+                      final itemId = (item['id'] as num).toInt();
+                      final qty = (item['qty'] as num).toInt();
+                      final returned =
+                          (item['returned_qty'] as num?)?.toInt() ?? 0;
+                      final remaining = qty - returned;
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${item['name']}',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 3),
+                                  Text(
+                                    'Qty: $qty • Sudah retur: $returned • Sisa: $remaining',
+                                    style: Theme.of(itemContext)
+                                        .textTheme
+                                        .bodySmall,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            SizedBox(
+                              width: 70,
+                              child: TextField(
+                                controller: controllers[itemId],
+                                enabled: remaining > 0,
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  labelText: 'Retur',
+                                  isDense: true,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Batal'),
+          ),
+          FilledButton(
+            onPressed: () {
+              final result = <int, int>{};
+              var total = 0;
+
+              for (final item in items) {
+                final itemId = (item['id'] as num).toInt();
+                final qty = (item['qty'] as num).toInt();
+                final returned =
+                    (item['returned_qty'] as num?)?.toInt() ?? 0;
+                final remaining = qty - returned;
+
+                final value =
+                    int.tryParse(controllers[itemId]?.text.trim() ?? '') ?? 0;
+
+                if (value < 0 || value > remaining) {
+                  ScaffoldMessenger.of(dialogContext).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Qty retur ${item['name']} harus 0 sampai $remaining.',
+                      ),
+                    ),
+                  );
+                  return;
+                }
+
+                if (value > 0) {
+                  result[itemId] = value;
+                  total += value;
+                }
+              }
+
+              if (total == 0) {
+                ScaffoldMessenger.of(dialogContext).showSnackBar(
+                  const SnackBar(
+                    content: Text('Masukkan minimal 1 qty untuk diretur.'),
+                  ),
+                );
+                return;
+              }
+
+              Navigator.pop(dialogContext, result);
+            },
+            child: const Text('PROSES RETUR'),
+          ),
+        ],
+      ),
+    );
+
+    for (final controller in controllers.values) {
+      controller.dispose();
+    }
+
+    if (returnQty == null || returnQty.isEmpty || !mounted) return;
+
     try {
-      await DB.returnSale(sale.id, 'admin');
+      await DB.returnSalePartial(
+        sale.id,
+        'admin',
+        returnQty,
+      );
+
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Retur berhasil. Stok dikembalikan.')));
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Retur berhasil. Stok dikembalikan.'),
+        ),
+      );
+
       await load();
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Retur gagal: $e')));
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Retur gagal: $e'),
+        ),
+      );
     }
   }
 }
