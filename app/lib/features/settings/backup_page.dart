@@ -6,6 +6,7 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import '../../core/widgets.dart';
 import '../../data/database.dart';
+import '../../services/google_drive_backup_service.dart';
 
 class BackupPage extends StatefulWidget {
   const BackupPage({super.key});
@@ -67,6 +68,37 @@ class _BackupPageState extends State<BackupPage> {
     }
   }
 
+  Future<void> backupToGoogleDrive() async {
+    if (working) return;
+
+    setState(() => working = true);
+
+    try {
+      final data = await DB.backup();
+
+      final fileName =
+          await GoogleDriveBackupService.uploadBackup(data: data);
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Backup Google Drive berhasil: $fileName'),
+        ),
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Backup Google Drive gagal: $e'),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => working = false);
+    }
+  }
+
   Future<void> restore() async {
     if(working) return;
     final ok=await showDialog<bool>(
@@ -123,6 +155,15 @@ class _BackupPageState extends State<BackupPage> {
                     const SizedBox(width:10),
                     Expanded(child:OutlinedButton.icon(onPressed:working?null:restore,icon:const Icon(Icons.restore_rounded),label:const Text('RESTORE'))),
                   ]),
+                  const SizedBox(height:10),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: working ? null : backupToGoogleDrive,
+                      icon: const Icon(Icons.cloud_upload_rounded),
+                      label: const Text('BACKUP KE GOOGLE DRIVE'),
+                    ),
+                  ),
                 ],
               ),
             ),
