@@ -17,7 +17,10 @@ class GoogleDriveBackupService {
   static Future<void>? _initialized;
 
   static Future<void> _ensureInitialized() {
-    return _initialized ??= _googleSignIn.initialize();
+    return _initialized ??= _googleSignIn.initialize(
+      serverClientId:
+          '661221438084-dfuspmpaqm8tp56bsgmm5aifck9fbck5.apps.googleusercontent.com',
+    );
   }
 
   static Future<GoogleSignInAccount> _getAccount() async {
