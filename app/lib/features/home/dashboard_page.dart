@@ -24,7 +24,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  int omzet = 0, transaksi = 0, item = 0, pengeluaran = 0;
+  int omzet = 0, transaksi = 0, item = 0, retur = 0, pengeluaran = 0, piutang = 0, labaBersih = 0;
   List<SaleModel> recent = [];
 
   DateTime selectedDate = DateTime.now();
@@ -49,47 +49,36 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Future<void> load() async {
-    final all = await DB.sales();
-    var om = 0;
-    var tr = 0;
+    final summary = await DB.rangeSummary(start, end);
 
-    for (final raw in all) {
-      final s = SaleModel.fromMap(raw);
-      final d = DateTime.tryParse(s.time);
-      if (d != null && !d.isBefore(start) && d.isBefore(end) && !s.returned) {
-        om += s.total;
-        tr++;
-      }
-    }
+    var expenseTotal = 0;
+    var expenseDebt = 0;
+    var receivable = 0;
 
-    final db = await DB.database;
-    final ymd = (DateTime d) {
-      final y = d.year.toString().padLeft(4, '0');
-      final m = d.month.toString().padLeft(2, '0');
-      final day = d.day.toString().padLeft(2, '0');
-      return '$y-$m-$day';
-    };
-    final from = '${ymd(start)} 00:00:00';
-    final to = '${ymd(end)} 00:00:00';
-    final rows = await db.rawQuery(
-      '''SELECT COALESCE(SUM(si.qty),0) jumlah
-         FROM sale_items si INNER JOIN sales s ON s.id=si.sale_id
-         WHERE s.sale_time >= ? AND s.sale_time < ? AND s.returned=0''',
-      [from, to],
-    );
-
-    var expenseToday = 0;
     if (widget.role == 'Administrator') {
-      expenseToday = await DB.expenseTotal(start, end);
+      expenseTotal = await DB.expenseTotal(start, end);
+      expenseDebt = await DB.expenseDebtTotal(start, end);
+      receivable = await DB.payLaterTotal(start, end);
     }
+
+    final netIncome = summary['omzet'] as int;
+    final paidExpense = expenseTotal - expenseDebt;
+    final netProfit = netIncome - paidExpense;
 
     if (!mounted) return;
+
     setState(() {
-      omzet = om;
-      transaksi = tr;
-      item = (rows.first['jumlah'] as num).toInt();
-      pengeluaran = expenseToday;
-      recent = all.take(5).map(SaleModel.fromMap).toList();
+      omzet = netIncome;
+      transaksi = summary['transaksi'] as int;
+      retur = summary['returned'] as int;
+      pengeluaran = expenseTotal;
+      piutang = receivable;
+      labaBersih = netProfit;
+
+      recent = (summary['sales'] as List)
+          .map((e) => SaleModel.fromMap(e as Map<String, dynamic>))
+          .take(5)
+          .toList();
     });
   }
 
@@ -264,10 +253,27 @@ class _DashboardPageState extends State<DashboardPage> {
                 crossAxisSpacing: 8,
                 childAspectRatio: 1.72,
                 children: [
-                  _stat('Omzet', rp(omzet), Icons.payments_rounded, true),
-                  _stat('Transaksi', '$transaksi', Icons.receipt_long_rounded, false, onTap: showTransactions),
-                  _stat('Item Terjual', '$item', Icons.fastfood_rounded, false, onTap: showItemsSold),
-                  if (widget.role == 'Administrator')
+                  _stat(
+                    'Omzet',
+                    rp(omzet),
+                    Icons.payments_rounded,
+                    true,
+                  ),
+                  _stat(
+                    'Transaksi',
+                    '$transaksi',
+                    Icons.receipt_long_rounded,
+                    false,
+                    onTap: showTransactions,
+                  ),
+                  _stat(
+                    'Retur',
+                    '$retur',
+                    Icons.assignment_return_rounded,
+                    false,
+                    onTap: () => widget.onQuickAccess?.call('laporan'),
+                  ),
+                  if (widget.role == 'Administrator') ...[
                     _stat(
                       'Pengeluaran',
                       rp(pengeluaran),
@@ -281,14 +287,36 @@ class _DashboardPageState extends State<DashboardPage> {
                           ),
                         );
                       },
-                    )
-                  else
-                    _stat(
-                      'Status',
-                      'V6.5.0',
-                      Icons.verified_rounded,
-                      false,
                     ),
+                    _stat(
+                      'Piutang',
+                      rp(piutang),
+                      Icons.account_balance_rounded,
+                      false,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const FinancePage(),
+                          ),
+                        );
+                      },
+                    ),
+                    _stat(
+                      'Laba Bersih',
+                      rp(labaBersih),
+                      Icons.trending_up_rounded,
+                      false,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const FinancePage(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ],
               );
             },
