@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../core/constants.dart';
 import '../../core/trial_service.dart';
 import '../../core/license/license_service.dart';
@@ -95,6 +96,15 @@ String _trialLabel() {
   }
 
   Future<void> logout() async {
+    const storage = FlutterSecureStorage();
+
+    // Logout manual harus membatalkan Remember Me.
+    await storage.delete(key: 'cp_remember_me');
+    await storage.delete(key: 'cp_remember_user');
+    await storage.delete(key: 'cp_remember_pass');
+
+    if (!mounted) return;
+
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (_) => const LoginPage()),
