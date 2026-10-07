@@ -362,99 +362,139 @@ class _DashboardPageState extends State<DashboardPage> {
                     LayoutBuilder(
             builder: (context, c) {
               final cross = c.maxWidth > 700 ? 4 : 2;
-              return GridView.count(
-                crossAxisCount: cross,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
-                childAspectRatio: 1.72,
+              final slot = (c.maxWidth - (cross - 1) * 8) / cross;
+              final cardHeight = slot / 1.72;
+
+              return Wrap(
+                spacing: 8,
+                runSpacing: 8,
                 children: [
-                  _stat(
-                    'Omzet',
-                    rp(omzet),
-                    Icons.payments_rounded,
-                    true,
-                    onTap: showOmzet,
-                  ),
-                  _stat(
-                    'Transaksi',
-                    '$transaksi',
-                    Icons.receipt_long_rounded,
-                    false,
-                    onTap: showTransactions,
-                  ),
-                  _stat(
-                    'Retur',
-                    '$retur',
-                    Icons.assignment_return_rounded,
-                    false,
-                    onTap: showReturns,
-                  ),
-                  if (widget.role == 'Administrator') ...[
-                    _stat(
-                      'Pengeluaran',
-                      rp(pengeluaran),
-                      Icons.account_balance_wallet_rounded,
-                      false,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const FinancePage(),
-                          ),
-                        );
-                      },
+                  SizedBox(
+                    width: slot,
+                    height: cardHeight,
+                    child: _stat(
+                      'Omzet',
+                      rp(omzet),
+                      Icons.payments_rounded,
+                      true,
+                      onTap: showOmzet,
                     ),
-                    _stat(
-                      'Piutang',
-                      rp(piutang),
-                      Icons.account_balance_rounded,
-                      false,
-                      reminder: piutangReminder > 0,
-                      onTap: showReceivables,
-                    ),
-                    _stat(
-                      'Hutang',
-                      rp(hutang),
+                  ),
+                  SizedBox(
+                    width: slot,
+                    height: cardHeight,
+                    child: _stat(
+                      'Transaksi',
+                      '$transaksi',
                       Icons.receipt_long_rounded,
                       false,
-                      reminder: hutangReminder > 0,
-                      onTap: showPayables,
+                      onTap: showTransactions,
                     ),
-                    _stat(
-                      'Laba Bersih',
-                      rp(labaBersih),
-                      Icons.trending_up_rounded,
+                  ),
+                  SizedBox(
+                    width: slot,
+                    height: cardHeight,
+                    child: _stat(
+                      'Retur',
+                      '$retur',
+                      Icons.assignment_return_rounded,
                       false,
-                      onTap: showNetIncome,
+                      onTap: showReturns,
                     ),
-                    _stat(
-                      'Item Terjual',
-                      '$item',
-                      Icons.inventory_2_rounded,
-                      false,
-                    ),
-                    _stat(
-                      'Produk Paling Laku',
-                      topProductQty > 0
-                          ? '$topProductName ($topProductQty)'
-                          : '-',
-                      Icons.local_fire_department_rounded,
-                      false,
-                      onTap: showTopProducts,
-                    ),
-                    _stat(
-                      'Waktu Paling Laku',
-                      bestTimeValue > 0
-                          ? '$bestTimeName • ${rp(bestTimeValue)}'
-                          : '-',
-                      Icons.schedule_rounded,
-                      false,
-                      onTap: showBestTimes,
+                  ),
+                  if (widget.role == 'Administrator') ...[
+                    SizedBox(
+                      width: slot,
+                      height: cardHeight,
+                      child: _stat(
+                        'Pengeluaran',
+                        rp(pengeluaran),
+                        Icons.account_balance_wallet_rounded,
+                        false,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const FinancePage(),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width - 32,
+                      width: slot,
+                      height: cardHeight,
+                      child: _stat(
+                        'Piutang',
+                        rp(piutang),
+                        Icons.account_balance_rounded,
+                        false,
+                        reminder: piutangReminder > 0,
+                        onTap: showReceivables,
+                      ),
+                    ),
+                    SizedBox(
+                      width: slot,
+                      height: cardHeight,
+                      child: _stat(
+                        'Hutang',
+                        rp(hutang),
+                        Icons.receipt_long_rounded,
+                        false,
+                        reminder: hutangReminder > 0,
+                        onTap: showPayables,
+                      ),
+                    ),
+                    SizedBox(
+                      width: slot,
+                      height: cardHeight,
+                      child: _stat(
+                        'Laba Bersih',
+                        rp(labaBersih),
+                        Icons.trending_up_rounded,
+                        false,
+                        onTap: showNetIncome,
+                      ),
+                    ),
+                    SizedBox(
+                      width: slot,
+                      height: cardHeight,
+                      child: _stat(
+                        'Item Terjual',
+                        '$item',
+                        Icons.inventory_2_rounded,
+                        false,
+                      ),
+                    ),
+                    SizedBox(
+                      width: slot,
+                      height: cardHeight,
+                      child: _stat(
+                        'Produk Paling Laku',
+                        topProductQty > 0
+                            ? '$topProductName ($topProductQty)'
+                            : '-',
+                        Icons.local_fire_department_rounded,
+                        false,
+                        onTap: showTopProducts,
+                      ),
+                    ),
+                    SizedBox(
+                      width: slot,
+                      height: cardHeight,
+                      child: _stat(
+                        'Waktu Paling Laku',
+                        bestTimeValue > 0
+                            ? '$bestTimeName • ${rp(bestTimeValue)}'
+                            : '-',
+                        Icons.schedule_rounded,
+                        false,
+                        onTap: showBestTimes,
+                      ),
+                    ),
+                    SizedBox(
+                      width: slot * 2 + 8,
+                      height: cardHeight,
                       child: _stat(
                         'Pelanggan Teratas',
                         topCustomerValue > 0
