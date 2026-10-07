@@ -104,6 +104,7 @@ class _BackupPageState extends State<BackupPage> {
     final ok=await showDialog<bool>(
       context:context,
       builder:(_)=>AlertDialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         title:const Text('Restore database?'),
         content:const Text('Data saat ini akan diganti dengan isi file backup. Pastikan file berasal dari CP POS.'),
         actions:[

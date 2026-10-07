@@ -680,6 +680,7 @@ class _ReportPageState extends State<ReportPage> {
     final ok = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         title: const Text('Otorisasi Retur Admin'),
         content: TextField(
           controller: pass,
@@ -727,6 +728,7 @@ class _ReportPageState extends State<ReportPage> {
     final returnQty = await showDialog<Map<int, int>?>(
       context: context,
       builder: (dialogContext) => AlertDialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         title: Text('Retur Sebagian #${sale.id}'),
         content: SizedBox(
           width: 500,

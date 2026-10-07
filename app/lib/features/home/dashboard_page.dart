@@ -154,6 +154,7 @@ class _DashboardPageState extends State<DashboardPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
+          insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
           title: const Row(
             children: [
               Icon(
@@ -295,6 +296,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       final code = await showDialog<String>(
                         context: context,
                         builder: (dialogContext) => AlertDialog(
+                          insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
                           title: const Text('Aktivasi Lisensi'),
                           content: TextField(
                             controller: controller,
@@ -629,6 +631,7 @@ class _DashboardPageState extends State<DashboardPage> {
     if (!mounted) return;
     if (sales.isEmpty) {
       await showDialog<void>(context: context, builder: (_) => const AlertDialog(title: Text('Transaksi'), content: Text('Belum ada transaksi hari ini.')));
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       return;
     }
     await showModalBottomSheet<void>(

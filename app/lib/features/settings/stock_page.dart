@@ -37,105 +37,187 @@ class _StockPageState
     Product p,
   ) async {
     final q =
-        TextEditingController();
+        TextEditingController(text: '1');
 
     final note =
         TextEditingController();
 
+    int qty = 1;
+
     await showDialog(
       context: context,
       builder: (_) =>
-          AlertDialog(
-        title: Text(
-          'Stok Masuk • '
-          '${p.name}',
-        ),
-        content: Column(
-          mainAxisSize:
-              MainAxisSize.min,
-          children: [
-            TextField(
-              controller: q,
-              keyboardType:
-                  TextInputType
-                      .number,
-              decoration:
-                  const InputDecoration(
-                labelText:
-                    'Jumlah',
+          StatefulBuilder(
+        builder: (context, setDialogState) =>
+            AlertDialog(
+          title: Text(
+            'Stok Masuk • '
+            '${p.name}',
+          ),
+          content: Column(
+            mainAxisSize:
+                MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                    tooltip:
+                        'Kurangi jumlah',
+                    onPressed: qty > 1
+                        ? () {
+                            setDialogState(() {
+                              qty--;
+                              q.text =
+                                  qty.toString();
+                              q.selection =
+                                  TextSelection
+                                      .fromPosition(
+                                TextPosition(
+                                  offset:
+                                      q.text.length,
+                                ),
+                              );
+                            });
+                          }
+                        : null,
+                    icon:
+                        const Icon(
+                      Icons
+                          .remove_circle_outline,
+                    ),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: q,
+                      keyboardType:
+                          TextInputType.number,
+                      textAlign:
+                          TextAlign.center,
+                      decoration:
+                          const InputDecoration(
+                        labelText:
+                            'Jumlah',
+                      ),
+                      onChanged: (value) {
+                        final parsed =
+                            int.tryParse(
+                              value,
+                            );
+
+                        setDialogState(() {
+                          if (parsed != null &&
+                              parsed > 0) {
+                            qty = parsed;
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                  IconButton(
+                    tooltip:
+                        'Tambah jumlah',
+                    onPressed: () {
+                      setDialogState(() {
+                        qty++;
+                        q.text =
+                            qty.toString();
+                        q.selection =
+                            TextSelection
+                                .fromPosition(
+                          TextPosition(
+                            offset:
+                                q.text.length,
+                          ),
+                        );
+                      });
+                    },
+                    icon:
+                        const Icon(
+                      Icons
+                          .add_circle_outline,
+                    ),
+                  ),
+                ],
+              ),
+              TextField(
+                controller: note,
+                decoration:
+                    const InputDecoration(
+                  labelText:
+                      'Keterangan',
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () =>
+                  Navigator.pop(
+                context,
+              ),
+              child:
+                  const Text(
+                'Batal',
               ),
             ),
-            TextField(
-              controller: note,
-              decoration:
-                  const InputDecoration(
-                labelText:
-                    'Keterangan',
+            FilledButton(
+              onPressed: () async {
+                try {
+                  final parsed =
+                      int.tryParse(
+                    q.text.trim(),
+                  );
+
+                  if (parsed == null ||
+                      parsed <= 0) {
+                    return;
+                  }
+
+                  await DB.addStock(
+                    p.id,
+                    parsed,
+                    note.text
+                            .trim()
+                            .isEmpty
+                        ? 'Stok masuk'
+                        : note.text
+                            .trim(),
+                  );
+
+                  if (context
+                      .mounted) {
+                    Navigator.pop(
+                      context,
+                    );
+                  }
+                } catch (e) {
+                  if (context
+                      .mounted) {
+                    ScaffoldMessenger
+                            .of(context)
+                        .showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Gagal menambah stok: '
+                          '$e',
+                        ),
+                      ),
+                    );
+                  }
+                }
+              },
+              child:
+                  const Text(
+                'Tambah',
               ),
             ),
           ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () =>
-                Navigator.pop(
-              context,
-            ),
-            child:
-                const Text(
-              'Batal',
-            ),
-          ),
-          FilledButton(
-            onPressed: () async {
-              try {
-                final qty =
-                    int.tryParse(
-                          q.text,
-                        ) ??
-                        0;
-
-                await DB.addStock(
-                  p.id,
-                  qty,
-                  note.text
-                          .trim()
-                          .isEmpty
-                      ? 'Stok masuk'
-                      : note.text
-                          .trim(),
-                );
-
-                if (context
-                    .mounted) {
-                  Navigator.pop(
-                    context,
-                  );
-                }
-              } catch (e) {
-                if (context
-                    .mounted) {
-                  ScaffoldMessenger
-                          .of(context)
-                      .showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Gagal menambah stok: '
-                        '$e',
-                      ),
-                    ),
-                  );
-                }
-              }
-            },
-            child:
-                const Text(
-              'Tambah',
-            ),
-          ),
-        ],
       ),
     );
+
+    q.dispose();
+    note.dispose();
 
     await load();
   }

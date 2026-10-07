@@ -46,6 +46,7 @@ class _MenuPageState extends State<MenuPage> {
     final value = await showDialog<String>(
       context: context,
       builder: (dialogContext) => AlertDialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         title: const Text('Kategori Baru'),
         content: TextField(
           controller: controller,
@@ -87,6 +88,7 @@ class _MenuPageState extends State<MenuPage> {
       builder: (dialogContext) => StatefulBuilder(
         builder: (context, setDialog) {
           return AlertDialog(
+            insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
             title: Text(p == null ? 'Tambah Menu' : 'Edit Menu'),
             content: SingleChildScrollView(
               child: Column(

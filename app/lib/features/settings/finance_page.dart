@@ -124,6 +124,7 @@ class _FinancePageState extends State<FinancePage> {
         return StatefulBuilder(
           builder: (context, setDialogState) {
             return AlertDialog(
+              insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
               title: Text(
                 item == null
                     ? 'Catat Pengeluaran'
@@ -267,6 +268,7 @@ class _FinancePageState extends State<FinancePage> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         title: const Text('Lunasi Piutang?'),
         content: Text(
           '${item['sale_no']} • ${rp(item['outstanding_amount'] as num)}',
@@ -296,6 +298,7 @@ class _FinancePageState extends State<FinancePage> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         title: const Text('Lunasi Hutang?'),
         content: Text(
           '${item['category']} • ${rp(item['amount'] as num)}',
@@ -325,6 +328,7 @@ class _FinancePageState extends State<FinancePage> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         title: const Text('Hapus Pengeluaran?'),
         content: Text(
           '${item['category']} • ${rp(item['amount'] as num)}',

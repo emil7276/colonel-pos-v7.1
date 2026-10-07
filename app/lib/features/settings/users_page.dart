@@ -73,6 +73,7 @@ class _UsersPageState
           setDialog,
         ) =>
             AlertDialog(
+              insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
           title: Text(
             u == null
                 ? 'Tambah Pengguna'

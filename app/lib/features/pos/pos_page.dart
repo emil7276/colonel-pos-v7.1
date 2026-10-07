@@ -179,6 +179,7 @@ class PosPageState extends State<PosPage> {
         await showDialog<int>(
       context: context,
       builder: (_) => AlertDialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         title: const Text('Diskon'),
         content: TextField(
           controller: c,
@@ -230,6 +231,7 @@ class PosPageState extends State<PosPage> {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         title: const Text('Simpan Pelanggan'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -284,69 +286,127 @@ class PosPageState extends State<PosPage> {
     if (cart.isEmpty) return;
 
     String method = 'Tunai';
-    final bankController = TextEditingController();
+    final bankController =
+        TextEditingController();
+
     DateTime? dueDate;
 
-    final result = await showDialog<bool>(
+    final result =
+        await showDialog<bool>(
       context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) {
+      builder: (context) =>
+          StatefulBuilder(
+        builder: (
+          context,
+          setDialogState,
+        ) {
           return AlertDialog(
-            title: const Text('Bayar Nanti'),
-            content: SingleChildScrollView(
+            title:
+                const Text(
+              'Bayar Tunda',
+            ),
+            content:
+                SingleChildScrollView(
               child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize:
+                    MainAxisSize.min,
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Total: ${rp(total)}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
+                    style:
+                        const TextStyle(
+                      fontWeight:
+                          FontWeight.bold,
                       fontSize: 18,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(
+                    height: 16,
+                  ),
                   const Text(
                     'Metode pembayaran',
-                    style: TextStyle(fontWeight: FontWeight.w600),
+                    style:
+                        TextStyle(
+                      fontWeight:
+                          FontWeight.w600,
+                    ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(
+                    height: 8,
+                  ),
                   Wrap(
                     spacing: 8,
                     children: [
                       ChoiceChip(
-                        label: const Text('Tunai'),
-                        selected: method == 'Tunai',
+                        label:
+                            const Text(
+                          'Tunai',
+                        ),
+                        selected:
+                            method ==
+                                'Tunai',
                         onSelected: (_) {
-                          setDialogState(() => method = 'Tunai');
+                          setDialogState(
+                            () => method =
+                                'Tunai',
+                          );
                         },
                       ),
                       ChoiceChip(
-                        label: const Text('Transfer'),
-                        selected: method == 'Transfer',
+                        label:
+                            const Text(
+                          'Transfer',
+                        ),
+                        selected:
+                            method ==
+                                'Transfer',
                         onSelected: (_) {
-                          setDialogState(() => method = 'Transfer');
+                          setDialogState(
+                            () => method =
+                                'Transfer',
+                          );
                         },
                       ),
                     ],
                   ),
-                  if (method == 'Transfer') ...[
-                    const SizedBox(height: 12),
+                  if (method ==
+                      'Transfer') ...[
+                    const SizedBox(
+                      height: 12,
+                    ),
                     TextField(
-                      controller: bankController,
-                      decoration: const InputDecoration(
-                        labelText: 'Transfer ke Bank',
-                        hintText: 'Contoh: BCA',
-                        prefixIcon: Icon(Icons.account_balance),
+                      controller:
+                          bankController,
+                      decoration:
+                          const InputDecoration(
+                        labelText:
+                            'Transfer ke Bank',
+                        hintText:
+                            'Contoh: BCA',
+                        prefixIcon:
+                            Icon(
+                          Icons
+                              .account_balance,
+                        ),
                       ),
                     ),
                   ],
-                  const SizedBox(height: 12),
+                  const SizedBox(
+                    height: 12,
+                  ),
                   const Text(
                     'Tgl Jatuh Tempo (opsional)',
-                    style: TextStyle(fontWeight: FontWeight.w600),
+                    style:
+                        TextStyle(
+                      fontWeight:
+                          FontWeight.w600,
+                    ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(
+                    height: 8,
+                  ),
                   Row(
                     children: [
                       Expanded(
@@ -359,25 +419,50 @@ class PosPageState extends State<PosPage> {
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.calendar_month),
-                        onPressed: () async {
-                          final picked = await showDatePicker(
-                            context: context,
-                            initialDate: dueDate ?? DateTime.now(),
-                            firstDate: DateTime.now(),
-                            lastDate: DateTime(2100),
+                        icon:
+                            const Icon(
+                          Icons
+                              .calendar_month,
+                        ),
+                        onPressed:
+                            () async {
+                          final picked =
+                              await showDatePicker(
+                            context:
+                                context,
+                            initialDate:
+                                dueDate ??
+                                    DateTime.now(),
+                            firstDate:
+                                DateTime.now(),
+                            lastDate:
+                                DateTime(
+                              2100,
+                            ),
                           );
 
-                          if (picked != null) {
-                            setDialogState(() => dueDate = picked);
+                          if (picked !=
+                              null) {
+                            setDialogState(
+                              () =>
+                                  dueDate =
+                                      picked,
+                            );
                           }
                         },
                       ),
-                      if (dueDate != null)
+                      if (dueDate !=
+                          null)
                         IconButton(
-                          icon: const Icon(Icons.clear),
+                          icon:
+                              const Icon(
+                            Icons.clear,
+                          ),
                           onPressed: () {
-                            setDialogState(() => dueDate = null);
+                            setDialogState(
+                              () => dueDate =
+                                  null,
+                            );
                           },
                         ),
                     ],
@@ -387,18 +472,36 @@ class PosPageState extends State<PosPage> {
             ),
             actions: [
               TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: const Text('Batal'),
+                onPressed: () =>
+                    Navigator.pop(
+                  context,
+                  false,
+                ),
+                child:
+                    const Text(
+                  'Batal',
+                ),
               ),
               FilledButton(
                 onPressed: () {
-                  if (method == 'Transfer' &&
-                      bankController.text.trim().isEmpty) {
+                  if (method ==
+                          'Transfer' &&
+                      bankController
+                          .text
+                          .trim()
+                          .isEmpty) {
                     return;
                   }
-                  Navigator.pop(context, true);
+
+                  Navigator.pop(
+                    context,
+                    true,
+                  );
                 },
-                child: const Text('Simpan'),
+                child:
+                    const Text(
+                  'Simpan',
+                ),
               ),
             ],
           );
@@ -412,6 +515,7 @@ class PosPageState extends State<PosPage> {
     }
 
     String dueDateText = '';
+
     if (dueDate != null) {
       dueDateText =
           '${dueDate!.year.toString().padLeft(4, '0')}-'
@@ -419,52 +523,183 @@ class PosPageState extends State<PosPage> {
           '${dueDate!.day.toString().padLeft(2, '0')}';
     }
 
-    await DB.createSale(
-      cashier: widget.cashier,
-      customerName: customerNameController.text,
-      customerPhone: customerPhoneController.text,
-      customerType: customerType,
-      items: cart,
-      subtotal: subtotal,
-      discount: discount,
-      total: total,
-      cash: 0,
-      change: 0,
-      payment: 'Bayar Tunda',
-      transferBank:
-          method == 'Transfer' ? bankController.text.trim() : '',
-      dueDate: dueDateText,
-    );
+    try {
+      final id =
+          await DB.createSale(
+        cashier:
+            widget.cashier,
+        customerName:
+            customerNameController
+                .text,
+        customerPhone:
+            customerPhoneController
+                .text,
+        customerType:
+            customerType,
+        items: cart,
+        subtotal:
+            subtotal,
+        discount:
+            discount,
+        total:
+            total,
+        cash: 0,
+        change: 0,
+        payment:
+            'Bayar Tunda',
+        transferBank:
+            method ==
+                    'Transfer'
+                ? bankController
+                    .text
+                    .trim()
+                : '',
+        dueDate:
+            dueDateText,
+      );
 
-    bankController.dispose();
+      final db =
+          await DB.database;
 
-    if (!mounted) return;
+      final rows =
+          await db.query(
+        'sales',
+        where: 'id=?',
+        whereArgs: [id],
+        limit: 1,
+      );
 
-    setState(() {
-      cart.clear();
-      discount = 0;
+      bankController
+          .dispose();
 
-      if (!saveCustomer) {
-        customerNameController.clear();
-        customerPhoneController.clear();
+      if (!mounted) return;
+
+      setState(() {
+        cart.clear();
+        discount = 0;
+
+        if (!saveCustomer) {
+          customerNameController
+              .clear();
+          customerPhoneController
+              .clear();
+        }
+
+        saveCustomer = false;
+        customerType =
+            'Retail';
+      });
+
+      await load();
+
+      if (rows.isEmpty) {
+        return;
       }
 
-      saveCustomer = false;
-    });
+      final sale =
+          SaleModel.fromMap(
+        rows.first,
+      );
 
-    await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Berhasil'),
-        content: const Text('Transaksi Bayar Nanti berhasil disimpan.'),
-        actions: [
-          FilledButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
+      // Cetak otomatis mengikuti setting Printer.
+      if (await printerAutoPrint()) {
+        try {
+          await printReceipt(
+            sale,
+          );
+        } catch (e) {
+          if (mounted) {
+            ScaffoldMessenger
+                    .of(context)
+                .showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Transaksi tersimpan, '
+                  'tetapi cetak otomatis gagal: '
+                  '$e',
+                ),
+              ),
+            );
+          }
+        }
+      }
+
+      if (!mounted) return;
+
+      await showDialog(
+        context: context,
+        builder: (_) =>
+            AlertDialog(
+          title:
+              const Text(
+            'Transaksi Berhasil',
           ),
-        ],
-      ),
-    );
+          content: Text(
+            '${sale.no}\n'
+            'Total ${rp(sale.total)}\n'
+            'Pembayaran: Bayar Tunda',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () =>
+                  Navigator.pop(
+                context,
+              ),
+              child:
+                  const Text(
+                'Tutup',
+              ),
+            ),
+            FilledButton(
+              onPressed: () async {
+                Navigator.pop(
+                  context,
+                );
+
+                try {
+                  await printReceipt(
+                    sale,
+                  );
+                } catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger
+                            .of(context)
+                        .showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Gagal mencetak: $e',
+                        ),
+                      ),
+                    );
+                  }
+                }
+              },
+              child:
+                  const Text(
+                'Cetak',
+              ),
+            ),
+          ],
+        ),
+      );
+    } catch (e) {
+      bankController.dispose();
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context)
+          .showSnackBar(
+        SnackBar(
+          duration:
+              const Duration(
+            seconds: 5,
+          ),
+          content: Text(
+            'Transaksi Bayar Tunda gagal diproses:\n$e',
+          ),
+        ),
+      );
+    }
   }
 
   Future<void> payment() async {
@@ -498,6 +733,7 @@ class PosPageState extends State<PosPage> {
                     : 0;
 
             return AlertDialog(
+              insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
               title:
                   const Text('Pembayaran'),
               content: Column(
@@ -527,16 +763,16 @@ class PosPageState extends State<PosPage> {
                           'QRIS',
                           'Transfer',
                           'Wallet (Platform)',
-                            'Bayar Nanti',
+                            'Bayar Tunda',
                         ])
                           ChoiceChip(
                             label: Text(x),
                             selected: method == x,
                             onSelected: (_) {
-                                    if (x == 'Bayar Nanti') {
+                                    if (x == 'Bayar Tunda') {
                                       Navigator.pop(
                                         context,
-                                        {'method': 'Bayar Nanti'},
+                                        {'method': 'Bayar Tunda'},
                                       );
                                       return;
                                     }
@@ -653,7 +889,7 @@ class PosPageState extends State<PosPage> {
 
     if (result == null) return;
 
-    if (result['method'] == 'Bayar Nanti') {
+    if (result['method'] == 'Bayar Tunda') {
       await payLater();
       return;
     }
@@ -736,6 +972,7 @@ class PosPageState extends State<PosPage> {
           context: context,
           builder: (_) =>
               AlertDialog(
+                insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
             title: const Text(
               'Transaksi Berhasil',
             ),
@@ -1073,6 +1310,7 @@ class PosPageState extends State<PosPage> {
                                         final qty = await showDialog<int>(
                                           context: context,
                                           builder: (_) => AlertDialog(
+                                            insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
                                             title: const Text('Jumlah'),
                                             content: TextField(
                                               controller: c,
@@ -1338,6 +1576,7 @@ class PosPageState extends State<PosPage> {
                                     final qty = await showDialog<int>(
                                       context: context,
                                       builder: (_) => AlertDialog(
+                                        insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
                                         title: const Text('Jumlah'),
                                         content: TextField(
                                           controller: c,

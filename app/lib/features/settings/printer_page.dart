@@ -208,6 +208,7 @@ class _PrinterPageState extends State<PrinterPage> {
     await showDialog<void>(
       context: context,
       builder: (_) => AlertDialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         title: const Text('Pasangkan Printer'),
         content: const Text(
           '1. Nyalakan printer Bluetooth.\n'
