@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/constants.dart';
+import '../../core/app_localizations.dart';
 import '../../core/license/license_service.dart';
 import '../../core/utils.dart';
 import '../../core/widgets.dart';
