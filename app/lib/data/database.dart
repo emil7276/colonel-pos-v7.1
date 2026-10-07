@@ -1296,7 +1296,8 @@ class DB {
       FROM expenses
       WHERE expense_date >= ?
         AND expense_date < ?
-        AND payment_status IN ('Hutang', 'Jatuh Tempo')
+        AND UPPER(TRIM(COALESCE(payment_status, ''))) IN
+            ('HUTANG', 'JATUH TEMPO')
       ''',
       [_dbDate(from), _dbDate(to)],
     );
@@ -1369,7 +1370,9 @@ class DB {
 
     return db.query(
       'expenses',
-      where: "UPPER(TRIM(COALESCE(payment_status, ''))) IN ('HUTANG', 'JATUH TEMPO')",
+      where:
+          "UPPER(TRIM(COALESCE(payment_status, ''))) IN "
+          "('HUTANG', 'JATUH TEMPO')",
       orderBy: 'due_date ASC, expense_date DESC, id DESC',
     );
   }
@@ -1409,8 +1412,12 @@ class DB {
       throw Exception('Nominal harus lebih dari 0.');
     }
 
+    final normalizedPaymentStatus =
+        paymentStatus.trim().toUpperCase();
+
     final normalizedStatus =
-        paymentStatus == 'Jatuh Tempo' || paymentStatus == 'Hutang'
+        normalizedPaymentStatus == 'HUTANG' ||
+                normalizedPaymentStatus == 'JATUH TEMPO'
             ? 'Hutang'
             : 'Lunas';
 

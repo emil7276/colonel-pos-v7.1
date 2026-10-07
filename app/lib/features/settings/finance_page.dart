@@ -49,7 +49,6 @@ class _FinancePageState extends State<FinancePage> {
       DB.cashIncome(from, to),
       DB.payLaterTotal(from, to),
       DB.expenseTotal(from, to),
-      DB.expenseDebtTotal(from, to),
       DB.expenses(from, to),
       DB.receivables(),
       DB.payables(),
@@ -61,12 +60,22 @@ class _FinancePageState extends State<FinancePage> {
       income = results[0] as int;
       payLater = results[1] as int;
       expense = results[2] as int;
-      debt = results[3] as int;
+
+      expenseRows = results[3] as List<Map<String, dynamic>>;
+      receivableRows = results[4] as List<Map<String, dynamic>>;
+      payableRows = results[5] as List<Map<String, dynamic>>;
+
       receivable = payLater;
-      payable = debt;
-      expenseRows = results[4] as List<Map<String, dynamic>>;
-      receivableRows = results[5] as List<Map<String, dynamic>>;
-      payableRows = results[6] as List<Map<String, dynamic>>;
+
+      // Kartu Hutang memakai sumber yang sama dengan daftar
+      // Hutang aktif agar jumlah kartu selalu sinkron.
+      payable = payableRows.fold<int>(
+        0,
+        (sum, item) =>
+            sum + ((item['amount'] as num?)?.toInt() ?? 0),
+      );
+
+      debt = payable;
     });
   }
 
