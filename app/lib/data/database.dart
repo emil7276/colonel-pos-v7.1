@@ -668,7 +668,6 @@ class DB {
         FROM sales
         WHERE sale_time >= ?
           AND sale_time < ?
-          AND payment != 'Bayar Tunda'
       )
       GROUP BY name
       HAVING SUM(qty - returned_qty) > 0
@@ -704,7 +703,6 @@ class DB {
       FROM sales
       WHERE sale_time >= ?
         AND sale_time < ?
-        AND payment != 'Bayar Tunda'
       GROUP BY jam
       ORDER BY transaksi DESC
       ''',
@@ -738,7 +736,6 @@ class DB {
       FROM sales
       WHERE sale_time >= ?
         AND sale_time < ?
-        AND payment != 'Bayar Tunda'
       GROUP BY tanggal
       ORDER BY transaksi DESC
       ''',
@@ -774,7 +771,6 @@ class DB {
       FROM sales
       WHERE sale_time >= ?
         AND sale_time < ?
-        AND payment != 'Bayar Tunda'
       GROUP BY customer_name, customer_type
       ORDER BY omzet DESC
       ''',
@@ -810,7 +806,6 @@ class DB {
       FROM sales
       WHERE sale_time >= ?
         AND sale_time < ?
-        AND payment != 'Bayar Tunda'
       GROUP BY periode
       ORDER BY periode
       ''',
@@ -840,7 +835,6 @@ class DB {
       FROM sales
       WHERE sale_time >= ?
         AND sale_time < ?
-        AND payment != 'Bayar Tunda'
       GROUP BY periode
       ORDER BY periode
       ''',
@@ -893,7 +887,6 @@ class DB {
       FROM sales
       WHERE sale_time >= ?
         AND sale_time < ?
-        AND payment != 'Bayar Tunda'
       ''',
       [
         _dbDate(from),
@@ -1105,12 +1098,11 @@ class DB {
       "INNER JOIN sales s ON s.id=si.sale_id "
       "WHERE s.sale_time >= ? "
       "AND s.sale_time < ? "
-      "AND s.payment != 'Bayar Tunda'",
+      "",
       [_dbDate(start), _dbDate(end)],
     );
 
     final gross = valid
-        .where((x) => x['payment'] != 'Bayar Tunda')
         .fold<int>(
           0,
           (sum, x) => sum + (x['total'] as num).toInt(),
@@ -1136,9 +1128,7 @@ class DB {
       'returnAmount': returnAmount,
       'omzet': net,
       'net': net,
-      'transaksi': valid
-          .where((x) => x['payment'] != 'Bayar Tunda')
-          .length,
+      'transaksi': valid.length,
       'item': (summaryRows.first['item'] as num).toInt(),
       'payments': payments,
     };
@@ -1180,12 +1170,11 @@ class DB {
       "INNER JOIN sales s ON s.id=si.sale_id "
       "WHERE s.sale_time >= ? "
       "AND s.sale_time < ? "
-      "AND s.payment != 'Bayar Tunda'",
+      "",
       [_dbDate(from), _dbDate(to)],
     );
 
     final gross = valid
-        .where((x) => x['payment'] != 'Bayar Tunda')
         .fold<int>(
           0,
           (sum, x) => sum + (x['total'] as num).toInt(),
@@ -1211,9 +1200,7 @@ class DB {
       'returnAmount': returnAmount,
       'omzet': net,
       'net': net,
-      'transaksi': valid
-          .where((x) => x['payment'] != 'Bayar Tunda')
-          .length,
+      'transaksi': valid.length,
       'item': (summaryRows.first['item'] as num).toInt(),
       'payments': payments,
     };
