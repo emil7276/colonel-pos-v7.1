@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/constants.dart';
 import '../../core/language_service.dart';
+import '../../core/app_localizations.dart';
 
 class LanguagePage extends StatefulWidget {
   const LanguagePage({super.key});
@@ -38,7 +39,7 @@ class _LanguagePageState extends State<LanguagePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bahasa / Language'),
+        title: Text(AppLocalizations.t('Bahasa / Language', 'Language')),
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
@@ -52,8 +53,8 @@ class _LanguagePageState extends State<LanguagePage> {
                     onChanged: (value) {
                       if (value != null) _selectLanguage(value);
                     },
-                    title: const Text('🇮🇩  Bahasa Indonesia'),
-                    subtitle: const Text('Bahasa default aplikasi'),
+                    title: Text(AppLocalizations.t('🇮🇩  Bahasa Indonesia', '🇮🇩  Indonesian')),
+                    subtitle: Text(AppLocalizations.t('Bahasa default aplikasi', 'Default app language')),
                     activeColor: red,
                   ),
                 ),
@@ -65,7 +66,7 @@ class _LanguagePageState extends State<LanguagePage> {
                       if (value != null) _selectLanguage(value);
                     },
                     title: const Text('🇬🇧  English'),
-                    subtitle: const Text('Use English'),
+                    subtitle: Text(AppLocalizations.t('Gunakan Bahasa Inggris', 'Use English')),
                     activeColor: red,
                   ),
                 ),

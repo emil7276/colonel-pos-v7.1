@@ -374,7 +374,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     width: slot,
                     height: cardHeight,
                     child: _stat(
-                      'Omzet',
+                      AppLocalizations.t('Omzet', 'Revenue'),
                       rp(omzet),
                       Icons.payments_rounded,
                       true,
@@ -385,7 +385,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     width: slot,
                     height: cardHeight,
                     child: _stat(
-                      'Transaksi',
+                      AppLocalizations.t('Transaksi', 'Transactions'),
                       '$transaksi',
                       Icons.receipt_long_rounded,
                       false,
@@ -396,7 +396,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     width: slot,
                     height: cardHeight,
                     child: _stat(
-                      'Retur',
+                      AppLocalizations.t('Retur', 'Returns'),
                       '$retur',
                       Icons.assignment_return_rounded,
                       false,
@@ -408,7 +408,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       width: slot,
                       height: cardHeight,
                       child: _stat(
-                        'Pengeluaran',
+                        AppLocalizations.t('Pengeluaran', 'Expenses'),
                         rp(pengeluaran),
                         Icons.account_balance_wallet_rounded,
                         false,
@@ -426,7 +426,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       width: slot,
                       height: cardHeight,
                       child: _stat(
-                        'Piutang',
+                        AppLocalizations.t('Piutang', 'Receivables'),
                         rp(piutang),
                         Icons.account_balance_rounded,
                         false,
@@ -438,7 +438,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       width: slot,
                       height: cardHeight,
                       child: _stat(
-                        'Hutang',
+                        AppLocalizations.t('Hutang', 'Payables'),
                         rp(hutang),
                         Icons.receipt_long_rounded,
                         false,
@@ -450,7 +450,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       width: slot,
                       height: cardHeight,
                       child: _stat(
-                        'Laba Bersih',
+                        AppLocalizations.t('Laba Bersih', 'Net Profit'),
                         rp(labaBersih),
                         Icons.trending_up_rounded,
                         false,
@@ -461,7 +461,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       width: slot,
                       height: cardHeight,
                       child: _stat(
-                        'Item Terjual',
+                        AppLocalizations.t('Item Terjual', 'Items Sold'),
                         '$item',
                         Icons.inventory_2_rounded,
                         false,
@@ -471,7 +471,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       width: slot,
                       height: cardHeight,
                       child: _stat(
-                        'Produk Paling Laku',
+                        AppLocalizations.t('Produk Paling Laku', 'Best-Selling Products'),
                         topProductQty > 0
                             ? '$topProductName ($topProductQty)'
                             : '-',
@@ -497,7 +497,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       width: slot * 2 + 8,
                       height: cardHeight,
                       child: _stat(
-                        'Pelanggan Teratas',
+                        AppLocalizations.t('Pelanggan Teratas', 'Top Customers'),
                         topCustomerValue > 0
                             ? '$topCustomerName • ${rp(topCustomerValue)}'
                             : '-',
@@ -529,10 +529,10 @@ class _DashboardPageState extends State<DashboardPage> {
                 mainAxisSpacing: 10,
                 childAspectRatio: 2.25,
                 children: [
-                  _quick('Transaksi Baru', Icons.point_of_sale_rounded, 'transaksi'),
+                  _quick(AppLocalizations.t('Transaksi Baru', 'New Transaction'), Icons.point_of_sale_rounded, 'transaksi'),
                   _quick('Laporan', Icons.analytics_rounded, 'laporan'),
                   if (widget.role == 'Administrator')
-                    _quick('Produk', Icons.restaurant_menu_rounded, 'produk'),
+                    _quick(AppLocalizations.t('Produk', 'Products'), Icons.restaurant_menu_rounded, 'produk'),
                   if (widget.role == 'Administrator')
                     _quick('Printer', Icons.print_rounded, 'printer'),
                 ],
@@ -614,7 +614,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          'Belum ada data pada rentang ini.',
+                          AppLocalizations.t('Belum ada data pada rentang ini.', 'No data in this period.'),
                           style: TextStyle(
                             color: inkMuted,
                             fontSize: 12,
@@ -673,7 +673,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                       SizedBox(height: 2),
                       Text(
-                        'Omzet • Biaya • Hasil Bersih',
+                        AppLocalizations.t('Omzet • Biaya • Hasil Bersih', 'Revenue • Expenses • Net Result'),
                         style: TextStyle(
                           color: inkMuted,
                           fontSize: 12,
@@ -706,17 +706,17 @@ class _DashboardPageState extends State<DashboardPage> {
             Wrap(
               spacing: 14,
               runSpacing: 7,
-              children: const [
+              children: [
                 _TrendLegend(
-                  label: 'Omzet',
+                  label: AppLocalizations.t('Omzet', 'Revenue'),
                   color: red,
                 ),
                 _TrendLegend(
-                  label: 'Biaya',
+                  label: AppLocalizations.t('Biaya', 'Expenses'),
                   color: Color(0xFFE38B22),
                 ),
                 _TrendLegend(
-                  label: 'Hasil Bersih',
+                  label: AppLocalizations.t('Hasil Bersih', 'Net Result'),
                   color: Color(0xFF2E9B63),
                 ),
               ],
@@ -779,7 +779,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 children: [
                   Expanded(
                     child: Text(
-                      'Periode Terpilih • ${selected.label}',
+                      AppLocalizations.t('Periode Terpilih • ${selected.label}', 'Selected Period • ${selected.label}'),
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w900,
@@ -787,19 +787,19 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                   ),
                   _TrendValue(
-                    label: 'Omzet',
+                    label: AppLocalizations.t('Omzet', 'Revenue'),
                     value: selected.omzet,
                     color: red,
                   ),
                   const SizedBox(width: 13),
                   _TrendValue(
-                    label: 'Biaya',
+                    label: AppLocalizations.t('Biaya', 'Expenses'),
                     value: selected.biaya,
                     color: Color(0xFFE38B22),
                   ),
                   const SizedBox(width: 13),
                   _TrendValue(
-                    label: 'Bersih',
+                    label: AppLocalizations.t('Bersih', 'Net'),
                     value: selected.bersih,
                     color: Color(0xFF2E9B63),
                   ),
@@ -820,8 +820,8 @@ class _DashboardPageState extends State<DashboardPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Total Periode',
+                  Text(
+                    AppLocalizations.t('Total Periode', 'Period Total'),
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w900,
@@ -832,21 +832,21 @@ class _DashboardPageState extends State<DashboardPage> {
                     children: [
                       Expanded(
                         child: _TrendValue(
-                          label: 'Omzet',
+                          label: AppLocalizations.t('Omzet', 'Revenue'),
                           value: omzet,
                           color: red,
                         ),
                       ),
                       Expanded(
                         child: _TrendValue(
-                          label: 'Biaya',
+                          label: AppLocalizations.t('Biaya', 'Expenses'),
                           value: pengeluaran,
                           color: Color(0xFFE38B22),
                         ),
                       ),
                       Expanded(
                         child: _TrendValue(
-                          label: 'Bersih',
+                          label: AppLocalizations.t('Bersih', 'Net'),
                           value: labaBersih,
                           color: Color(0xFF2E9B63),
                         ),
@@ -1485,12 +1485,12 @@ class _DashboardPageState extends State<DashboardPage> {
     final rows = await _topProductsData();
 
     await _showRankingSheet(
-      title: 'Produk Paling Laku',
+      title: AppLocalizations.t('Produk Paling Laku', 'Best-Selling Products'),
       rows: rows,
-      emptyText: 'Belum ada produk terjual pada periode ini.',
+      emptyText: AppLocalizations.t('Belum ada produk terjual pada periode ini.', 'No products sold in this period.'),
       titleBuilder: (row) => row['name'].toString(),
-      subtitleBuilder: (row) => '${row['qty']} item terjual',
-      trailingBuilder: (row) => '${row['qty']} item',
+      subtitleBuilder: (row) => '${row['qty']} ${AppLocalizations.t('item terjual', 'items sold')}',
+      trailingBuilder: (row) => '${row['qty']} ${AppLocalizations.t('item', 'items')}',
     );
   }
 
@@ -1498,11 +1498,11 @@ class _DashboardPageState extends State<DashboardPage> {
     final rows = await _topCustomersData();
 
     await _showRankingSheet(
-      title: 'Pelanggan Teratas',
+      title: AppLocalizations.t('Pelanggan Teratas', 'Top Customers'),
       rows: rows,
-      emptyText: 'Belum ada transaksi pada periode ini.',
+      emptyText: AppLocalizations.t('Belum ada transaksi pada periode ini.', 'No transactions in this period.'),
       titleBuilder: (row) => row['name'].toString(),
-      subtitleBuilder: (_) => 'Total pembelian bersih',
+      subtitleBuilder: (_) => AppLocalizations.t('Total pembelian bersih', 'Net purchase total'),
       trailingBuilder: (row) => rp(row['value'] as num),
     );
   }
@@ -1511,11 +1511,11 @@ class _DashboardPageState extends State<DashboardPage> {
     final rows = await _bestTimesData();
 
     await _showRankingSheet(
-      title: 'Waktu Paling Laku',
+      title: AppLocalizations.t('Waktu Paling Laku', 'Peak Hours'),
       rows: rows,
-      emptyText: 'Belum ada transaksi pada periode ini.',
+      emptyText: AppLocalizations.t('Belum ada transaksi pada periode ini.', 'No transactions in this period.'),
       titleBuilder: (row) => row['name'].toString(),
-      subtitleBuilder: (_) => 'Omzet bersih',
+      subtitleBuilder: (_) => AppLocalizations.t('Omzet bersih', 'Net revenue'),
       trailingBuilder: (row) => rp(row['value'] as num),
     );
   }
@@ -1527,7 +1527,7 @@ class _DashboardPageState extends State<DashboardPage> {
         .toList();
 
     await _showSalesSheet(
-      title: 'Riwayat Transaksi',
+      title: AppLocalizations.t('Riwayat Transaksi', 'Transaction History'),
       sales: sales,
     );
   }
@@ -1539,7 +1539,7 @@ class _DashboardPageState extends State<DashboardPage> {
         .toList();
 
     await _showSalesSheet(
-      title: 'Riwayat Omzet',
+      title: AppLocalizations.t('Riwayat Omzet', 'Revenue History'),
       sales: sales,
       showNetTotal: true,
     );
@@ -1552,7 +1552,7 @@ class _DashboardPageState extends State<DashboardPage> {
         .toList();
 
     await _showSalesSheet(
-      title: 'Riwayat Retur',
+      title: AppLocalizations.t('Riwayat Retur', 'Return History'),
       sales: sales,
       returnsOnly: true,
     );
@@ -1573,7 +1573,7 @@ class _DashboardPageState extends State<DashboardPage> {
         .toList();
 
     await _showSalesSheet(
-      title: 'Riwayat Piutang',
+      title: AppLocalizations.t('Riwayat Piutang', 'Receivables History'),
       sales: sales,
     );
   }
@@ -1582,7 +1582,7 @@ class _DashboardPageState extends State<DashboardPage> {
     final rows = await DB.payables();
 
     await _showExpenseSheet(
-      title: 'Hutang Aktif',
+      title: AppLocalizations.t('Hutang Aktif', 'Active Payables'),
       rows: rows,
     );
   }
@@ -1630,7 +1630,7 @@ class _DashboardPageState extends State<DashboardPage> {
         .toList();
 
     await _showSalesSheet(
-      title: 'Transaksi $payment',
+      title: AppLocalizations.t('Transaksi $payment', 'Transactions $payment'),
       sales: sales,
       showNetTotal: true,
     );
@@ -1671,7 +1671,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 if (sales.isEmpty)
                   const Expanded(
                     child: Center(
-                      child: Text('Tidak ada transaksi pada rentang ini.'),
+                      child: Text(AppLocalizations.t('Tidak ada transaksi pada rentang ini.', 'No transactions in this period.')),
                     ),
                   )
                 else
@@ -1733,7 +1733,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               children: [
                                 const Expanded(
                                   child: Text(
-                                    'Total Bersih',
+                                    AppLocalizations.t('Total Bersih', 'Net Total'),
                                     style: TextStyle(
                                       fontWeight: FontWeight.w900,
                                     ),
@@ -1805,7 +1805,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 if (rows.isEmpty)
                   const Expanded(
                     child: Center(
-                      child: Text('Tidak ada hutang pada rentang ini.'),
+                      child: Text(AppLocalizations.t('Tidak ada hutang pada rentang ini.', 'No payables in this period.')),
                     ),
                   )
                 else
@@ -1821,7 +1821,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             (row['amount'] as num?)?.toInt() ?? 0;
 
                         final note =
-                            (row['note'] ?? 'Pengeluaran').toString();
+                            (row['note'] ?? AppLocalizations.t('Pengeluaran', 'Expense')).toString();
 
                         final category =
                             (row['category'] ?? '').toString();
@@ -1898,7 +1898,7 @@ class _DashboardPageState extends State<DashboardPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
-                'Rincian Laba Bersih',
+                AppLocalizations.t('Rincian Laba Bersih', 'Net Profit Details'),
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
@@ -1906,14 +1906,14 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
               const SizedBox(height: 14),
               ListTile(
-                title: const Text('Omzet Bersih'),
+                title: Text(AppLocalizations.t('Omzet Bersih', 'Net Revenue')),
                 trailing: Text(
                   rp(salesTotal),
                   style: const TextStyle(fontWeight: FontWeight.w800),
                 ),
               ),
               ListTile(
-                title: const Text('Pengeluaran Dibayar'),
+                title: Text(AppLocalizations.t('Pengeluaran Dibayar', 'Paid Expenses')),
                 trailing: Text(
                   rp(expenseTotal),
                   style: const TextStyle(fontWeight: FontWeight.w800),
@@ -1922,7 +1922,7 @@ class _DashboardPageState extends State<DashboardPage> {
               const Divider(),
               ListTile(
                 title: const Text(
-                  'Laba Bersih',
+                  AppLocalizations.t('Laba Bersih', 'Net Profit'),
                   style: TextStyle(fontWeight: FontWeight.w900),
                 ),
                 trailing: Text(
@@ -1935,7 +1935,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Ketuk transaksi pada kartu Omzet untuk melihat detail penjualan.',
+                AppLocalizations.t('Ketuk transaksi pada kartu Omzet untuk melihat detail penjualan.', 'Tap the Revenue card to view sales details.'),
                 style: Theme.of(context).textTheme.bodySmall,
                 textAlign: TextAlign.center,
               ),
@@ -1964,30 +1964,30 @@ class _DashboardPageState extends State<DashboardPage> {
             padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
             children: [
               Text(
-                'Detail ${sale.no}',
+                AppLocalizations.t('Detail ${sale.no}', 'Details ${sale.no}'),
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
                 ),
               ),
               const SizedBox(height: 12),
-              _detailRow('Tanggal', sale.time),
-              _detailRow('Kasir', sale.cashier),
-              _detailRow('Pelanggan', sale.customerName),
+              _detailRow(AppLocalizations.t('Tanggal', 'Date'), sale.time),
+              _detailRow(AppLocalizations.t('Kasir', 'Cashier'), sale.cashier),
+              _detailRow(AppLocalizations.t('Pelanggan', 'Customer'), sale.customerName),
               if (sale.customerPhone.isNotEmpty)
-                _detailRow('Telepon', sale.customerPhone),
-              _detailRow('Tipe Pelanggan', sale.customerType),
-              _detailRow('Pembayaran', sale.payment),
+                _detailRow(AppLocalizations.t('Telepon', 'Phone'), sale.customerPhone),
+              _detailRow(AppLocalizations.t('Tipe Pelanggan', 'Customer Type'), sale.customerType),
+              _detailRow(AppLocalizations.t('Pembayaran', 'Payment'), sale.payment),
               if (sale.transferBank.isNotEmpty)
-                _detailRow('Bank', sale.transferBank),
+                _detailRow(AppLocalizations.t('Bank', 'Bank'), sale.transferBank),
               if (sale.transferAccount.isNotEmpty)
-                _detailRow('Rekening', sale.transferAccount),
+                _detailRow(AppLocalizations.t('Rekening', 'Account'), sale.transferAccount),
               if (sale.dueDate.isNotEmpty)
-                _detailRow('Jatuh Tempo', sale.dueDate),
+                _detailRow(AppLocalizations.t('Jatuh Tempo', 'Due Date'), sale.dueDate),
               const SizedBox(height: 12),
               const Divider(),
-              const Text(
-                'Item',
+              Text(
+                AppLocalizations.t('Item', 'Items'),
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w900,
@@ -1997,11 +1997,11 @@ class _DashboardPageState extends State<DashboardPage> {
               if (items.isEmpty)
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 12),
-                  child: Text('Detail item tidak tersedia.'),
+                  child: Text(AppLocalizations.t('Detail item tidak tersedia.', 'Item details are not available.')),
                 )
               else
                 ...items.map((item) {
-                  final name = (item['name'] ?? 'Item').toString();
+                  final name = (item['name'] ?? AppLocalizations.t('Item', 'Item')).toString();
                   final qty = (item['qty'] as num?)?.toInt() ?? 0;
                   final returned =
                       (item['returned_qty'] as num?)?.toInt() ?? 0;
@@ -2018,8 +2018,8 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                     subtitle: Text(
                       returned > 0
-                          ? 'Qty $qty • Retur $returned • Harga ${rp(price)}'
-                          : 'Qty $qty • Harga ${rp(price)}',
+                          ? AppLocalizations.t('Qty $qty • Retur $returned • Harga ${rp(price)}', 'Qty $qty • Returns $returned • Price ${rp(price)}')
+                          : AppLocalizations.t('Qty $qty • Harga ${rp(price)}', 'Qty $qty • Price ${rp(price)}'),
                     ),
                     trailing: Text(
                       rp(price * qty),
@@ -2030,21 +2030,21 @@ class _DashboardPageState extends State<DashboardPage> {
                   );
                 }),
               const Divider(),
-              _detailRow('Subtotal', rp(sale.subtotal)),
-              _detailRow('Diskon', rp(sale.discount)),
-              _detailRow('Total', rp(sale.total)),
+              _detailRow(AppLocalizations.t('Subtotal', 'Subtotal'), rp(sale.subtotal)),
+              _detailRow(AppLocalizations.t('Diskon', 'Discount'), rp(sale.discount)),
+              _detailRow(AppLocalizations.t('Total', 'Total'), rp(sale.total)),
               if (returnedAmount > 0)
-                _detailRow('Nilai Retur', rp(returnedAmount)),
+                _detailRow(AppLocalizations.t('Nilai Retur', 'Return Value'), rp(returnedAmount)),
               if (returnedAmount > 0)
                 _detailRow(
-                  'Total Bersih',
+                  AppLocalizations.t('Total Bersih', 'Net Total'),
                   rp(sale.total - returnedAmount),
                 ),
               if (sale.returned)
                 const Padding(
                   padding: EdgeInsets.only(top: 8),
                   child: Text(
-                    'TRANSAKSI SUDAH DIRETUR SELURUHNYA',
+                    AppLocalizations.t('TRANSAKSI SUDAH DIRETUR SELURUHNYA', 'TRANSACTION FULLY RETURNED'),
                     style: TextStyle(
                       color: red,
                       fontWeight: FontWeight.w900,
@@ -2135,7 +2135,7 @@ class _DashboardPageState extends State<DashboardPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Metode Pembayaran',
+          AppLocalizations.t('Metode Pembayaran', 'Payment Methods'),
           style: TextStyle(
             fontSize: 19,
             fontWeight: FontWeight.w900,
@@ -2145,7 +2145,7 @@ class _DashboardPageState extends State<DashboardPage> {
         Row(
           children: [
             paymentItem(
-              'Tunai',
+              AppLocalizations.t('Tunai', 'Cash'),
               paymentTotals['Tunai'] ?? 0,
             ),
             const SizedBox(width: 8),
@@ -2159,12 +2159,12 @@ class _DashboardPageState extends State<DashboardPage> {
         Row(
           children: [
             paymentItem(
-              'Transfer',
+              AppLocalizations.t('Transfer', 'Transfer'),
               paymentTotals['Transfer'] ?? 0,
             ),
             const SizedBox(width: 8),
             paymentItem(
-              'Bayar Tunda',
+              AppLocalizations.t('Bayar Tunda', 'Pay Later'),
               paymentTotals['Bayar Tunda'] ?? 0,
             ),
           ],
@@ -2189,9 +2189,9 @@ class _DashboardPageState extends State<DashboardPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Item Terjual Hari Ini', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w900)),
+              Text(AppLocalizations.t('Item Terjual Hari Ini', 'Items Sold Today'), style: TextStyle(fontSize: 19, fontWeight: FontWeight.w900)),
               const SizedBox(height: 8),
-              if (rows.isEmpty) const Padding(padding: EdgeInsets.all(16), child: Text('Belum ada item terjual hari ini.')),
+              if (rows.isEmpty) Padding(padding: const EdgeInsets.all(16), child: Text(AppLocalizations.t('Belum ada item terjual hari ini.', 'No items sold today.'))),
               ...rows.take(12).map((r) => ListTile(
                 dense: true,
                 leading: CircleAvatar(radius: 17, backgroundColor: redSoft, foregroundColor: red, child: Text('${r['qty']}')),
