@@ -150,6 +150,7 @@ class _DashboardPageState extends State<DashboardPage> {
     setState(() {
       omzet = netIncome;
       transaksi = summary['transaksi'] as int;
+      item = summary['item'] as int;
       retur = summary['returned'] as int;
       pengeluaran = expenseTotal;
       piutang = receivable;
@@ -399,6 +400,12 @@ class _DashboardPageState extends State<DashboardPage> {
                       Icons.trending_up_rounded,
                       false,
                       onTap: showNetIncome,
+                    ),
+                    _stat(
+                      'Item Terjual',
+                      '$item',
+                      Icons.inventory_2_rounded,
+                      false,
                     ),
                   ],
                 ],
