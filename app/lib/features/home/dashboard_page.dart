@@ -445,15 +445,6 @@ class _DashboardPageState extends State<DashboardPage> {
                       onTap: showTopProducts,
                     ),
                     _stat(
-                      'Pelanggan Teratas',
-                      topCustomerValue > 0
-                          ? '$topCustomerName • ${rp(topCustomerValue)}'
-                          : '-',
-                      Icons.person_rounded,
-                      false,
-                      onTap: showTopCustomers,
-                    ),
-                    _stat(
                       'Waktu Paling Laku',
                       bestTimeValue > 0
                           ? '$bestTimeName • ${rp(bestTimeValue)}'
@@ -461,6 +452,18 @@ class _DashboardPageState extends State<DashboardPage> {
                       Icons.schedule_rounded,
                       false,
                       onTap: showBestTimes,
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width - 32,
+                      child: _stat(
+                        'Pelanggan Teratas',
+                        topCustomerValue > 0
+                            ? '$topCustomerName • ${rp(topCustomerValue)}'
+                            : '-',
+                        Icons.person_rounded,
+                        false,
+                        onTap: showTopCustomers,
+                      ),
                     ),
                   ],
                 ],
