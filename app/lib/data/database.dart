@@ -1273,6 +1273,66 @@ class DB {
     return (rows.first['total'] as num).toInt();
   }
 
+
+  static Future<List<Map<String, dynamic>>> reminderItems() async {
+    final db = await database;
+
+    final sales = await db.query(
+      'sales',
+      columns: ['id', 'due_date'],
+      where: "payment = ? AND receivable_status != ? AND due_date != ?",
+      whereArgs: ['Bayar Tunda', 'Lunas', ''],
+    );
+
+    final expenses = await db.query(
+      'expenses',
+      columns: ['id', 'due_date'],
+      where: "payment_status IN (?, ?) AND due_date != ?",
+      whereArgs: ['Hutang', 'Jatuh Tempo', ''],
+    );
+
+    bool isReminder(String? value) {
+      if (value == null || value.isEmpty) return false;
+
+      final due = DateTime.tryParse(value);
+      if (due == null) return false;
+
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+      final dueDay = DateTime(due.year, due.month, due.day);
+      final diff = dueDay.difference(today).inDays;
+
+      // H-3 dan Hari H saja.
+      return diff == 3 || diff == 0;
+    }
+
+    final result = <Map<String, dynamic>>[];
+
+    for (final row in sales) {
+      final due = row['due_date']?.toString();
+      if (isReminder(due)) {
+        result.add({
+          'type': 'piutang',
+          'id': row['id'],
+          'due_date': due,
+        });
+      }
+    }
+
+    for (final row in expenses) {
+      final due = row['due_date']?.toString();
+      if (isReminder(due)) {
+        result.add({
+          'type': 'hutang',
+          'id': row['id'],
+          'due_date': due,
+        });
+      }
+    }
+
+    return result;
+  }
+
   static Future<List<Map<String, dynamic>>> payables() async {
     final db = await database;
 
