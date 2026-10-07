@@ -28,6 +28,8 @@ class _DashboardPageState extends State<DashboardPage> {
   int omzet = 0, transaksi = 0, item = 0, retur = 0, pengeluaran = 0, piutang = 0, hutang = 0, labaBersih = 0;
   int piutangReminder = 0, hutangReminder = 0;
   List<SaleModel> recent = [];
+  List<_TrendPoint> trendPoints = [];
+  int selectedTrendIndex = -1;
 
   Map<String, int> paymentTotals = {
     'Tunai': 0,
@@ -72,6 +74,8 @@ class _DashboardPageState extends State<DashboardPage> {
             .map((e) => Map<String, dynamic>.from(e as Map))
             .toList();
 
+    final saleNetTotals = <int, int>{};
+
     for (final sale in summarySales) {
       var payment = (sale['payment'] ?? 'Tunai').toString().trim();
 
@@ -93,11 +97,18 @@ class _DashboardPageState extends State<DashboardPage> {
           (sale['id'] as num).toInt(),
         );
         final net = gross - returned;
+        final saleId = (sale['id'] as num).toInt();
+
+        saleNetTotals[saleId] = net;
 
         calculatedPayments[payment] =
             (calculatedPayments[payment] ?? 0) + net;
       }
     }
+
+    final trendData = widget.role == 'Administrator'
+        ? await _buildTrendPoints(summarySales, saleNetTotals)
+        : <_TrendPoint>[];
 
     var expenseTotal = 0;
     var expenseDebt = 0;
@@ -147,6 +158,9 @@ class _DashboardPageState extends State<DashboardPage> {
       hutangReminder = reminderPayable;
       labaBersih = netProfit;
       paymentTotals = calculatedPayments;
+      trendPoints = trendData;
+      selectedTrendIndex =
+          trendData.isEmpty ? -1 : trendData.length - 1;
 
       recent = (summary['sales'] as List)
           .map((e) => SaleModel.fromMap(e as Map<String, dynamic>))
@@ -419,6 +433,10 @@ class _DashboardPageState extends State<DashboardPage> {
               );
             },
           ),
+          if (widget.role == 'Administrator') ...[
+            const SizedBox(height: 18),
+            _trendChartCard(),
+          ],
           const SizedBox(height: 20),
           const Text('Transaksi Terbaru', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w900)),
           const SizedBox(height: 9),
@@ -444,6 +462,389 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
+
+  String _trendModeLabel() {
+    final days = end.difference(start).inDays;
+
+    if (days <= 1) return 'Per jam';
+    if (days <= 31) return 'Per hari';
+    return 'Per bulan';
+  }
+
+  Widget _trendChartCard() {
+    if (trendPoints.isEmpty) {
+      return Card(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 38,
+                    height: 38,
+                    decoration: BoxDecoration(
+                      color: redSoft,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.show_chart_rounded,
+                      color: red,
+                      size: 21,
+                    ),
+                  ),
+                  const SizedBox(width: 11),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Grafik Keuangan',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          'Belum ada data pada rentang ini.',
+                          style: TextStyle(
+                            color: inkMuted,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final safeIndex = selectedTrendIndex.clamp(
+      0,
+      trendPoints.length - 1,
+    );
+    final selected = trendPoints[safeIndex];
+
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(14, 15, 14, 14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 38,
+                  height: 38,
+                  decoration: BoxDecoration(
+                    color: redSoft,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(
+                    Icons.show_chart_rounded,
+                    color: red,
+                    size: 21,
+                  ),
+                ),
+                const SizedBox(width: 11),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Grafik Keuangan',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        'Omzet • Biaya • Hasil Bersih',
+                        style: TextStyle(
+                          color: inkMuted,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 9,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF5F5F7),
+                    borderRadius: BorderRadius.circular(9),
+                  ),
+                  child: Text(
+                    _trendModeLabel(),
+                    style: const TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w800,
+                      color: inkMuted,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 13),
+            Wrap(
+              spacing: 14,
+              runSpacing: 7,
+              children: const [
+                _TrendLegend(
+                  label: 'Omzet',
+                  color: red,
+                ),
+                _TrendLegend(
+                  label: 'Biaya',
+                  color: Color(0xFFE38B22),
+                ),
+                _TrendLegend(
+                  label: 'Hasil Bersih',
+                  color: Color(0xFF2E9B63),
+                ),
+              ],
+            ),
+            const SizedBox(height: 7),
+            SizedBox(
+              height: 245,
+              width: double.infinity,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTapDown: (details) {
+                      final left = 54.0;
+                      final right = constraints.maxWidth - 12.0;
+                      final usable = right - left;
+
+                      if (usable <= 0 || trendPoints.length == 1) {
+                        setState(() {
+                          selectedTrendIndex = 0;
+                        });
+                        return;
+                      }
+
+                      final x = details.localPosition.dx
+                          .clamp(left, right);
+
+                      final ratio = (x - left) / usable;
+                      final index = (ratio * (trendPoints.length - 1))
+                          .round()
+                          .clamp(0, trendPoints.length - 1);
+
+                      setState(() {
+                        selectedTrendIndex = index;
+                      });
+                    },
+                    child: CustomPaint(
+                      painter: _TrendChartPainter(
+                        points: trendPoints,
+                        selectedIndex: safeIndex,
+                      ),
+                      size: const Size(double.infinity, 245),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 2),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF7F7F8),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: const Color(0xFFEAEAEF),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      selected.label,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
+                  _TrendValue(
+                    label: 'Omzet',
+                    value: selected.omzet,
+                    color: red,
+                  ),
+                  const SizedBox(width: 13),
+                  _TrendValue(
+                    label: 'Biaya',
+                    value: selected.biaya,
+                    color: Color(0xFFE38B22),
+                  ),
+                  const SizedBox(width: 13),
+                  _TrendValue(
+                    label: 'Bersih',
+                    value: selected.bersih,
+                    color: Color(0xFF2E9B63),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<List<_TrendPoint>> _buildTrendPoints(
+    List<Map<String, dynamic>> sales,
+    Map<int, int> saleNetTotals,
+  ) async {
+    final expenses = await DB.expenses(start, end);
+    final days = end.difference(start).inDays;
+
+    final mode = days <= 1
+        ? _TrendMode.hour
+        : days <= 31
+            ? _TrendMode.day
+            : _TrendMode.month;
+
+    final buckets = <String, _TrendAccumulator>{};
+
+    DateTime cursor;
+    if (mode == _TrendMode.month) {
+      cursor = DateTime(start.year, start.month, 1);
+    } else {
+      cursor = start;
+    }
+
+    while (cursor.isBefore(end)) {
+      final key = _trendKey(cursor, mode);
+
+      buckets.putIfAbsent(
+        key,
+        () => _TrendAccumulator(
+          bucket: cursor,
+          label: _trendLabel(cursor, mode),
+        ),
+      );
+
+      if (mode == _TrendMode.hour) {
+        cursor = cursor.add(const Duration(hours: 1));
+      } else if (mode == _TrendMode.day) {
+        cursor = cursor.add(const Duration(days: 1));
+      } else {
+        cursor = DateTime(cursor.year, cursor.month + 1, 1);
+      }
+    }
+
+    for (final sale in sales) {
+      final rawDate = sale['sale_time']?.toString() ?? '';
+      final date = DateTime.tryParse(rawDate);
+
+      if (date == null) continue;
+
+      final key = _trendKey(date.toLocal(), mode);
+      final bucket = buckets[key];
+
+      if (bucket == null) continue;
+
+      final saleId = (sale['id'] as num?)?.toInt();
+      final net = saleId == null
+          ? (sale['total'] as num?)?.toInt() ?? 0
+          : saleNetTotals[saleId] ??
+              (sale['total'] as num?)?.toInt() ??
+              0;
+
+      bucket.omzet += net;
+    }
+
+    for (final expense in expenses) {
+      final status = (expense['payment_status'] ?? '')
+          .toString()
+          .trim()
+          .toLowerCase();
+
+      if (status != 'lunas' && status != 'sudah dibayar') {
+        continue;
+      }
+
+      final rawDate = expense['expense_date']?.toString() ?? '';
+      var date = DateTime.tryParse(rawDate);
+
+      if (date == null) continue;
+
+      date = date.toLocal();
+
+      // Data pengeluaran hanya menyimpan tanggal, bukan jam.
+      // Pada mode per jam ditempatkan di ujung hari agar tidak
+      // terlihat seperti biaya terjadi di awal hari.
+      if (mode == _TrendMode.hour) {
+        date = DateTime(date.year, date.month, date.day, 23);
+      }
+
+      final key = _trendKey(date, mode);
+      final bucket = buckets[key];
+
+      if (bucket == null) continue;
+
+      bucket.biaya += (expense['amount'] as num?)?.toInt() ?? 0;
+    }
+
+    return buckets.values
+        .map(
+          (bucket) => _TrendPoint(
+            bucket: bucket.bucket,
+            label: bucket.label,
+            omzet: bucket.omzet,
+            biaya: bucket.biaya,
+            bersih: bucket.omzet - bucket.biaya,
+          ),
+        )
+        .toList();
+  }
+
+  String _trendKey(DateTime date, _TrendMode mode) {
+    if (mode == _TrendMode.hour) {
+      return '${date.year.toString().padLeft(4, '0')}-'
+          '${date.month.toString().padLeft(2, '0')}-'
+          '${date.day.toString().padLeft(2, '0')}-'
+          '${date.hour.toString().padLeft(2, '0')}';
+    }
+
+    if (mode == _TrendMode.day) {
+      return '${date.year.toString().padLeft(4, '0')}-'
+          '${date.month.toString().padLeft(2, '0')}-'
+          '${date.day.toString().padLeft(2, '0')}';
+    }
+
+    return '${date.year.toString().padLeft(4, '0')}-'
+        '${date.month.toString().padLeft(2, '0')}';
+  }
+
+  String _trendLabel(DateTime date, _TrendMode mode) {
+    if (mode == _TrendMode.hour) {
+      return '${date.hour.toString().padLeft(2, '0')}:00';
+    }
+
+    if (mode == _TrendMode.day) {
+      return '${date.day.toString().padLeft(2, '0')}/'
+          '${date.month.toString().padLeft(2, '0')}';
+    }
+
+    return '${date.month.toString().padLeft(2, '0')}/'
+        '${date.year.toString().substring(2)}';
+  }
 
   Widget _quick(String title, IconData icon, String action) {
     return Card(
@@ -1241,4 +1642,396 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
+}
+
+
+enum _TrendMode {
+  hour,
+  day,
+  month,
+}
+
+class _TrendPoint {
+  final DateTime bucket;
+  final String label;
+  final int omzet;
+  final int biaya;
+  final int bersih;
+
+  const _TrendPoint({
+    required this.bucket,
+    required this.label,
+    required this.omzet,
+    required this.biaya,
+    required this.bersih,
+  });
+}
+
+class _TrendAccumulator {
+  final DateTime bucket;
+  final String label;
+  int omzet = 0;
+  int biaya = 0;
+
+  _TrendAccumulator({
+    required this.bucket,
+    required this.label,
+  });
+}
+
+class _TrendLegend extends StatelessWidget {
+  final String label;
+  final Color color;
+
+  const _TrendLegend({
+    required this.label,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 9,
+          height: 9,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+          ),
+        ),
+        const SizedBox(width: 6),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+            color: inkMuted,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _TrendValue extends StatelessWidget {
+  final String label;
+  final int value;
+  final Color color;
+
+  const _TrendValue({
+    required this.label,
+    required this.value,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 9,
+            color: inkMuted,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          _compactRupiah(value),
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w900,
+            color: color,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+String _compactRupiah(num value) {
+  final absolute = value.abs();
+
+  if (absolute >= 1000000000) {
+    final v = value / 1000000000;
+    return 'Rp${v.toStringAsFixed(v.abs() >= 10 ? 0 : 1)}M';
+  }
+
+  if (absolute >= 1000000) {
+    final v = value / 1000000;
+    return 'Rp${v.toStringAsFixed(v.abs() >= 10 ? 0 : 1)}jt';
+  }
+
+  if (absolute >= 1000) {
+    final v = value / 1000;
+    return 'Rp${v.toStringAsFixed(v.abs() >= 10 ? 0 : 1)}rb';
+  }
+
+  return 'Rp${value.round()}';
+}
+
+class _TrendChartPainter extends CustomPainter {
+  final List<_TrendPoint> points;
+  final int selectedIndex;
+
+  const _TrendChartPainter({
+    required this.points,
+    required this.selectedIndex,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (points.isEmpty) return;
+
+    const left = 54.0;
+    const top = 14.0;
+    const bottom = 38.0;
+    const right = 12.0;
+
+    final chartWidth = size.width - left - right;
+    final chartHeight = size.height - top - bottom;
+
+    if (chartWidth <= 0 || chartHeight <= 0) return;
+
+    final maxValue = points
+        .expand<double>((point) => [
+              point.omzet.toDouble(),
+              point.biaya.toDouble(),
+              point.bersih.toDouble(),
+            ])
+        .fold<double>(0, (max, value) => value > max ? value : max);
+
+    final minValue = points
+        .expand<double>((point) => [
+              point.omzet.toDouble(),
+              point.biaya.toDouble(),
+              point.bersih.toDouble(),
+            ])
+        .fold<double>(0, (min, value) => value < min ? value : min);
+
+    final range = (maxValue - minValue).abs() < 1
+        ? 1.0
+        : (maxValue - minValue);
+
+    final paddedMin = minValue < 0
+        ? minValue - range * .12
+        : 0.0;
+
+    final paddedMax = maxValue + range * .12;
+    final paddedRange = (paddedMax - paddedMin).abs() < 1
+        ? 1.0
+        : (paddedMax - paddedMin);
+
+    Offset pointOffset(int index, double value) {
+      final x = points.length == 1
+          ? left + chartWidth / 2
+          : left +
+              (chartWidth * index / (points.length - 1));
+
+      final normalized =
+          (value - paddedMin) / paddedRange;
+
+      final y = top +
+          chartHeight -
+          normalized.clamp(0.0, 1.0) * chartHeight;
+
+      return Offset(x, y);
+    }
+
+    final gridPaint = Paint()
+      ..color = const Color(0xFFEAEAF0)
+      ..strokeWidth = 1;
+
+    final axisPaint = Paint()
+      ..color = const Color(0xFFDCDCE3)
+      ..strokeWidth = 1;
+
+    for (var i = 0; i <= 4; i++) {
+      final y = top + chartHeight * i / 4;
+
+      canvas.drawLine(
+        Offset(left, y),
+        Offset(size.width - right, y),
+        gridPaint,
+      );
+
+      final value = paddedMax -
+          paddedRange * i / 4;
+
+      final painter = TextPainter(
+        text: TextSpan(
+          text: _compactRupiah(value),
+          style: const TextStyle(
+            fontSize: 9,
+            color: inkMuted,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        textDirection: TextDirection.ltr,
+      )..layout(maxWidth: left - 7);
+
+      painter.paint(
+        canvas,
+        Offset(
+          left - painter.width - 7,
+          y - painter.height / 2,
+        ),
+      );
+    }
+
+    canvas.drawLine(
+      Offset(left, top + chartHeight),
+      Offset(size.width - right, top + chartHeight),
+      axisPaint,
+    );
+
+    final xLabelStep = points.length <= 8
+        ? 1
+        : points.length <= 16
+            ? 2
+            : points.length <= 24
+                ? 3
+                : 5;
+
+    for (var i = 0; i < points.length; i += xLabelStep) {
+      final p = pointOffset(i, paddedMin);
+      final painter = TextPainter(
+        text: TextSpan(
+          text: points[i].label,
+          style: const TextStyle(
+            fontSize: 9,
+            color: inkMuted,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        textDirection: TextDirection.ltr,
+      )..layout();
+
+      final x = (p.dx - painter.width / 2)
+          .clamp(0.0, size.width - painter.width);
+
+      painter.paint(
+        canvas,
+        Offset(
+          x,
+          top + chartHeight + 9,
+        ),
+      );
+    }
+
+    void drawSeries(
+      List<double> values,
+      Color color,
+    ) {
+      final path = Path();
+
+      for (var i = 0; i < values.length; i++) {
+        final point = pointOffset(i, values[i]);
+
+        if (i == 0) {
+          path.moveTo(point.dx, point.dy);
+          continue;
+        }
+
+        final previous = pointOffset(i - 1, values[i - 1]);
+        final control = (point.dx - previous.dx) * .35;
+
+        path.cubicTo(
+          previous.dx + control,
+          previous.dy,
+          point.dx - control,
+          point.dy,
+          point.dx,
+          point.dy,
+        );
+      }
+
+      final paint = Paint()
+        ..color = color
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.7
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round;
+
+      canvas.drawPath(path, paint);
+
+      final dotPaint = Paint()..color = color;
+
+      for (var i = 0; i < values.length; i++) {
+        final point = pointOffset(i, values[i]);
+
+        if (i == selectedIndex) {
+          canvas.drawCircle(
+            point,
+            5.5,
+            Paint()..color = Colors.white,
+          );
+          canvas.drawCircle(
+            point,
+            4,
+            dotPaint,
+          );
+        } else if (points.length <= 16) {
+          canvas.drawCircle(
+            point,
+            2.2,
+            dotPaint,
+          );
+        }
+      }
+    }
+
+    drawSeries(
+      points.map((e) => e.omzet.toDouble()).toList(),
+      red,
+    );
+
+    drawSeries(
+      points.map((e) => e.biaya.toDouble()).toList(),
+      const Color(0xFFE38B22),
+    );
+
+    drawSeries(
+      points.map((e) => e.bersih.toDouble()).toList(),
+      const Color(0xFF2E9B63),
+    );
+
+    if (selectedIndex >= 0 &&
+        selectedIndex < points.length) {
+      final selected = pointOffset(
+        selectedIndex,
+        points[selectedIndex].bersih.toDouble(),
+      );
+
+      final verticalPaint = Paint()
+        ..color = const Color(0xFFBFC0C8)
+        ..strokeWidth = 1.2;
+
+      canvas.drawLine(
+        Offset(selected.dx, top),
+        Offset(selected.dx, top + chartHeight),
+        verticalPaint,
+      );
+
+      final markerPaint = Paint()
+        ..color = const Color(0xFF666772)
+        ..style = PaintingStyle.fill;
+
+      canvas.drawCircle(
+        Offset(selected.dx, top + chartHeight),
+        3,
+        markerPaint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _TrendChartPainter oldDelegate) {
+    return oldDelegate.points != points ||
+        oldDelegate.selectedIndex != selectedIndex;
+  }
 }
