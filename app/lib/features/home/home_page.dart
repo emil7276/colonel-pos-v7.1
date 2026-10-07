@@ -287,7 +287,7 @@ String _trialLabel() {
                   minimumSize: const Size(0, 20),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-                child: const Text(
+                child: Text(
                   AppLocalizations.t('Berlangganan Sekarang', 'Subscribe Now'),
                   style: TextStyle(
                     fontSize: 10,
@@ -455,24 +455,24 @@ String _trialLabel() {
             selectedIcon: Icon(Icons.dashboard_rounded),
             label: AppLocalizations.t('Dasbor', 'Dashboard'),
           ),
-          const NavigationDestination(
+          NavigationDestination(
             icon: Icon(Icons.shopping_cart_outlined),
             selectedIcon: Icon(Icons.shopping_cart),
             label: AppLocalizations.t('Transaksi', 'Transactions'),
           ),
-          const NavigationDestination(
-            icon: Icon(Icons.analytics_outlined),
+          NavigationDestination(
+            icon: const Icon(Icons.analytics_outlined),
             selectedIcon: Icon(Icons.analytics_rounded),
             label: AppLocalizations.t('Laporan', 'Reports'),
           ),
           if (widget.role == 'Administrator')
-            const NavigationDestination(
-              icon: Icon(Icons.settings_outlined),
+            NavigationDestination(
+              icon: const Icon(Icons.settings_outlined),
               selectedIcon: Icon(Icons.settings_rounded),
               label: AppLocalizations.t('Admin', 'Admin'),
             ),
           if (widget.role == 'Administrator')
-            const NavigationDestination(
+            NavigationDestination(
               icon: Icon(Icons.account_balance_wallet_outlined),
               selectedIcon: Icon(Icons.account_balance_wallet_rounded),
               label: AppLocalizations.t('Keuangan', 'Finance'),
