@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/constants.dart';
+import '../../core/app_localizations.dart';
 import '../../core/utils.dart';
 import '../../data/database.dart';
 import '../../models/models.dart';
@@ -31,7 +32,7 @@ class _MenuPageState extends State<MenuPage> {
       });
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Gagal memuat menu: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.t('Gagal memuat menu: $e', 'Failed to load menu: $e'))));
     }
   }
 
@@ -47,25 +48,25 @@ class _MenuPageState extends State<MenuPage> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-        title: const Text('Kategori Baru'),
+        title: Text(AppLocalizations.t('Kategori Baru', 'New Category')),
         content: TextField(
           controller: controller,
           autofocus: true,
           textCapitalization: TextCapitalization.words,
-          decoration: const InputDecoration(
-            labelText: 'Nama kategori',
-            hintText: 'Contoh: Paket, Snack, Minuman',
+          decoration: InputDecoration(
+            labelText: AppLocalizations.t('Nama kategori', 'Category Name'),
+            hintText: AppLocalizations.t('Contoh: Paket, Snack, Minuman', 'Example: Combo, Snack, Drinks'),
           ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text('Batal')),
+          TextButton(onPressed: () => Navigator.pop(dialogContext), child: Text(AppLocalizations.t('Batal', 'Cancel'))),
           FilledButton(
             onPressed: () {
               final name = controller.text.trim();
               if (name.isEmpty) return;
               Navigator.pop(dialogContext, name);
             },
-            child: const Text('Gunakan'),
+            child: Text(AppLocalizations.t('Gunakan', 'Use')),
           ),
         ],
       ),
@@ -89,20 +90,20 @@ class _MenuPageState extends State<MenuPage> {
         builder: (context, setDialog) {
           return AlertDialog(
             insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-            title: Text(p == null ? 'Tambah Menu' : 'Edit Menu'),
+            title: Text(p == null ? AppLocalizations.t('Tambah Menu', 'Add Menu') : AppLocalizations.t('Edit Menu', 'Edit Menu')),
             content: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextField(
                     controller: nameController,
-                    decoration: const InputDecoration(labelText: 'Nama menu'),
+                    decoration: InputDecoration(labelText: AppLocalizations.t('Nama menu', 'Menu Name')),
                   ),
                   const SizedBox(height: 10),
                   DropdownButtonFormField<String>(
                     value: availableCategories.contains(selectedCategory) ? selectedCategory : null,
                     isExpanded: true,
-                    decoration: const InputDecoration(labelText: 'Kategori'),
+                    decoration: InputDecoration(labelText: AppLocalizations.t('Kategori', 'Category')),
                     items: [
                       ...availableCategories.map((category) => DropdownMenuItem<String>(
                             value: category,
@@ -114,7 +115,7 @@ class _MenuPageState extends State<MenuPage> {
                           children: [
                             Icon(Icons.add_circle_outline, color: red, size: 20),
                             SizedBox(width: 8),
-                            Text('Buat kategori baru', style: TextStyle(color: red, fontWeight: FontWeight.w800)),
+                            Text(AppLocalizations.t('Buat kategori baru', 'Create new category'), style: TextStyle(color: red, fontWeight: FontWeight.w800)),
                           ],
                         ),
                       ),
@@ -136,19 +137,19 @@ class _MenuPageState extends State<MenuPage> {
                   TextField(
                     controller: priceController,
                     keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(labelText: 'Harga'),
+                    decoration: InputDecoration(labelText: AppLocalizations.t('Harga', 'Price')),
                   ),
                   const SizedBox(height: 10),
                   TextField(
                     controller: stockController,
                     keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(labelText: 'Stok awal'),
+                    decoration: InputDecoration(labelText: AppLocalizations.t('Stok awal', 'Initial Stock')),
                   ),
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
                     value: active,
                     onChanged: (v) => setDialog(() => active = v),
-                    title: const Text('Aktif'),
+                    title: Text(AppLocalizations.t('Aktif', 'Active')),
                   ),
                 ],
               ),
@@ -169,10 +170,10 @@ class _MenuPageState extends State<MenuPage> {
                     if (dialogContext.mounted) Navigator.pop(dialogContext);
                   } catch (e) {
                     if (!dialogContext.mounted) return;
-                    ScaffoldMessenger.of(dialogContext).showSnackBar(SnackBar(content: Text('Gagal menyimpan menu: $e')));
+                    ScaffoldMessenger.of(dialogContext).showSnackBar(SnackBar(content: Text(AppLocalizations.t('Gagal menyimpan menu: $e', 'Failed to save menu: $e'))));
                   }
                 },
-                child: const Text('Simpan'),
+                child: Text(AppLocalizations.t('Simpan', 'Save')),
               ),
             ],
           );
@@ -194,9 +195,9 @@ class _MenuPageState extends State<MenuPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Menu & Harga'),
+        title: Text(AppLocalizations.t('Menu & Harga', 'Menu & Prices')),
         actions: [
-          IconButton(onPressed: () => edit(), tooltip: 'Tambah menu', icon: const Icon(Icons.add_rounded)),
+          IconButton(onPressed: () => edit(), tooltip: AppLocalizations.t('Tambah menu', 'Add menu'), icon: const Icon(Icons.add_rounded)),
         ],
       ),
       body: Column(
@@ -222,7 +223,9 @@ class _MenuPageState extends State<MenuPage> {
                       border: Border.all(color: selected ? red : line),
                     ),
                     child: Text(
-                      category,
+                      category == 'Semua'
+                          ? AppLocalizations.t('Semua', 'All')
+                          : category,
                       style: TextStyle(
                         color: selected ? Colors.white : ink,
                         fontWeight: FontWeight.w800,
@@ -261,7 +264,7 @@ class _MenuPageState extends State<MenuPage> {
                               children: [
                                 Text(p.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 17)),
                                 const SizedBox(height: 3),
-                                Text('${p.category}  •  ${rp(p.price)}  •  Stok ${p.stock}', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: inkMuted, fontSize: 14)),
+                                Text('${p.category}  •  ${rp(p.price)}  •  ${AppLocalizations.t('Stok', 'Stock')} ${p.stock}', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: inkMuted, fontSize: 14)),
                               ],
                             ),
                           ),
@@ -273,11 +276,11 @@ class _MenuPageState extends State<MenuPage> {
                                 await load();
                               } catch (e) {
                                 if (!mounted) return;
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Gagal: $e')));
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.t('Gagal: $e', 'Failed: $e'))));
                               }
                             },
                           ),
-                          IconButton(onPressed: () => edit(p), tooltip: 'Edit', icon: const Icon(Icons.edit_rounded)),
+                          IconButton(onPressed: () => edit(p), tooltip: AppLocalizations.t('Edit', 'Edit'), icon: const Icon(Icons.edit_rounded)),
                         ],
                       ),
                     ),
