@@ -130,114 +130,6 @@ class _DashboardPageState extends State<DashboardPage> {
     }
   }
 
-  Future<void> _showReminderDialog() async {
-    if (!mounted) return;
-
-    final reminders = await DB.reminderItems();
-    if (!mounted || reminders.isEmpty) return;
-
-    final storage = const FlutterSecureStorage();
-    final active = <Map<String, dynamic>>[];
-
-    for (final item in reminders) {
-      final key =
-          'cp_reminder_handled_${item['type']}_${item['id']}_${item['due_date']}';
-
-      if (await storage.read(key: key) != '1') {
-        active.add(item);
-      }
-    }
-
-    if (!mounted || active.isEmpty) return;
-
-    await showDialog<void>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-          title: const Row(
-            children: [
-              Icon(
-                Icons.notifications_active_rounded,
-                color: Colors.red,
-              ),
-              SizedBox(width: 8),
-              Text('Reminder Keuangan'),
-            ],
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: active.map((item) {
-              final type =
-                  item['type'] == 'piutang' ? 'Piutang' : 'Hutang';
-
-              final due = DateTime.tryParse(
-                item['due_date']?.toString() ?? '',
-              );
-
-              final now = DateTime.now();
-              final today = DateTime(now.year, now.month, now.day);
-
-              final dueDay = due == null
-                  ? today
-                  : DateTime(due.year, due.month, due.day);
-
-              final diff = dueDay.difference(today).inDays;
-
-              final timing = diff == 0
-                  ? 'Jatuh tempo hari ini'
-                  : 'Jatuh tempo H-3';
-
-              return ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: const CircleAvatar(
-                  radius: 17,
-                  child: Icon(
-                    Icons.notifications_none_rounded,
-                    size: 18,
-                  ),
-                ),
-                title: Text('$type #${item['id']}'),
-                subtitle: Text(timing),
-              );
-            }).toList(),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Nanti'),
-            ),
-            FilledButton(
-              onPressed: () async {
-                for (final item in active) {
-                  final key =
-                      'cp_reminder_handled_${item['type']}_${item['id']}_${item['due_date']}';
-
-                  await storage.write(
-                    key: key,
-                    value: '1',
-                  );
-                }
-
-                if (mounted) {
-                  setState(() {
-                    piutangReminder = 0;
-                    hutangReminder = 0;
-                  });
-                }
-
-                if (context.mounted) {
-                  Navigator.pop(context);
-                }
-              },
-              child: const Text('Sudah Ditangani'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -630,8 +522,14 @@ class _DashboardPageState extends State<DashboardPage> {
     final sales = (summary['sales'] as List).map((e) => SaleModel.fromMap(e as Map<String, dynamic>)).toList();
     if (!mounted) return;
     if (sales.isEmpty) {
-      await showDialog<void>(context: context, builder: (_) => const AlertDialog(title: Text('Transaksi'), content: Text('Belum ada transaksi hari ini.')));
-        insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      await showDialog<void>(
+        context: context,
+        builder: (_) => const AlertDialog(
+          insetPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+          title: Text('Transaksi'),
+          content: Text('Belum ada transaksi hari ini.'),
+        ),
+      );
       return;
     }
     await showModalBottomSheet<void>(

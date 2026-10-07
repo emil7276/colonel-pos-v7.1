@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../core/constants.dart';
 import '../../core/utils.dart';
 import '../../data/database.dart';
-import '../../services/receipt_service.dart';
 
 class FinancePage extends StatefulWidget {
   const FinancePage({super.key});
