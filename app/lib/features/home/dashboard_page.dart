@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/constants.dart';
 import '../../core/license/license_service.dart';
@@ -25,6 +26,7 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   int omzet = 0, transaksi = 0, item = 0, retur = 0, pengeluaran = 0, piutang = 0, hutang = 0, labaBersih = 0;
+  int piutangReminder = 0, hutangReminder = 0;
   List<SaleModel> recent = [];
 
   DateTime selectedDate = DateTime.now();
@@ -54,11 +56,33 @@ class _DashboardPageState extends State<DashboardPage> {
     var expenseTotal = 0;
     var expenseDebt = 0;
     var receivable = 0;
+    var reminderReceivable = 0;
+    var reminderPayable = 0;
 
     if (widget.role == 'Administrator') {
       expenseTotal = await DB.expenseTotal(start, end);
       expenseDebt = await DB.expenseDebtTotal(start, end);
       receivable = await DB.payLaterTotal(start, end);
+      final reminders = await DB.reminderItems();
+      final storage = const FlutterSecureStorage();
+      final activeReminders = <Map<String, dynamic>>[];
+
+      for (final item in reminders) {
+        final key =
+            'cp_reminder_handled_${item['type']}_${item['id']}_${item['due_date']}';
+
+        if (await storage.read(key: key) != '1') {
+          activeReminders.add(item);
+        }
+      }
+
+      reminderReceivable = activeReminders
+          .where((item) => item['type'] == 'piutang')
+          .length;
+
+      reminderPayable = activeReminders
+          .where((item) => item['type'] == 'hutang')
+          .length;
     }
 
     final netIncome = summary['omzet'] as int;
@@ -73,6 +97,8 @@ class _DashboardPageState extends State<DashboardPage> {
       pengeluaran = expenseTotal;
       piutang = receivable;
       hutang = expenseDebt;
+      piutangReminder = reminderReceivable;
+      hutangReminder = reminderPayable;
       labaBersih = netProfit;
 
       recent = (summary['sales'] as List)
@@ -102,6 +128,113 @@ class _DashboardPageState extends State<DashboardPage> {
 
       await load();
     }
+  }
+
+  Future<void> _showReminderDialog() async {
+    if (!mounted) return;
+
+    final reminders = await DB.reminderItems();
+    if (!mounted || reminders.isEmpty) return;
+
+    final storage = const FlutterSecureStorage();
+    final active = <Map<String, dynamic>>[];
+
+    for (final item in reminders) {
+      final key =
+          'cp_reminder_handled_${item['type']}_${item['id']}_${item['due_date']}';
+
+      if (await storage.read(key: key) != '1') {
+        active.add(item);
+      }
+    }
+
+    if (!mounted || active.isEmpty) return;
+
+    await showDialog<void>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Row(
+            children: [
+              Icon(
+                Icons.notifications_active_rounded,
+                color: Colors.red,
+              ),
+              SizedBox(width: 8),
+              Text('Reminder Keuangan'),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: active.map((item) {
+              final type =
+                  item['type'] == 'piutang' ? 'Piutang' : 'Hutang';
+
+              final due = DateTime.tryParse(
+                item['due_date']?.toString() ?? '',
+              );
+
+              final now = DateTime.now();
+              final today = DateTime(now.year, now.month, now.day);
+
+              final dueDay = due == null
+                  ? today
+                  : DateTime(due.year, due.month, due.day);
+
+              final diff = dueDay.difference(today).inDays;
+
+              final timing = diff == 0
+                  ? 'Jatuh tempo hari ini'
+                  : 'Jatuh tempo H-3';
+
+              return ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const CircleAvatar(
+                  radius: 17,
+                  child: Icon(
+                    Icons.notifications_none_rounded,
+                    size: 18,
+                  ),
+                ),
+                title: Text('$type #${item['id']}'),
+                subtitle: Text(timing),
+              );
+            }).toList(),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Nanti'),
+            ),
+            FilledButton(
+              onPressed: () async {
+                for (final item in active) {
+                  final key =
+                      'cp_reminder_handled_${item['type']}_${item['id']}_${item['due_date']}';
+
+                  await storage.write(
+                    key: key,
+                    value: '1',
+                  );
+                }
+
+                if (mounted) {
+                  setState(() {
+                    piutangReminder = 0;
+                    hutangReminder = 0;
+                  });
+                }
+
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
+              },
+              child: const Text('Sudah Ditangani'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -293,6 +426,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       rp(piutang),
                       Icons.account_balance_rounded,
                       false,
+                      reminder: piutangReminder > 0,
                       onTap: () {
                         Navigator.push(
                           context,
@@ -307,6 +441,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       rp(hutang),
                       Icons.receipt_long_rounded,
                       false,
+                      reminder: hutangReminder > 0,
                       onTap: () {
                         Navigator.push(
                           context,
@@ -419,7 +554,14 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget _stat(String title, String value, IconData icon, bool primary, {VoidCallback? onTap}) {
+  Widget _stat(
+    String title,
+    String value,
+    IconData icon,
+    bool primary, {
+    VoidCallback? onTap,
+    bool reminder = false,
+  }) {
     return Card(
       child: InkWell(
         borderRadius: BorderRadius.circular(18),
@@ -440,7 +582,35 @@ class _DashboardPageState extends State<DashboardPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(children: [Expanded(child: Text(title, style: const TextStyle(color: inkMuted, fontSize: 11, fontWeight: FontWeight.w700))), if (onTap != null) const Icon(Icons.chevron_right_rounded, size: 17, color: inkMuted)]),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            title,
+                            style: const TextStyle(
+                              color: inkMuted,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        if (reminder)
+                          Container(
+                            width: 9,
+                            height: 9,
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        if (onTap != null)
+                          const Icon(
+                            Icons.chevron_right_rounded,
+                            size: 17,
+                            color: inkMuted,
+                          ),
+                      ],
+                    ),
                     const SizedBox(height: 2),
                     FittedBox(alignment: Alignment.centerLeft, child: Text(value, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: primary ? red : ink))),
                   ],
