@@ -21,6 +21,7 @@ class _FinancePageState extends State<FinancePage> {
   int debt = 0;
   int receivable = 0;
   int payable = 0;
+  int actualCash = 0;
   List<Map<String, dynamic>> expenseRows = [];
   List<Map<String, dynamic>> receivableRows = [];
   List<Map<String, dynamic>> payableRows = [];
@@ -43,6 +44,47 @@ class _FinancePageState extends State<FinancePage> {
               selectedEndDate!.day,
             ).add(const Duration(days: 1));
 
+  Future<int> _actualCashTotal() async {
+    final db = await DB.database;
+
+    final salesRows = await db.rawQuery('''
+      SELECT COALESCE(
+        SUM(
+          s.total - COALESCE(
+            (
+              SELECT SUM(si.returned_qty * si.price)
+              FROM sale_items si
+              WHERE si.sale_id = s.id
+            ),
+            0
+          )
+        ),
+        0
+      ) AS total
+      FROM sales s
+      WHERE (
+        UPPER(TRIM(COALESCE(s.payment, ''))) NOT IN
+          ('BAYAR TUNDA', 'BAYAR NANTI')
+        OR (
+          UPPER(TRIM(COALESCE(s.payment, ''))) IN
+            ('BAYAR TUNDA', 'BAYAR NANTI')
+          AND UPPER(TRIM(COALESCE(s.receivable_status, ''))) = 'LUNAS'
+        )
+      )
+    ''');
+
+    var cash = (salesRows.first['total'] as num?)?.toInt() ?? 0;
+
+    final expenseRows = await db.rawQuery('''
+      SELECT COALESCE(SUM(amount), 0) AS total
+      FROM expenses
+      WHERE UPPER(TRIM(COALESCE(payment_status, ''))) = 'LUNAS'
+    ''');
+
+    cash -= (expenseRows.first['total'] as num?)?.toInt() ?? 0;
+    return cash;
+  }
+
   Future<void> _load() async {
     final results = await Future.wait([
       DB.cashIncome(from, to),
@@ -51,6 +93,7 @@ class _FinancePageState extends State<FinancePage> {
       DB.expenses(from, to),
       DB.receivables(),
       DB.payables(),
+      _actualCashTotal(),
     ]);
 
     if (!mounted) return;
@@ -74,6 +117,7 @@ class _FinancePageState extends State<FinancePage> {
             sum + ((item['amount'] as num?)?.toInt() ?? 0),
       );
 
+      actualCash = results[6] as int;
       debt = payable;
     });
   }
@@ -478,51 +522,23 @@ class _FinancePageState extends State<FinancePage> {
               children: [
                 Expanded(
                   child: _metric(
-                    'Piutang',
-                    receivable,
-                    Icons.account_balance_rounded,
+                    'Kas Aktual',
+                    actualCash,
+                    Icons.account_balance_wallet_rounded,
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: _metric(
-                    'Hutang',
-                    payable,
-                    Icons.receipt_long_rounded,
+                    'Hasil Bersih',
+                    net,
+                    Icons.trending_up_rounded,
                   ),
                 ),
               ],
             ),
 
             const SizedBox(height: 8),
-            Card(
-              child: ListTile(
-                leading: const Icon(
-                  Icons.account_balance_wallet_rounded,
-                  color: red,
-                ),
-                title: const Text(
-                  'Hasil Bersih',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-                subtitle: const Text(
-                  'Pendapatan - Pengeluaran',
-                ),
-                trailing: Text(
-                  rp(net),
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900,
-                    color: net >= 0
-                        ? Colors.green.shade700
-                        : red,
-                  ),
-                ),
-              ),
-            ),
-
             const SizedBox(height: 14),
 
             Card(
