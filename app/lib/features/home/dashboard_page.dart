@@ -31,6 +31,15 @@ class _DashboardPageState extends State<DashboardPage> {
   List<_TrendPoint> trendPoints = [];
   int selectedTrendIndex = -1;
 
+  String topProductName = '-';
+  int topProductQty = 0;
+
+  String topCustomerName = '-';
+  int topCustomerValue = 0;
+
+  String bestTimeName = '-';
+  int bestTimeValue = 0;
+
   Map<String, int> paymentTotals = {
     'Tunai': 0,
     'QRIS': 0,
@@ -110,6 +119,11 @@ class _DashboardPageState extends State<DashboardPage> {
         ? await _buildTrendPoints(summarySales, saleNetTotals)
         : <_TrendPoint>[];
 
+    final rankingData = await _buildDashboardRankings(
+      summarySales,
+      saleNetTotals,
+    );
+
     var expenseTotal = 0;
     var expenseDebt = 0;
     var receivable = 0;
@@ -165,6 +179,15 @@ class _DashboardPageState extends State<DashboardPage> {
       labaBersih = netProfit;
       paymentTotals = calculatedPayments;
       trendPoints = trendData;
+
+      topProductName = rankingData['productName'] as String;
+      topProductQty = rankingData['productQty'] as int;
+
+      topCustomerName = rankingData['customerName'] as String;
+      topCustomerValue = rankingData['customerValue'] as int;
+
+      bestTimeName = rankingData['timeName'] as String;
+      bestTimeValue = rankingData['timeValue'] as int;
       selectedTrendIndex =
           trendData.isEmpty ? -1 : trendData.length - 1;
 
@@ -411,6 +434,33 @@ class _DashboardPageState extends State<DashboardPage> {
                       '$item',
                       Icons.inventory_2_rounded,
                       false,
+                    ),
+                    _stat(
+                      'Produk Paling Laku',
+                      topProductQty > 0
+                          ? '$topProductName ($topProductQty)'
+                          : '-',
+                      Icons.local_fire_department_rounded,
+                      false,
+                      onTap: showTopProducts,
+                    ),
+                    _stat(
+                      'Pelanggan Teratas',
+                      topCustomerValue > 0
+                          ? '$topCustomerName • ${rp(topCustomerValue)}'
+                          : '-',
+                      Icons.person_rounded,
+                      false,
+                      onTap: showTopCustomers,
+                    ),
+                    _stat(
+                      'Waktu Paling Laku',
+                      bestTimeValue > 0
+                          ? '$bestTimeName • ${rp(bestTimeValue)}'
+                          : '-',
+                      Icons.schedule_rounded,
+                      false,
+                      onTap: showBestTimes,
                     ),
                   ],
                 ],
@@ -1009,6 +1059,420 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<Map<String, dynamic>> _buildDashboardRankings(
+    List<Map<String, dynamic>> sales,
+    Map<int, int> saleNetTotals,
+  ) async {
+    final db = await DB.database;
+
+    final productTotals = <String, int>{};
+
+    if (sales.isNotEmpty) {
+      final ids = sales
+          .map((e) => (e['id'] as num).toInt())
+          .toList();
+
+      final placeholders = List.filled(ids.length, '?').join(',');
+
+      final itemRows = await db.rawQuery(
+        '''
+        SELECT name, qty, returned_qty
+        FROM sale_items
+        WHERE sale_id IN ($placeholders)
+        ''',
+        ids,
+      );
+
+      for (final row in itemRows) {
+        final name = (row['name'] ?? 'Produk').toString();
+        final qty = (row['qty'] as num?)?.toInt() ?? 0;
+        final returned = (row['returned_qty'] as num?)?.toInt() ?? 0;
+        final netQty = qty - returned;
+
+        if (netQty > 0) {
+          productTotals[name] =
+              (productTotals[name] ?? 0) + netQty;
+        }
+      }
+    }
+
+    final sortedProducts = productTotals.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+
+    String productName = '-';
+    int productQty = 0;
+
+    if (sortedProducts.isNotEmpty) {
+      productName = sortedProducts.first.key;
+      productQty = sortedProducts.first.value;
+    }
+
+    final customerTotals = <String, int>{};
+
+    for (final sale in sales) {
+      final id = (sale['id'] as num).toInt();
+      final customer =
+          (sale['customer_name'] ?? 'Pelanggan Umum').toString().trim();
+
+      final name =
+          customer.isEmpty ? 'Pelanggan Umum' : customer;
+
+      final net = saleNetTotals[id] ??
+          ((sale['total'] as num?)?.toInt() ?? 0);
+
+      customerTotals[name] =
+          (customerTotals[name] ?? 0) + net;
+    }
+
+    final sortedCustomers = customerTotals.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+
+    String customerName = '-';
+    int customerValue = 0;
+
+    if (sortedCustomers.isNotEmpty) {
+      customerName = sortedCustomers.first.key;
+      customerValue = sortedCustomers.first.value;
+    }
+
+    final timeTotals = <String, int>{};
+
+    final rangeDays =
+        end.difference(start).inDays;
+
+    String timeKey(DateTime date) {
+      if (rangeDays <= 1) {
+        return '${date.hour.toString().padLeft(2, '0')}:00';
+      }
+
+      if (rangeDays <= 31) {
+        return '${date.day.toString().padLeft(2, '0')}/'
+            '${date.month.toString().padLeft(2, '0')}/'
+            '${date.year}';
+      }
+
+      return '${date.month.toString().padLeft(2, '0')}/${date.year}';
+    }
+
+    for (final sale in sales) {
+      final raw = sale['sale_time']?.toString();
+
+      if (raw == null || raw.isEmpty) {
+        continue;
+      }
+
+      final date = DateTime.tryParse(raw);
+
+      if (date == null) {
+        continue;
+      }
+
+      final id = (sale['id'] as num).toInt();
+      final net = saleNetTotals[id] ??
+          ((sale['total'] as num?)?.toInt() ?? 0);
+
+      final key = timeKey(date);
+
+      timeTotals[key] =
+          (timeTotals[key] ?? 0) + net;
+    }
+
+    final sortedTimes = timeTotals.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+
+    String timeName = '-';
+    int timeValue = 0;
+
+    if (sortedTimes.isNotEmpty) {
+      timeName = sortedTimes.first.key;
+      timeValue = sortedTimes.first.value;
+    }
+
+    return {
+      'productName': productName,
+      'productQty': productQty,
+      'customerName': customerName,
+      'customerValue': customerValue,
+      'timeName': timeName,
+      'timeValue': timeValue,
+    };
+  }
+
+  Future<List<Map<String, dynamic>>> _topProductsData() async {
+    final summary = await DB.rangeSummary(start, end);
+    final sales = (summary['sales'] as List)
+        .map((e) => Map<String, dynamic>.from(e as Map))
+        .toList();
+
+    final db = await DB.database;
+    final totals = <String, int>{};
+
+    if (sales.isNotEmpty) {
+      final ids = sales
+          .map((e) => (e['id'] as num).toInt())
+          .toList();
+
+      final placeholders = List.filled(ids.length, '?').join(',');
+
+      final rows = await db.rawQuery(
+        '''
+        SELECT name, qty, returned_qty
+        FROM sale_items
+        WHERE sale_id IN ($placeholders)
+        ''',
+        ids,
+      );
+
+      for (final row in rows) {
+        final name = (row['name'] ?? 'Produk').toString();
+        final qty = (row['qty'] as num?)?.toInt() ?? 0;
+        final returned =
+            (row['returned_qty'] as num?)?.toInt() ?? 0;
+        final netQty = qty - returned;
+
+        if (netQty > 0) {
+          totals[name] = (totals[name] ?? 0) + netQty;
+        }
+      }
+    }
+
+    final result = totals.entries
+        .map((e) => {
+              'name': e.key,
+              'qty': e.value,
+            })
+        .toList();
+
+    result.sort(
+      (a, b) => (b['qty'] as int).compareTo(a['qty'] as int),
+    );
+
+    return result;
+  }
+
+  Future<List<Map<String, dynamic>>> _topCustomersData() async {
+    final summary = await DB.rangeSummary(start, end);
+    final sales = (summary['sales'] as List)
+        .map((e) => Map<String, dynamic>.from(e as Map))
+        .toList();
+
+    final totals = <String, int>{};
+
+    for (final sale in sales) {
+      final id = (sale['id'] as num).toInt();
+      final returned = await DB.returnedAmount(id);
+      final gross = (sale['total'] as num?)?.toInt() ?? 0;
+      final net = gross - returned;
+
+      final rawName =
+          (sale['customer_name'] ?? 'Pelanggan Umum').toString().trim();
+
+      final name =
+          rawName.isEmpty ? 'Pelanggan Umum' : rawName;
+
+      totals[name] = (totals[name] ?? 0) + net;
+    }
+
+    final result = totals.entries
+        .map((e) => {
+              'name': e.key,
+              'value': e.value,
+            })
+        .toList();
+
+    result.sort(
+      (a, b) =>
+          (b['value'] as int).compareTo(a['value'] as int),
+    );
+
+    return result;
+  }
+
+  Future<List<Map<String, dynamic>>> _bestTimesData() async {
+    final summary = await DB.rangeSummary(start, end);
+    final sales = (summary['sales'] as List)
+        .map((e) => Map<String, dynamic>.from(e as Map))
+        .toList();
+
+    final totals = <String, int>{};
+    final rangeDays = end.difference(start).inDays;
+
+    String keyFor(DateTime date) {
+      if (rangeDays <= 1) {
+        return '${date.hour.toString().padLeft(2, '0')}:00';
+      }
+
+      if (rangeDays <= 31) {
+        return '${date.day.toString().padLeft(2, '0')}/'
+            '${date.month.toString().padLeft(2, '0')}/'
+            '${date.year}';
+      }
+
+      return '${date.month.toString().padLeft(2, '0')}/${date.year}';
+    }
+
+    for (final sale in sales) {
+      final raw = sale['sale_time']?.toString();
+
+      if (raw == null || raw.isEmpty) {
+        continue;
+      }
+
+      final date = DateTime.tryParse(raw);
+
+      if (date == null) {
+        continue;
+      }
+
+      final id = (sale['id'] as num).toInt();
+      final returned = await DB.returnedAmount(id);
+      final gross = (sale['total'] as num?)?.toInt() ?? 0;
+      final net = gross - returned;
+
+      final key = keyFor(date);
+      totals[key] = (totals[key] ?? 0) + net;
+    }
+
+    final result = totals.entries
+        .map((e) => {
+              'name': e.key,
+              'value': e.value,
+            })
+        .toList();
+
+    result.sort(
+      (a, b) =>
+          (b['value'] as int).compareTo(a['value'] as int),
+    );
+
+    return result;
+  }
+
+  Widget _rankingTile({
+    required String title,
+    required String subtitle,
+    required String trailing,
+    required int rank,
+  }) {
+    return ListTile(
+      dense: true,
+      leading: CircleAvatar(
+        radius: 17,
+        child: Text(
+          '$rank',
+          style: const TextStyle(fontWeight: FontWeight.w900),
+        ),
+      ),
+      title: Text(
+        title,
+        style: const TextStyle(fontWeight: FontWeight.w800),
+      ),
+      subtitle: Text(subtitle),
+      trailing: Text(
+        trailing,
+        style: const TextStyle(fontWeight: FontWeight.w800),
+      ),
+    );
+  }
+
+  Future<void> _showRankingSheet({
+    required String title,
+    required List<Map<String, dynamic>> rows,
+    required String emptyText,
+    required String Function(Map<String, dynamic>) titleBuilder,
+    required String Function(Map<String, dynamic>) subtitleBuilder,
+    required String Function(Map<String, dynamic>) trailingBuilder,
+  }) async {
+    if (!mounted) return;
+
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 19,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                if (rows.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(emptyText),
+                  ),
+                if (rows.isNotEmpty)
+                  Flexible(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: rows.length,
+                      itemBuilder: (_, index) {
+                        final row = rows[index];
+
+                        return _rankingTile(
+                          rank: index + 1,
+                          title: titleBuilder(row),
+                          subtitle: subtitleBuilder(row),
+                          trailing: trailingBuilder(row),
+                        );
+                      },
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> showTopProducts() async {
+    final rows = await _topProductsData();
+
+    await _showRankingSheet(
+      title: 'Produk Paling Laku',
+      rows: rows,
+      emptyText: 'Belum ada produk terjual pada periode ini.',
+      titleBuilder: (row) => row['name'].toString(),
+      subtitleBuilder: (row) => '${row['qty']} item terjual',
+      trailingBuilder: (row) => '${row['qty']} item',
+    );
+  }
+
+  Future<void> showTopCustomers() async {
+    final rows = await _topCustomersData();
+
+    await _showRankingSheet(
+      title: 'Pelanggan Teratas',
+      rows: rows,
+      emptyText: 'Belum ada transaksi pada periode ini.',
+      titleBuilder: (row) => row['name'].toString(),
+      subtitleBuilder: (_) => 'Total pembelian bersih',
+      trailingBuilder: (row) => rp(row['value'] as num),
+    );
+  }
+
+  Future<void> showBestTimes() async {
+    final rows = await _bestTimesData();
+
+    await _showRankingSheet(
+      title: 'Waktu Paling Laku',
+      rows: rows,
+      emptyText: 'Belum ada transaksi pada periode ini.',
+      titleBuilder: (row) => row['name'].toString(),
+      subtitleBuilder: (_) => 'Omzet bersih',
+      trailingBuilder: (row) => rp(row['value'] as num),
     );
   }
 
