@@ -635,7 +635,7 @@ class PosPageState extends State<PosPage> {
           content: Text(
             '${sale.no}\n'
             'Total ${rp(sale.total)}\n'
-            AppLocalizations.t('Pembayaran: Bayar Tunda', 'Payment: Pay Later'),
+            + AppLocalizations.t('Pembayaran: Bayar Tunda', 'Payment: Pay Later'),
           ),
           actions: [
             TextButton(
