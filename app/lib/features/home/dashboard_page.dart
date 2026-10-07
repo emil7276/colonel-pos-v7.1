@@ -29,6 +29,13 @@ class _DashboardPageState extends State<DashboardPage> {
   int piutangReminder = 0, hutangReminder = 0;
   List<SaleModel> recent = [];
 
+  Map<String, int> paymentTotals = {
+    'Tunai': 0,
+    'QRIS': 0,
+    'Transfer': 0,
+    'Bayar Tunda': 0,
+  };
+
   DateTime selectedDate = DateTime.now();
   DateTime? selectedEndDate;
 
@@ -52,6 +59,45 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Future<void> load() async {
     final summary = await DB.rangeSummary(start, end);
+
+    final calculatedPayments = <String, int>{
+      'Tunai': 0,
+      'QRIS': 0,
+      'Transfer': 0,
+      'Bayar Tunda': 0,
+    };
+
+    final summarySales =
+        (summary['sales'] as List)
+            .map((e) => Map<String, dynamic>.from(e as Map))
+            .toList();
+
+    for (final sale in summarySales) {
+      var payment = (sale['payment'] ?? 'Tunai').toString().trim();
+
+      if (payment.toLowerCase() == 'cash' ||
+          payment.toLowerCase() == 'tunai') {
+        payment = 'Tunai';
+      } else if (payment.toLowerCase() == 'qris') {
+        payment = 'QRIS';
+      } else if (payment.toLowerCase() == 'transfer') {
+        payment = 'Transfer';
+      } else if (payment.toLowerCase() == 'bayar tunda' ||
+          payment.toLowerCase() == 'bayar nanti') {
+        payment = 'Bayar Tunda';
+      }
+
+      if (calculatedPayments.containsKey(payment)) {
+        final gross = (sale['total'] as num?)?.toInt() ?? 0;
+        final returned = await DB.returnedAmount(
+          (sale['id'] as num).toInt(),
+        );
+        final net = gross - returned;
+
+        calculatedPayments[payment] =
+            (calculatedPayments[payment] ?? 0) + net;
+      }
+    }
 
     var expenseTotal = 0;
     var expenseDebt = 0;
@@ -100,6 +146,7 @@ class _DashboardPageState extends State<DashboardPage> {
       piutangReminder = reminderReceivable;
       hutangReminder = reminderPayable;
       labaBersih = netProfit;
+      paymentTotals = calculatedPayments;
 
       recent = (summary['sales'] as List)
           .map((e) => SaleModel.fromMap(e as Map<String, dynamic>))
@@ -285,6 +332,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     rp(omzet),
                     Icons.payments_rounded,
                     true,
+                    onTap: showOmzet,
                   ),
                   _stat(
                     'Transaksi',
@@ -298,7 +346,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     '$retur',
                     Icons.assignment_return_rounded,
                     false,
-                    onTap: () => widget.onQuickAccess?.call('laporan'),
+                    onTap: showReturns,
                   ),
                   if (widget.role == 'Administrator') ...[
                     _stat(
@@ -321,14 +369,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       Icons.account_balance_rounded,
                       false,
                       reminder: piutangReminder > 0,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const FinancePage(),
-                          ),
-                        );
-                      },
+                      onTap: showReceivables,
                     ),
                     _stat(
                       'Hutang',
@@ -336,34 +377,24 @@ class _DashboardPageState extends State<DashboardPage> {
                       Icons.receipt_long_rounded,
                       false,
                       reminder: hutangReminder > 0,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const FinancePage(),
-                          ),
-                        );
-                      },
+                      onTap: showPayables,
                     ),
                     _stat(
                       'Laba Bersih',
                       rp(labaBersih),
                       Icons.trending_up_rounded,
                       false,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const FinancePage(),
-                          ),
-                        );
-                      },
+                      onTap: showNetIncome,
                     ),
                   ],
                 ],
               );
             },
           ),
+          if (widget.role == 'Administrator') ...[
+            const SizedBox(height: 18),
+            _paymentCard(),
+          ],
           const SizedBox(height: 18),
           const Text('Akses Cepat', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w900)),
           const SizedBox(height: 10),
@@ -403,6 +434,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   title: Text(s.no, style: const TextStyle(fontWeight: FontWeight.w800)),
                   subtitle: Text('${s.time} • ${s.cashier}'),
                   trailing: Text(rp(s.total), style: const TextStyle(fontWeight: FontWeight.w900)),
+                  onTap: () => _showSaleDetail(s),
                 ),
               ),
             ),
@@ -518,20 +550,270 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Future<void> showTransactions() async {
-    final summary = await DB.daySummary(DateTime.now());
-    final sales = (summary['sales'] as List).map((e) => SaleModel.fromMap(e as Map<String, dynamic>)).toList();
+    final summary = await DB.rangeSummary(start, end);
+    final sales = (summary['sales'] as List)
+        .map((e) => SaleModel.fromMap(e as Map<String, dynamic>))
+        .toList();
+
+    await _showSalesSheet(
+      title: 'Riwayat Transaksi',
+      sales: sales,
+    );
+  }
+
+  Future<void> showOmzet() async {
+    final summary = await DB.rangeSummary(start, end);
+    final sales = (summary['sales'] as List)
+        .map((e) => SaleModel.fromMap(e as Map<String, dynamic>))
+        .toList();
+
+    await _showSalesSheet(
+      title: 'Riwayat Omzet',
+      sales: sales,
+      showNetTotal: true,
+    );
+  }
+
+  Future<void> showReturns() async {
+    final summary = await DB.rangeSummary(start, end);
+    final sales = (summary['returnedSales'] as List)
+        .map((e) => SaleModel.fromMap(e as Map<String, dynamic>))
+        .toList();
+
+    await _showSalesSheet(
+      title: 'Riwayat Retur',
+      sales: sales,
+      returnsOnly: true,
+    );
+  }
+
+  Future<void> showReceivables() async {
+    final rows = await DB.receivables();
+
+    final sales = rows
+        .where((row) {
+          final raw = row['sale_time']?.toString() ?? '';
+          final date = DateTime.tryParse(raw);
+          return date != null &&
+              !date.isBefore(start) &&
+              date.isBefore(end);
+        })
+        .map((row) => SaleModel.fromMap(row))
+        .toList();
+
+    await _showSalesSheet(
+      title: 'Riwayat Piutang',
+      sales: sales,
+    );
+  }
+
+  Future<void> showPayables() async {
+    final rows = await DB.expenses(start, end);
+
+    final filtered = rows.where((row) {
+      final status =
+          (row['payment_status'] ?? '').toString().trim().toLowerCase();
+
+      return status == 'hutang' || status == 'jatuh tempo';
+    }).toList();
+
+    await _showExpenseSheet(
+      title: 'Riwayat Hutang',
+      rows: filtered,
+    );
+  }
+
+  Future<void> showNetIncome() async {
+    final summary = await DB.rangeSummary(start, end);
+    final sales = (summary['sales'] as List)
+        .map((e) => SaleModel.fromMap(e as Map<String, dynamic>))
+        .toList();
+
+    final expenses = await DB.expenses(start, end);
+
+    await _showNetIncomeSheet(
+      sales: sales,
+      expenses: expenses,
+    );
+  }
+
+  Future<void> showPaymentTransactions(String payment) async {
+    final summary = await DB.rangeSummary(start, end);
+
+    final sales = (summary['sales'] as List)
+        .map((e) => SaleModel.fromMap(e as Map<String, dynamic>))
+        .where((sale) {
+          final raw = sale.payment.trim().toLowerCase();
+
+          if (payment == 'Tunai') {
+            return raw == 'tunai' || raw == 'cash';
+          }
+
+          if (payment == 'QRIS') {
+            return raw == 'qris';
+          }
+
+          if (payment == 'Transfer') {
+            return raw == 'transfer';
+          }
+
+          if (payment == 'Bayar Tunda') {
+            return raw == 'bayar tunda' || raw == 'bayar nanti';
+          }
+
+          return false;
+        })
+        .toList();
+
+    await _showSalesSheet(
+      title: 'Transaksi $payment',
+      sales: sales,
+      showNetTotal: true,
+    );
+  }
+
+  Future<void> _showSalesSheet({
+    required String title,
+    required List<SaleModel> sales,
+    bool returnsOnly = false,
+    bool showNetTotal = false,
+  }) async {
     if (!mounted) return;
-    if (sales.isEmpty) {
-      await showDialog<void>(
-        context: context,
-        builder: (_) => const AlertDialog(
-          insetPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-          title: Text('Transaksi'),
-          content: Text('Belum ada transaksi hari ini.'),
+
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => SafeArea(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * .78,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${displayDate(start)} - ${displayDate(end.subtract(const Duration(days: 1)))}',
+                  style: const TextStyle(color: inkMuted),
+                ),
+                const SizedBox(height: 10),
+                if (sales.isEmpty)
+                  const Expanded(
+                    child: Center(
+                      child: Text('Tidak ada transaksi pada rentang ini.'),
+                    ),
+                  )
+                else
+                  Expanded(
+                    child: ListView.separated(
+                      itemCount: sales.length,
+                      separatorBuilder: (_, __) =>
+                          const Divider(height: 1),
+                      itemBuilder: (_, index) {
+                        final sale = sales[index];
+
+                        return ListTile(
+                          dense: true,
+                          leading: CircleAvatar(
+                            radius: 18,
+                            backgroundColor: redSoft,
+                            foregroundColor: red,
+                            child: Icon(
+                              returnsOnly
+                                  ? Icons.assignment_return_rounded
+                                  : Icons.receipt_long_rounded,
+                              size: 19,
+                            ),
+                          ),
+                          title: Text(
+                            sale.no,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          subtitle: Text(
+                            '${sale.time} • ${sale.customerName} • ${sale.payment}',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          trailing: Text(
+                            rp(sale.total),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          onTap: () => _showSaleDetail(sale),
+                        );
+                      },
+                    ),
+                  ),
+                if (showNetTotal && sales.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: FutureBuilder<int>(
+                      future: _salesNetTotal(sales),
+                      builder: (_, snapshot) {
+                        final total = snapshot.data ?? 0;
+
+                        return Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(14),
+                            child: Row(
+                              children: [
+                                const Expanded(
+                                  child: Text(
+                                    'Total Bersih',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  rp(total),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+              ],
+            ),
+          ),
         ),
-      );
-      return;
+      ),
+    );
+  }
+
+  Future<int> _salesNetTotal(List<SaleModel> sales) async {
+    var total = 0;
+
+    for (final sale in sales) {
+      total += sale.total;
+      total -= await DB.returnedAmount(sale.id);
     }
+
+    return total;
+  }
+
+  Future<void> _showExpenseSheet({
+    required String title,
+    required List<Map<String, dynamic>> rows,
+  }) async {
+    if (!mounted) return;
+
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -543,28 +825,387 @@ class _DashboardPageState extends State<DashboardPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Transaksi Hari Ini', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w900)),
-                const SizedBox(height: 8),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: sales.length,
-                    itemBuilder: (_, i) {
-                      final sale = sales[i];
-                      return ListTile(
-                        dense: true,
-                        leading: const Icon(Icons.receipt_long_rounded, color: red),
-                        title: Text(sale.no, style: const TextStyle(fontWeight: FontWeight.w800)),
-                        subtitle: Text('${sale.time} • ${sale.payment}'),
-                        trailing: Text(rp(sale.total), style: const TextStyle(fontWeight: FontWeight.w800)),
-                      );
-                    },
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
                   ),
                 ),
+                const SizedBox(height: 4),
+                Text(
+                  '${displayDate(start)} - ${displayDate(end.subtract(const Duration(days: 1)))}',
+                  style: const TextStyle(color: inkMuted),
+                ),
+                const SizedBox(height: 10),
+                if (rows.isEmpty)
+                  const Expanded(
+                    child: Center(
+                      child: Text('Tidak ada hutang pada rentang ini.'),
+                    ),
+                  )
+                else
+                  Expanded(
+                    child: ListView.separated(
+                      itemCount: rows.length,
+                      separatorBuilder: (_, __) =>
+                          const Divider(height: 1),
+                      itemBuilder: (_, index) {
+                        final row = rows[index];
+
+                        final amount =
+                            (row['amount'] as num?)?.toInt() ?? 0;
+
+                        final note =
+                            (row['note'] ?? 'Pengeluaran').toString();
+
+                        final category =
+                            (row['category'] ?? '').toString();
+
+                        final status =
+                            (row['payment_status'] ?? '').toString();
+
+                        return ListTile(
+                          leading: const CircleAvatar(
+                            radius: 18,
+                            child: Icon(
+                              Icons.receipt_long_rounded,
+                              size: 19,
+                            ),
+                          ),
+                          title: Text(
+                            note,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          subtitle: Text(
+                            '$category • ${row['expense_date'] ?? ''} • $status',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          trailing: Text(
+                            rp(amount),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _showNetIncomeSheet({
+    required List<SaleModel> sales,
+    required List<Map<String, dynamic>> expenses,
+  }) async {
+    if (!mounted) return;
+
+    final salesTotal = await _salesNetTotal(sales);
+
+    var expenseTotal = 0;
+
+    for (final row in expenses) {
+      final status =
+          (row['payment_status'] ?? '').toString().trim().toLowerCase();
+
+      if (status == 'lunas' || status == 'sudah dibayar') {
+        expenseTotal += (row['amount'] as num?)?.toInt() ?? 0;
+      }
+    }
+
+    final net = salesTotal - expenseTotal;
+
+    if (!mounted) return;
+
+    await showModalBottomSheet<void>(
+      context: context,
+      builder: (_) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 28),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Rincian Laba Bersih',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              const SizedBox(height: 14),
+              ListTile(
+                title: const Text('Omzet Bersih'),
+                trailing: Text(
+                  rp(salesTotal),
+                  style: const TextStyle(fontWeight: FontWeight.w800),
+                ),
+              ),
+              ListTile(
+                title: const Text('Pengeluaran Dibayar'),
+                trailing: Text(
+                  rp(expenseTotal),
+                  style: const TextStyle(fontWeight: FontWeight.w800),
+                ),
+              ),
+              const Divider(),
+              ListTile(
+                title: const Text(
+                  'Laba Bersih',
+                  style: TextStyle(fontWeight: FontWeight.w900),
+                ),
+                trailing: Text(
+                  rp(net),
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Ketuk transaksi pada kartu Omzet untuk melihat detail penjualan.',
+                style: Theme.of(context).textTheme.bodySmall,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showSaleDetail(SaleModel sale) async {
+    if (!mounted) return;
+
+    final items = await DB.saleItems(sale.id);
+    final returnedAmount = await DB.returnedAmount(sale.id);
+
+    if (!mounted) return;
+
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => SafeArea(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * .78,
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
+            children: [
+              Text(
+                'Detail ${sale.no}',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              const SizedBox(height: 12),
+              _detailRow('Tanggal', sale.time),
+              _detailRow('Kasir', sale.cashier),
+              _detailRow('Pelanggan', sale.customerName),
+              if (sale.customerPhone.isNotEmpty)
+                _detailRow('Telepon', sale.customerPhone),
+              _detailRow('Tipe Pelanggan', sale.customerType),
+              _detailRow('Pembayaran', sale.payment),
+              if (sale.transferBank.isNotEmpty)
+                _detailRow('Bank', sale.transferBank),
+              if (sale.transferAccount.isNotEmpty)
+                _detailRow('Rekening', sale.transferAccount),
+              if (sale.dueDate.isNotEmpty)
+                _detailRow('Jatuh Tempo', sale.dueDate),
+              const SizedBox(height: 12),
+              const Divider(),
+              const Text(
+                'Item',
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              const SizedBox(height: 6),
+              if (items.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  child: Text('Detail item tidak tersedia.'),
+                )
+              else
+                ...items.map((item) {
+                  final name = (item['name'] ?? 'Item').toString();
+                  final qty = (item['qty'] as num?)?.toInt() ?? 0;
+                  final returned =
+                      (item['returned_qty'] as num?)?.toInt() ?? 0;
+                  final price =
+                      (item['price'] as num?)?.toInt() ?? 0;
+
+                  return ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(
+                      name,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    subtitle: Text(
+                      returned > 0
+                          ? 'Qty $qty • Retur $returned • Harga ${rp(price)}'
+                          : 'Qty $qty • Harga ${rp(price)}',
+                    ),
+                    trailing: Text(
+                      rp(price * qty),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  );
+                }),
+              const Divider(),
+              _detailRow('Subtotal', rp(sale.subtotal)),
+              _detailRow('Diskon', rp(sale.discount)),
+              _detailRow('Total', rp(sale.total)),
+              if (returnedAmount > 0)
+                _detailRow('Nilai Retur', rp(returnedAmount)),
+              if (returnedAmount > 0)
+                _detailRow(
+                  'Total Bersih',
+                  rp(sale.total - returnedAmount),
+                ),
+              if (sale.returned)
+                const Padding(
+                  padding: EdgeInsets.only(top: 8),
+                  child: Text(
+                    'TRANSAKSI SUDAH DIRETUR SELURUHNYA',
+                    style: TextStyle(
+                      color: red,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _detailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 125,
+            child: Text(
+              label,
+              style: const TextStyle(
+                color: inkMuted,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _paymentCard() {
+    Widget paymentItem(String title, int amount) {
+      return Expanded(
+        child: Card(
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: () => showPaymentTransactions(title),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  FittedBox(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      rp(amount),
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  const Icon(
+                    Icons.chevron_right_rounded,
+                    size: 17,
+                    color: inkMuted,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Metode Pembayaran',
+          style: TextStyle(
+            fontSize: 19,
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            paymentItem(
+              'Tunai',
+              paymentTotals['Tunai'] ?? 0,
+            ),
+            const SizedBox(width: 8),
+            paymentItem(
+              'QRIS',
+              paymentTotals['QRIS'] ?? 0,
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            paymentItem(
+              'Transfer',
+              paymentTotals['Transfer'] ?? 0,
+            ),
+            const SizedBox(width: 8),
+            paymentItem(
+              'Bayar Tunda',
+              paymentTotals['Bayar Tunda'] ?? 0,
+            ),
+          ],
+        ),
+      ],
     );
   }
 
