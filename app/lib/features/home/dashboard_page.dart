@@ -234,8 +234,8 @@ class _DashboardPageState extends State<DashboardPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Dashboard',
+                    Text(
+                      AppLocalizations.t('Dasbor', 'Dashboard'),
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w900,
@@ -250,7 +250,7 @@ class _DashboardPageState extends State<DashboardPage> {
               OutlinedButton.icon(
                 onPressed: pickDateRange,
                 icon: const Icon(Icons.calendar_month_outlined),
-                label: const Text('Pilih Rentang'),
+                label: Text(AppLocalizations.t('Pilih Rentang', 'Select Range')),
               ),
             ],
           ),
@@ -265,9 +265,9 @@ class _DashboardPageState extends State<DashboardPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('AKTIVASI LISENSI', style: const TextStyle(color: Colors.white, fontSize: 19, fontWeight: FontWeight.w900)),
+                      Text(AppLocalizations.t('AKTIVASI LISENSI', 'LICENSE ACTIVATION'), style: const TextStyle(color: Colors.white, fontSize: 19, fontWeight: FontWeight.w900)),
                       const SizedBox(height: 4),
-                      const Text('Berlangganan Sekarang', style: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.w600)),
+                      Text(AppLocalizations.t('Berlangganan Sekarang', 'Subscribe Now'), style: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.w600)),
                     ],
                   ),
                 ),
@@ -279,27 +279,27 @@ class _DashboardPageState extends State<DashboardPage> {
                         context: context,
                         builder: (dialogContext) => AlertDialog(
                           insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-                          title: const Text('Aktivasi Lisensi'),
+                          title: Text(AppLocalizations.t('Aktivasi Lisensi', 'License Activation')),
                           content: TextField(
                             controller: controller,
                             maxLines: 4,
-                            decoration: const InputDecoration(
-                              labelText: 'Kode Aktivasi',
-                              hintText: 'Tempel kode aktivasi di sini',
+                            decoration: InputDecoration(
+                              labelText: AppLocalizations.t('Kode Aktivasi', 'Activation Code'),
+                              hintText: AppLocalizations.t('Tempel kode aktivasi di sini', 'Paste activation code here'),
                               border: OutlineInputBorder(),
                             ),
                           ),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.pop(dialogContext),
-                              child: const Text('BATAL'),
+                              child: Text(AppLocalizations.t('BATAL', 'CANCEL')),
                             ),
                             ElevatedButton(
                               onPressed: () => Navigator.pop(
                                 dialogContext,
                                 controller.text.trim(),
                               ),
-                              child: const Text('AKTIVASI'),
+                              child: Text(AppLocalizations.t('AKTIVASI', 'ACTIVATE')),
                             ),
                           ],
                         ),
@@ -324,7 +324,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       );
                     },
                     icon: const Icon(Icons.key_rounded, size: 18),
-                    label: const Text('Aktivasi'),
+                    label: Text(AppLocalizations.t('Aktivasi', 'Activate')),
                   ),
               ],
             ),
@@ -515,7 +515,7 @@ class _DashboardPageState extends State<DashboardPage> {
             _paymentCard(),
           ],
           const SizedBox(height: 18),
-          const Text('Akses Cepat', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w900)),
+          Text(AppLocalizations.t('Akses Cepat', 'Quick Access'), style: TextStyle(fontSize: 19, fontWeight: FontWeight.w900)),
           const SizedBox(height: 10),
           LayoutBuilder(
             builder: (context, c) {
@@ -543,10 +543,10 @@ class _DashboardPageState extends State<DashboardPage> {
             _trendChartCard(),
           ],
           const SizedBox(height: 20),
-          const Text('Transaksi Terbaru', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w900)),
+          Text(AppLocalizations.t('Transaksi Terbaru', 'Recent Transactions'), style: TextStyle(fontSize: 19, fontWeight: FontWeight.w900)),
           const SizedBox(height: 9),
           if (recent.isEmpty)
-            Card(child: Padding(padding: const EdgeInsets.all(18), child: Text('Belum ada transaksi.', style: Theme.of(context).textTheme.bodyMedium)))
+            Card(child: Padding(padding: const EdgeInsets.all(18), child: Text(AppLocalizations.t('Belum ada transaksi.', 'No transactions yet.'), style: Theme.of(context).textTheme.bodyMedium)))
           else
             ...recent.map(
               (s) => Card(

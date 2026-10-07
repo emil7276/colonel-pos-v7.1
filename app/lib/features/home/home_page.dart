@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../core/constants.dart';
+import '../../core/app_localizations.dart';
 import '../../core/language_service.dart';
 import '../../core/trial_service.dart';
 import '../../core/license/license_service.dart';
@@ -81,13 +82,19 @@ String _trialLabel() {
       case "1Y": planLabel = "1 TAHUN"; break;
       default: planLabel = license.plan;
     }
-    return "AKTIF • $planLabel • Sisa $days hari";
+    return AppLocalizations.t(
+      "AKTIF • $planLabel • Sisa $days hari",
+      "ACTIVE • $planLabel • $days days left",
+    );
   }
   final status = _trialStatus;
   if (status == null) return "TRIAL";
   final remaining = status.expiresAt.difference(DateTime.now());
   final days = (remaining.inHours / 24).ceil().clamp(1, 7);
-  return "TRIAL • Sisa $days hari";
+  return AppLocalizations.t(
+    "TRIAL • Sisa $days hari",
+    "TRIAL • $days days left",
+  );
 }
 
   @override
@@ -243,7 +250,18 @@ String _trialLabel() {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(titles[index], style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+            Text(
+              titles[index] == 'Dashboard'
+                  ? AppLocalizations.t('Dasbor', 'Dashboard')
+                  : titles[index] == 'Transaksi'
+                      ? AppLocalizations.t('Transaksi', 'Transactions')
+                      : titles[index] == 'Laporan'
+                          ? AppLocalizations.t('Laporan', 'Reports')
+                          : titles[index] == 'Pengaturan'
+                              ? AppLocalizations.t('Pengaturan', 'Settings')
+                              : AppLocalizations.t('Keuangan', 'Finance'),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+            ),
             Text('${widget.username} • ${widget.role}', style: const TextStyle(fontSize: 11, color: Colors.white70, fontWeight: FontWeight.w600)),
             if (_trialStatus != null || _licenseInfo != null)
               Text(
@@ -270,7 +288,7 @@ String _trialLabel() {
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 child: const Text(
-                  'Berlangganan Sekarang',
+                  AppLocalizations.t('Berlangganan Sekarang', 'Subscribe Now'),
                   style: TextStyle(
                     fontSize: 10,
                     color: Colors.white,
@@ -330,7 +348,7 @@ String _trialLabel() {
               ),
             ),
           IconButton(
-            tooltip: 'Logout',
+            tooltip: AppLocalizations.t('Logout', 'Logout'),
             onPressed: logout,
             icon: const Icon(Icons.logout_rounded, color: Colors.white),
           ),
@@ -435,29 +453,29 @@ String _trialLabel() {
           const NavigationDestination(
             icon: Icon(Icons.dashboard_outlined),
             selectedIcon: Icon(Icons.dashboard_rounded),
-            label: 'Dashboard',
+            label: AppLocalizations.t('Dasbor', 'Dashboard'),
           ),
           const NavigationDestination(
             icon: Icon(Icons.shopping_cart_outlined),
             selectedIcon: Icon(Icons.shopping_cart),
-            label: 'Transaksi',
+            label: AppLocalizations.t('Transaksi', 'Transactions'),
           ),
           const NavigationDestination(
             icon: Icon(Icons.analytics_outlined),
             selectedIcon: Icon(Icons.analytics_rounded),
-            label: 'Laporan',
+            label: AppLocalizations.t('Laporan', 'Reports'),
           ),
           if (widget.role == 'Administrator')
             const NavigationDestination(
               icon: Icon(Icons.settings_outlined),
               selectedIcon: Icon(Icons.settings_rounded),
-              label: 'Admin',
+              label: AppLocalizations.t('Admin', 'Admin'),
             ),
           if (widget.role == 'Administrator')
             const NavigationDestination(
               icon: Icon(Icons.account_balance_wallet_outlined),
               selectedIcon: Icon(Icons.account_balance_wallet_rounded),
-              label: 'Keuangan',
+              label: AppLocalizations.t('Keuangan', 'Finance'),
             ),
         ],
       ),

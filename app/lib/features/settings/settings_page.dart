@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/constants.dart';
+import '../../core/app_localizations.dart';
 import '../../core/widgets.dart';
 import 'store_page.dart';
 import 'menu_page.dart';
@@ -28,61 +29,61 @@ class SettingsPage
       children: [
         settingsTile(
           context,
-          'Bahasa / Language',
+          AppLocalizations.t('Bahasa / Language', 'Language'),
           Icons.language_rounded,
           const LanguagePage(),
         ),
         settingsTile(
           context,
-          'Identitas Toko',
+          AppLocalizations.t('Identitas Toko', 'Store Identity'),
           Icons.store,
           const StorePage(),
         ),
         settingsTile(
           context,
-          'Menu & Harga',
+          AppLocalizations.t('Menu & Harga', 'Menu & Prices'),
           Icons.restaurant_menu,
           const MenuPage(),
         ),
         settingsTile(
           context,
-          'Stok',
+          AppLocalizations.t('Stok', 'Stock'),
           Icons.inventory_2,
           const StockPage(),
         ),
         settingsTile(
           context,
-          'Manajemen Pengguna',
+          AppLocalizations.t('Manajemen Pengguna', 'User Management'),
           Icons.people,
           const UsersPage(),
         ),
         settingsTile(
           context,
-          'QRIS',
+          AppLocalizations.t('QRIS', 'QRIS'),
           Icons.qr_code_2,
           const QrisPage(),
         ),
         settingsTile(
           context,
-          'Printer',
+          AppLocalizations.t('Printer', 'Printer'),
           Icons.print_outlined,
           const PrinterPage(),
         ),
         settingsTile(
           context,
-          'Backup',
+          AppLocalizations.t('Backup', 'Backup'),
           Icons.backup_outlined,
           const BackupPage(),
         ),
         settingsTile(
           context,
-          'Q&A mengenai aplikasi ini',
+          AppLocalizations.t('Q&A mengenai aplikasi ini', 'App Q&A'),
           Icons.help_outline_rounded,
           const QaPage(),
         ),
         settingsTile(
           context,
-          'Hubungi Kami',
+          AppLocalizations.t('Hubungi Kami', 'Contact Us'),
           Icons.support_agent_rounded,
           const ContactPage(),
         ),

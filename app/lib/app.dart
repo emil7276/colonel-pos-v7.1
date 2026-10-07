@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'core/constants.dart';
+import 'core/language_service.dart';
 import 'features/auth/intro_page.dart';
 
 class ColonelApp extends StatelessWidget {
@@ -7,7 +8,11 @@ class ColonelApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = ColorScheme.fromSeed(
+    LanguageService.load();
+    return ValueListenableBuilder<String>(
+      valueListenable: LanguageService.language,
+      builder: (context, language, _) {
+        final scheme = ColorScheme.fromSeed(
       seedColor: gold,
       brightness: Brightness.light,
     );
@@ -129,7 +134,9 @@ class ColonelApp extends StatelessWidget {
           thickness: 1,
         ),
       ),
-      home: const IntroPage(),
+        home: const IntroPage(),
+      );
+      },
     );
   }
 }
