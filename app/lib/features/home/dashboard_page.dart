@@ -685,7 +685,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 children: [
                   Expanded(
                     child: Text(
-                      selected.label,
+                      'Periode Terpilih • ${selected.label}',
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w900,
@@ -708,6 +708,56 @@ class _DashboardPageState extends State<DashboardPage> {
                     label: 'Bersih',
                     value: selected.bersih,
                     color: Color(0xFF2E9B63),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 9),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(12, 11, 12, 11),
+              decoration: BoxDecoration(
+                color: redSoft,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: const Color(0xFFEAEAEF),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Total Periode',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _TrendValue(
+                          label: 'Omzet',
+                          value: omzet,
+                          color: red,
+                        ),
+                      ),
+                      Expanded(
+                        child: _TrendValue(
+                          label: 'Biaya',
+                          value: pengeluaran,
+                          color: Color(0xFFE38B22),
+                        ),
+                      ),
+                      Expanded(
+                        child: _TrendValue(
+                          label: 'Bersih',
+                          value: labaBersih,
+                          color: Color(0xFF2E9B63),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
