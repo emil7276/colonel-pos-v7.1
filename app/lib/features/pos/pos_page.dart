@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants.dart';
+import '../../core/app_localizations.dart';
 import '../../core/utils.dart';
 import '../../data/database.dart';
 import '../../models/models.dart';
@@ -91,7 +92,7 @@ class PosPageState extends State<PosPage> {
           .showSnackBar(
         SnackBar(
           content: Text(
-            'Gagal memuat stok: $e',
+            AppLocalizations.t('Gagal memuat stok: $e', 'Failed to load stock: $e'),
           ),
         ),
       );
@@ -130,7 +131,7 @@ class PosPageState extends State<PosPage> {
             .showSnackBar(
           SnackBar(
             content:
-                Text('Stok ${p.name} habis.'),
+                Text(AppLocalizations.t('Stok ${p.name} habis.', 'Stock ${p.name} is out.')),
           ),
         );
         return;
@@ -147,7 +148,7 @@ class PosPageState extends State<PosPage> {
             .showSnackBar(
           SnackBar(
             content: Text(
-              'Stok ${p.name} hanya ${p.stock}.',
+              AppLocalizations.t('Stok ${p.name} hanya ${p.stock}.', 'Only ${p.stock} ${p.name} in stock.'),
             ),
           ),
         );
@@ -180,22 +181,22 @@ class PosPageState extends State<PosPage> {
       context: context,
       builder: (_) => AlertDialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-        title: const Text('Diskon'),
+        title: Text(AppLocalizations.t('Diskon', 'Discount')),
         content: TextField(
           controller: c,
           keyboardType:
               TextInputType.number,
           decoration:
-              const InputDecoration(
+              InputDecoration(
             labelText:
-                'Nominal diskon',
+                AppLocalizations.t('Nominal diskon', 'Discount amount'),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () =>
                 Navigator.pop(context),
-            child: const Text('Batal'),
+            child: Text(AppLocalizations.t('Batal', 'Cancel')),
           ),
           FilledButton(
             onPressed: () {
@@ -205,7 +206,7 @@ class PosPageState extends State<PosPage> {
                     0,
               );
             },
-            child: const Text('Simpan'),
+            child: Text(AppLocalizations.t('Simpan', 'Save')),
           ),
         ],
       ),
@@ -232,14 +233,14 @@ class PosPageState extends State<PosPage> {
       context: context,
       builder: (context) => AlertDialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-        title: const Text('Simpan Pelanggan'),
+        title: Text(AppLocalizations.t('Simpan Pelanggan', 'Save Customer')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: nameController,
-              decoration: const InputDecoration(
-                labelText: 'Nama pelanggan',
+              decoration: InputDecoration(
+                labelText: AppLocalizations.t('Nama pelanggan', 'Customer name'),
                 prefixIcon: Icon(Icons.person_outline),
               ),
             ),
@@ -247,8 +248,8 @@ class PosPageState extends State<PosPage> {
             TextField(
               controller: phoneController,
               keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(
-                labelText: 'Nomor HP',
+              decoration: InputDecoration(
+                labelText: AppLocalizations.t('Nomor HP', 'Phone number'),
                 prefixIcon: Icon(Icons.phone_outlined),
               ),
             ),
@@ -257,7 +258,7 @@ class PosPageState extends State<PosPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Batal'),
+            child: Text(AppLocalizations.t('Batal', 'Cancel')),
           ),
           FilledButton(
             onPressed: () {
@@ -268,7 +269,7 @@ class PosPageState extends State<PosPage> {
 
               Navigator.pop(context, true);
             },
-            child: const Text('Simpan'),
+            child: Text(AppLocalizations.t('Simpan', 'Save')),
           ),
         ],
       ),
@@ -302,8 +303,8 @@ class PosPageState extends State<PosPage> {
         ) {
           return AlertDialog(
             title:
-                const Text(
-              'Bayar Tunda',
+                Text(
+              AppLocalizations.t('Bayar Tunda', 'Pay Later'),
             ),
             content:
                 SingleChildScrollView(
@@ -314,7 +315,7 @@ class PosPageState extends State<PosPage> {
                     CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Total: ${rp(total)}',
+                    AppLocalizations.t('Total', 'Total') + ': ${rp(total)}',
                     style:
                         const TextStyle(
                       fontWeight:
@@ -325,8 +326,8 @@ class PosPageState extends State<PosPage> {
                   const SizedBox(
                     height: 16,
                   ),
-                  const Text(
-                    'Metode pembayaran',
+                  Text(
+                    AppLocalizations.t('Metode pembayaran', 'Payment method'),
                     style:
                         TextStyle(
                       fontWeight:
@@ -341,22 +342,20 @@ class PosPageState extends State<PosPage> {
                     children: [
                       ChoiceChip(
                         label:
-                            const Text(
-                          'Tunai',
+                            Text(
+                          AppLocalizations.t('Tunai', 'Cash'),
                         ),
                         selected:
-                            method ==
-                                'Tunai',
+                            method == 'Tunai',
                         onSelected: (_) {
                           setDialogState(
-                            () => method =
-                                'Tunai',
+                            () => method = 'Tunai',
                           );
                         },
                       ),
                       ChoiceChip(
                         label:
-                            const Text(
+                            Text(
                           'Transfer',
                         ),
                         selected:
@@ -379,12 +378,10 @@ class PosPageState extends State<PosPage> {
                     TextField(
                       controller:
                           bankController,
-                      decoration:
-                          const InputDecoration(
-                        labelText:
-                            'Transfer ke Bank',
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.t('Transfer ke Bank', 'Bank transfer'),
                         hintText:
-                            'Contoh: BCA',
+                            AppLocalizations.t('Contoh: BCA', 'Example: BCA'),
                         prefixIcon:
                             Icon(
                           Icons
@@ -396,8 +393,8 @@ class PosPageState extends State<PosPage> {
                   const SizedBox(
                     height: 12,
                   ),
-                  const Text(
-                    'Tgl Jatuh Tempo (opsional)',
+                  Text(
+                    AppLocalizations.t('Tgl Jatuh Tempo (opsional)', 'Due date (optional)'),
                     style:
                         TextStyle(
                       fontWeight:
@@ -412,7 +409,7 @@ class PosPageState extends State<PosPage> {
                       Expanded(
                         child: Text(
                           dueDate == null
-                              ? 'Tidak diisi'
+                              ? AppLocalizations.t('Tidak diisi', 'Not set')
                               : '${dueDate!.day.toString().padLeft(2, '0')}/'
                                 '${dueDate!.month.toString().padLeft(2, '0')}/'
                                 '${dueDate!.year}',
@@ -478,8 +475,8 @@ class PosPageState extends State<PosPage> {
                   false,
                 ),
                 child:
-                    const Text(
-                  'Batal',
+                    Text(
+                  AppLocalizations.t('Batal', 'Cancel'),
                 ),
               ),
               FilledButton(
@@ -499,8 +496,8 @@ class PosPageState extends State<PosPage> {
                   );
                 },
                 child:
-                    const Text(
-                  'Simpan',
+                    Text(
+                  AppLocalizations.t('Simpan', 'Save'),
                 ),
               ),
             ],
@@ -614,9 +611,10 @@ class PosPageState extends State<PosPage> {
                 .showSnackBar(
               SnackBar(
                 content: Text(
-                  'Transaksi tersimpan, '
-                  'tetapi cetak otomatis gagal: '
-                  '$e',
+                  AppLocalizations.t(
+                    'Transaksi tersimpan, tetapi cetak otomatis gagal: $e',
+                    'Transaction saved, but automatic printing failed: $e',
+                  ),
                 ),
               ),
             );
@@ -631,13 +629,13 @@ class PosPageState extends State<PosPage> {
         builder: (_) =>
             AlertDialog(
           title:
-              const Text(
-            'Transaksi Berhasil',
+              Text(
+            AppLocalizations.t('Transaksi Berhasil', 'Transaction Successful'),
           ),
           content: Text(
             '${sale.no}\n'
             'Total ${rp(sale.total)}\n'
-            'Pembayaran: Bayar Tunda',
+            AppLocalizations.t('Pembayaran: Bayar Tunda', 'Payment: Pay Later'),
           ),
           actions: [
             TextButton(
@@ -646,8 +644,8 @@ class PosPageState extends State<PosPage> {
                 context,
               ),
               child:
-                  const Text(
-                'Tutup',
+                  Text(
+                AppLocalizations.t('Tutup', 'Close'),
               ),
             ),
             FilledButton(
@@ -667,7 +665,7 @@ class PosPageState extends State<PosPage> {
                         .showSnackBar(
                       SnackBar(
                         content: Text(
-                          'Gagal mencetak: $e',
+                          AppLocalizations.t('Gagal mencetak: $e', 'Failed to print: $e'),
                         ),
                       ),
                     );
@@ -675,8 +673,8 @@ class PosPageState extends State<PosPage> {
                 }
               },
               child:
-                  const Text(
-                'Cetak',
+                  Text(
+                AppLocalizations.t('Cetak', 'Print'),
               ),
             ),
           ],
@@ -695,7 +693,7 @@ class PosPageState extends State<PosPage> {
             seconds: 5,
           ),
           content: Text(
-            'Transaksi Bayar Tunda gagal diproses:\n$e',
+            AppLocalizations.t('Transaksi Bayar Tunda gagal diproses:\n$e', 'Pay Later transaction failed to process:\n$e'),
           ),
         ),
       );
@@ -734,14 +732,13 @@ class PosPageState extends State<PosPage> {
 
             return AlertDialog(
               insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-              title:
-                  const Text('Pembayaran'),
+              title: Text(AppLocalizations.t('Pembayaran', 'Payment')),
               content: Column(
                 mainAxisSize:
                     MainAxisSize.min,
                 children: [
                   Text(
-                    'TOTAL ${rp(total)}',
+                    AppLocalizations.t('TOTAL', 'TOTAL') + ' ${rp(total)}',
                     style:
                         const TextStyle(
                       fontSize: 20,
@@ -763,10 +760,10 @@ class PosPageState extends State<PosPage> {
                           'QRIS',
                           'Transfer',
                           'Wallet (Platform)',
-                            'Bayar Tunda',
+                          'Bayar Tunda',
                         ])
                           ChoiceChip(
-                            label: Text(x),
+                            label: Text(AppLocalizations.t(x == 'Tunai' ? 'Tunai' : x == 'Bayar Tunda' ? 'Bayar Tunda' : x, x == 'Tunai' ? 'Cash' : x == 'Bayar Tunda' ? 'Pay Later' : x)),
                             selected: method == x,
                             onSelected: (_) {
                                     if (x == 'Bayar Tunda') {
@@ -808,9 +805,8 @@ class PosPageState extends State<PosPage> {
                         () {},
                       ),
                       decoration:
-                          const InputDecoration(
-                        labelText:
-                            'Uang diterima',
+                          InputDecoration(
+                        labelText: AppLocalizations.t('Uang diterima', 'Cash received'),
                       ),
                     ),
                     const SizedBox(
@@ -818,10 +814,8 @@ class PosPageState extends State<PosPage> {
                     ),
                     Text(
                       change >= 0
-                          ? 'Kembalian '
-                            '${rp(change)}'
-                          : 'Uang kurang '
-                            '${rp(-change)}',
+                          ? AppLocalizations.t('Kembalian ', 'Change ') + '${rp(change)}'
+                          : AppLocalizations.t('Uang kurang ', 'Short by ') + '${rp(-change)}',
                     ),
                   ],
                 ],
@@ -832,8 +826,7 @@ class PosPageState extends State<PosPage> {
                       Navigator.pop(
                     context,
                   ),
-                  child:
-                      const Text('Batal'),
+                  child: Text(AppLocalizations.t('Batal', 'Cancel')),
                 ),
                 FilledButton(
                   onPressed: () {
@@ -850,10 +843,8 @@ class PosPageState extends State<PosPage> {
                       ScaffoldMessenger
                               .of(context)
                           .showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            'Uang diterima '
-                            'belum cukup.',
+                        SnackBar(
+                          content: Text(AppLocalizations.t('Uang diterima belum cukup.', 'Cash received is not enough.'),
                           ),
                         ),
                       );
@@ -877,8 +868,7 @@ class PosPageState extends State<PosPage> {
                       },
                     );
                   },
-                  child:
-                      const Text('PROSES'),
+                  child: Text(AppLocalizations.t('PROSES', 'PROCESS')),
                 ),
               ],
             );
@@ -973,8 +963,8 @@ class PosPageState extends State<PosPage> {
           builder: (_) =>
               AlertDialog(
                 insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-            title: const Text(
-              'Transaksi Berhasil',
+            title: Text(
+              AppLocalizations.t('Transaksi Berhasil', 'Transaction Successful'),
             ),
             content: Text(
               '${sale.no}\n'
@@ -987,7 +977,7 @@ class PosPageState extends State<PosPage> {
                   context,
                 ),
                 child:
-                    const Text('Tutup'),
+                    Text(AppLocalizations.t('Tutup', 'Close')),
               ),
               FilledButton(
                 onPressed: () async {
@@ -1000,7 +990,7 @@ class PosPageState extends State<PosPage> {
                   );
                 },
                 child:
-                    const Text('Cetak'),
+                    Text(AppLocalizations.t('Cetak', 'Print')),
               ),
             ],
           ),
@@ -1017,7 +1007,7 @@ class PosPageState extends State<PosPage> {
             seconds: 5,
           ),
           content: Text(
-            'Transaksi gagal diproses:\n$e',
+            AppLocalizations.t('Transaksi gagal diproses:\n$e', 'Transaction failed to process:\n$e'),
           ),
         ),
       );
@@ -1032,8 +1022,8 @@ class PosPageState extends State<PosPage> {
     if (path == null || path.isEmpty || !File(path).existsSync()) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('QRIS belum diatur oleh Administrator.'),
+        SnackBar(
+          content: Text(AppLocalizations.t('QRIS belum diatur oleh Administrator.', 'QRIS has not been configured by the Administrator.')),
         ),
       );
       return;
@@ -1099,7 +1089,7 @@ class PosPageState extends State<PosPage> {
                   width: double.infinity,
                   child: FilledButton(
                     onPressed: () => Navigator.pop(context),
-                    child: const Text('Tutup'),
+                    child: Text(AppLocalizations.t('Tutup', 'Close')),
                   ),
                 ),
               ],
@@ -1139,7 +1129,7 @@ class PosPageState extends State<PosPage> {
                         setState(() => searchQuery = value);
                       },
                       decoration: InputDecoration(
-                        hintText: 'Cari menu...',
+                        hintText: AppLocalizations.t('Cari menu...', 'Search menu...'),
                         prefixIcon: const Icon(Icons.search),
                         suffixIcon: searchQuery.isEmpty
                             ? null
@@ -1162,7 +1152,7 @@ class PosPageState extends State<PosPage> {
                     ),
                   ),
                   Text(
-                    '${filtered.length} menu',
+                    '${filtered.length} ${AppLocalizations.t('menu', 'items')}',
                     style: const TextStyle(color: inkMuted, fontWeight: FontWeight.w700),
                   ),
                 ],
@@ -1204,7 +1194,7 @@ class PosPageState extends State<PosPage> {
                             const SizedBox(width: 5),
                           ],
                           Text(
-                            x,
+                              x == 'Semua' ? AppLocalizations.t('Semua', 'All') : x,
                             style: TextStyle(
                               color: selected ? Colors.white : Colors.black,
                               fontWeight: FontWeight.bold,
@@ -1311,7 +1301,7 @@ class PosPageState extends State<PosPage> {
                                           context: context,
                                           builder: (_) => AlertDialog(
                                             insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-                                            title: const Text('Jumlah'),
+                                            title: Text(AppLocalizations.t('Jumlah', 'Quantity')),
                                             content: TextField(
                                               controller: c,
                                               keyboardType: TextInputType.number,
@@ -1321,14 +1311,14 @@ class PosPageState extends State<PosPage> {
                                               TextButton(
                                                 onPressed: () =>
                                                     Navigator.pop(context),
-                                                child: const Text('Batal'),
+                                                child: Text(AppLocalizations.t('Batal', 'Cancel')),
                                               ),
                                               FilledButton(
                                                 onPressed: () => Navigator.pop(
                                                   context,
                                                   int.tryParse(c.text),
                                                 ),
-                                                child: const Text('OK'),
+                                                child: Text(AppLocalizations.t('OK', 'OK')),
                                               ),
                                             ],
                                           ),
@@ -1374,7 +1364,7 @@ class PosPageState extends State<PosPage> {
                               },
                             ),
                             Text(
-                              'Stok ${p.stock}',
+                              AppLocalizations.t('Stok', 'Stock') + ' ${p.stock}',
                               style: TextStyle(
                                 color: p.stock <= 0 ? red : Colors.green.shade700,
                                 fontWeight: FontWeight.w700,
@@ -1405,11 +1395,11 @@ class PosPageState extends State<PosPage> {
           ),
           child: Column(
             children: [
-              const ListTile(
+              ListTile(
                 dense: true,
                 contentPadding: EdgeInsets.symmetric(horizontal: 10),
                 leading: Icon(Icons.shopping_cart_rounded, color: red, size: 20),
-                title: Text('Keranjang', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13, color: red)),
+                title: Text(AppLocalizations.t('Keranjang', 'Cart'), style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13, color: red)),
               ),
 
               Padding(
@@ -1453,9 +1443,9 @@ class PosPageState extends State<PosPage> {
                               onChanged: (v) {
                                 customerNameController.text = v;
                               },
-                              decoration: const InputDecoration(
-                                labelText: 'Nama Pelanggan',
-                                hintText: 'Pelanggan umum / nama pelanggan tetap',
+                              decoration: InputDecoration(
+                                labelText: AppLocalizations.t('Nama Pelanggan', 'Customer Name'),
+                                hintText: AppLocalizations.t('Pelanggan umum / nama pelanggan tetap', 'General customer / regular customer'),
                                 prefixIcon: Icon(Icons.person_outline_rounded),
                               ),
                             );
@@ -1468,8 +1458,8 @@ class PosPageState extends State<PosPage> {
                       dense: true,
                       title: Row(
                         children: [
-                          const Text(
-                            'Simpan pelanggan',
+                          Text(
+                            AppLocalizations.t('Simpan pelanggan', 'Save customer'),
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 12,
@@ -1477,7 +1467,7 @@ class PosPageState extends State<PosPage> {
                           ),
                           const Spacer(),
                           Text(
-                            '$totalItems item',
+                            '$totalItems ${AppLocalizations.t('item', 'items')}',
                             style: const TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 12,
@@ -1541,7 +1531,7 @@ class PosPageState extends State<PosPage> {
               ),
               Expanded(
                 child: cart.isEmpty
-                    ? const Center(child: Text('Belum ada item'))
+                    ? Center(child: Text(AppLocalizations.t('Belum ada item', 'No items yet')))
                     : ListView.builder(
                         padding: EdgeInsets.zero,
                         itemCount: cart.length,
@@ -1577,7 +1567,7 @@ class PosPageState extends State<PosPage> {
                                       context: context,
                                       builder: (_) => AlertDialog(
                                         insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-                                        title: const Text('Jumlah'),
+                                        title: Text(AppLocalizations.t('Jumlah', 'Quantity')),
                                         content: TextField(
                                           controller: c,
                                           keyboardType: TextInputType.number,
@@ -1587,14 +1577,14 @@ class PosPageState extends State<PosPage> {
                                           TextButton(
                                             onPressed: () =>
                                                 Navigator.pop(context),
-                                            child: const Text('Batal'),
+                                            child: Text(AppLocalizations.t('Batal', 'Cancel')),
                                           ),
                                           FilledButton(
                                             onPressed: () => Navigator.pop(
                                               context,
                                               int.tryParse(c.text),
                                             ),
-                                            child: const Text('OK'),
+                                            child: Text(AppLocalizations.t('OK', 'OK')),
                                           ),
                                         ],
                                       ),
@@ -1636,8 +1626,8 @@ class PosPageState extends State<PosPage> {
                 padding: const EdgeInsets.fromLTRB(10, 6, 10, 8),
                 child: Column(
                   children: [
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [const Text('Subtotal'), Text(rp(subtotal))]),
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [const Text('Diskon'), Text(rp(discount))]),
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text(AppLocalizations.t('Subtotal', 'Subtotal')), Text(rp(subtotal))]),
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text(AppLocalizations.t('Diskon', 'Discount')), Text(rp(discount))]),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -1654,7 +1644,7 @@ class PosPageState extends State<PosPage> {
                             style: OutlinedButton.styleFrom(
                               side: const BorderSide(color: red, width: 1.5),
                             ),
-                            child: const Text('Diskon'),
+                            child: Text(AppLocalizations.t('Diskon', 'Discount')),
                           ),
                         ),
                         const SizedBox(width: 7),
@@ -1670,7 +1660,7 @@ class PosPageState extends State<PosPage> {
                                 side: const BorderSide(color: red, width: 1.5),
                               ),
                             ),
-                            child: const Text('BAYAR'),
+                            child: Text(AppLocalizations.t('BAYAR', 'PAY')),
                           ),
                         ),
                       ],
