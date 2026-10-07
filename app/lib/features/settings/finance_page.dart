@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/constants.dart';
 import '../../core/utils.dart';
 import '../../data/database.dart';
+import '../../services/receipt_service.dart';
 
 class FinancePage extends StatefulWidget {
   const FinancePage({super.key});
@@ -45,7 +46,7 @@ class _FinancePageState extends State<FinancePage> {
 
   Future<void> _load() async {
     final results = await Future.wait([
-      DB.omzet(from, to),
+      DB.cashIncome(from, to),
       DB.payLaterTotal(from, to),
       DB.expenseTotal(from, to),
       DB.expenseDebtTotal(from, to),

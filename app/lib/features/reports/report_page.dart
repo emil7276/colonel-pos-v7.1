@@ -467,12 +467,43 @@ class _ReportPageState extends State<ReportPage> {
                           style: const TextStyle(fontWeight: FontWeight.w800),
                         ),
                         subtitle: Text('${s.time} • Kasir: ${s.cashier}'),
-                        trailing: const Text(
-                          'RETUR',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                            color: Colors.red,
-                          ),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              tooltip: 'Cetak retur',
+                              icon: const Icon(
+                                Icons.print_outlined,
+                              ),
+                              onPressed: () async {
+                                try {
+                                  await printReceipt(s);
+                                } catch (e) {
+                                  if (!mounted) return;
+
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Gagal mencetak: '
+                                        '${e.toString().replaceFirst(
+                                          'Exception: ',
+                                          '',
+                                        )}',
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                            const Text(
+                              'RETUR',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w800,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },

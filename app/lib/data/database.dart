@@ -897,6 +897,50 @@ class DB {
     return (rows.first['total'] as num).toInt();
   }
 
+  // Pendapatan/Kas aktual.
+  //
+  // Transaksi Bayar Tunda tidak dianggap sebagai kas
+  // sebelum piutang benar-benar dilunasi.
+  static Future<int> cashIncome(
+    DateTime from,
+    DateTime to,
+  ) async {
+    final db = await database;
+
+    final rows = await db.rawQuery(
+      '''
+      SELECT COALESCE(
+        SUM(
+          s.total - COALESCE(
+            (
+              SELECT SUM(si.returned_qty * si.price)
+              FROM sale_items si
+              WHERE si.sale_id = s.id
+            ),
+            0
+          )
+        ),
+        0
+      ) AS total
+      FROM sales s
+      WHERE s.sale_time >= ?
+        AND s.sale_time < ?
+        AND (
+          UPPER(TRIM(COALESCE(s.payment, ''))) NOT IN
+              ('BAYAR TUNDA', 'BAYAR NANTI')
+          OR (
+            UPPER(TRIM(COALESCE(s.payment, ''))) IN
+                ('BAYAR TUNDA', 'BAYAR NANTI')
+            AND UPPER(TRIM(COALESCE(s.receivable_status, ''))) = 'LUNAS'
+          )
+        )
+      ''',
+      [_dbDate(from), _dbDate(to)],
+    );
+
+    return (rows.first['total'] as num).toInt();
+  }
+
   static Future<List<Map<String, dynamic>>> receivables() async {
     final db = await database;
 
@@ -946,8 +990,8 @@ class DB {
     await db.update(
       'sales',
       {'receivable_status': 'Lunas'},
-      where: 'id=? AND payment=?',
-      whereArgs: [saleId, 'Bayar Tunda'],
+      where: "id=? AND UPPER(TRIM(COALESCE(payment, ''))) IN (?, ?)",
+      whereArgs: [saleId, 'BAYAR TUNDA', 'BAYAR NANTI'],
     );
   }
 
@@ -1325,7 +1369,7 @@ class DB {
 
     return db.query(
       'expenses',
-      where: "payment_status IN ('Hutang', 'Jatuh Tempo')",
+      where: "UPPER(TRIM(COALESCE(payment_status, ''))) IN ('HUTANG', 'JATUH TEMPO')",
       orderBy: 'due_date ASC, expense_date DESC, id DESC',
     );
   }

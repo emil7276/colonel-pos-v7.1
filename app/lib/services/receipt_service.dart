@@ -199,6 +199,283 @@ Future<void> _printBluetoothSale(SaleModel sale) async {
   if (!sent) throw Exception('Data struk gagal dikirim ke printer Bluetooth.');
 }
 
+Future<pw.Document> _buildExpenseReceipt(
+  Map<String, dynamic> item,
+) async {
+  final name = await storeName();
+  final address = await storeAddress();
+  final phone = await storePhone();
+
+  final doc = pw.Document();
+  final format = _paperFormat(await printerPaper());
+
+  final category = item['category']?.toString() ?? 'Pembelian';
+  final note = item['note']?.toString() ?? '';
+  final amount = (item['amount'] as num?)?.toInt() ?? 0;
+  final date = item['expense_date']?.toString() ?? '';
+  final dueDate = item['due_date']?.toString() ?? '';
+  final status = item['payment_status']?.toString() ?? 'Hutang';
+
+  doc.addPage(
+    pw.Page(
+      pageFormat: format,
+      build: (_) => pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.center,
+        children: [
+          pw.Text(
+            name,
+            style: pw.TextStyle(
+              fontSize: 16,
+              fontWeight: pw.FontWeight.bold,
+            ),
+            textAlign: pw.TextAlign.center,
+          ),
+          if (address.isNotEmpty)
+            pw.Text(
+              address,
+              textAlign: pw.TextAlign.center,
+            ),
+          if (phone.isNotEmpty)
+            pw.Text(
+              phone,
+              textAlign: pw.TextAlign.center,
+            ),
+
+          pw.SizedBox(height: 8),
+
+          pw.Text(
+            'NOTA HUTANG PEMBELIAN',
+            style: pw.TextStyle(
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+
+          pw.Divider(),
+
+          pw.Align(
+            alignment: pw.Alignment.centerLeft,
+            child: pw.Text('Tanggal: $date'),
+          ),
+          pw.Align(
+            alignment: pw.Alignment.centerLeft,
+            child: pw.Text('Kategori: $category'),
+          ),
+
+          if (note.isNotEmpty)
+            pw.Align(
+              alignment: pw.Alignment.centerLeft,
+              child: pw.Text('Keterangan: $note'),
+            ),
+
+          if (dueDate.isNotEmpty)
+            pw.Align(
+              alignment: pw.Alignment.centerLeft,
+              child: pw.Text('Jatuh tempo: $dueDate'),
+            ),
+
+          pw.Align(
+            alignment: pw.Alignment.centerLeft,
+            child: pw.Text('Status: $status'),
+          ),
+
+          pw.Divider(),
+
+          pw.Row(
+            mainAxisAlignment:
+                pw.MainAxisAlignment.spaceBetween,
+            children: [
+              pw.Text(
+                'TOTAL',
+                style: pw.TextStyle(
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+              pw.Text(
+                rp(amount),
+                style: pw.TextStyle(
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+
+          pw.SizedBox(height: 14),
+
+          pw.Text('Bukti pencatatan hutang pembelian'),
+        ],
+      ),
+    ),
+  );
+
+  return doc;
+}
+
+Future<List<int>> _escPosExpenseReceipt(
+  Map<String, dynamic> item,
+) async {
+  final profile = await CapabilityProfile.load();
+
+  final paper = await printerPaper();
+
+  final generator = Generator(
+    paper == '80 mm'
+        ? PaperSize.mm80
+        : PaperSize.mm58,
+    profile,
+  );
+
+  final name = await storeName();
+  final address = await storeAddress();
+  final phone = await storePhone();
+
+  final category = item['category']?.toString() ?? 'Pembelian';
+  final note = item['note']?.toString() ?? '';
+  final amount = (item['amount'] as num?)?.toInt() ?? 0;
+  final date = item['expense_date']?.toString() ?? '';
+  final dueDate = item['due_date']?.toString() ?? '';
+  final status = item['payment_status']?.toString() ?? 'Hutang';
+
+  final bytes = <int>[];
+
+  bytes.addAll(generator.reset());
+
+  bytes.addAll(
+    generator.text(
+      name,
+      styles: PosStyles(
+        align: PosAlign.center,
+        bold: true,
+      ),
+    ),
+  );
+
+  if (address.isNotEmpty) {
+    bytes.addAll(
+      generator.text(
+        address,
+        styles: PosStyles(
+          align: PosAlign.center,
+        ),
+      ),
+    );
+  }
+
+  if (phone.isNotEmpty) {
+    bytes.addAll(
+      generator.text(
+        phone,
+        styles: PosStyles(
+          align: PosAlign.center,
+        ),
+      ),
+    );
+  }
+
+  bytes.addAll(
+    generator.text(
+      'NOTA HUTANG PEMBELIAN',
+      styles: PosStyles(
+        align: PosAlign.center,
+        bold: true,
+      ),
+    ),
+  );
+
+  bytes.addAll(generator.hr());
+
+  bytes.addAll(generator.text('Tanggal: $date'));
+  bytes.addAll(generator.text('Kategori: $category'));
+
+  if (note.isNotEmpty) {
+    bytes.addAll(generator.text('Keterangan: $note'));
+  }
+
+  if (dueDate.isNotEmpty) {
+    bytes.addAll(
+      generator.text('Jatuh tempo: $dueDate'),
+    );
+  }
+
+  bytes.addAll(generator.text('Status: $status'));
+
+  bytes.addAll(generator.hr());
+
+  bytes.addAll(
+    generator.row([
+      PosColumn(
+        text: 'TOTAL',
+        width: 7,
+        styles: PosStyles(
+          bold: true,
+        ),
+      ),
+      PosColumn(
+        text: rp(amount),
+        width: 5,
+        styles: PosStyles(
+          align: PosAlign.right,
+          bold: true,
+        ),
+      ),
+    ]),
+  );
+
+  bytes.addAll(generator.feed(2));
+
+  bytes.addAll(
+    generator.text(
+      'Bukti pencatatan hutang pembelian',
+      styles: PosStyles(
+        align: PosAlign.center,
+      ),
+    ),
+  );
+
+  bytes.addAll(generator.feed(2));
+  bytes.addAll(generator.cut());
+
+  return bytes;
+}
+
+Future<void> printExpenseReceipt(
+  Map<String, dynamic> item,
+) async {
+  final mode = await printerMode();
+
+  if (mode == 'Bluetooth') {
+    final connected =
+        await _ensureBluetoothConnection();
+
+    if (!connected) {
+      throw Exception(
+        'Printer Bluetooth belum terhubung.',
+      );
+    }
+
+    final bytes =
+        await _escPosExpenseReceipt(item);
+
+    final sent =
+        await PrintBluetoothThermal.writeBytes(bytes);
+
+    if (!sent) {
+      throw Exception(
+        'Gagal mengirim bukti hutang ke printer.',
+      );
+    }
+
+    return;
+  }
+
+  final doc =
+      await _buildExpenseReceipt(item);
+
+  await Printing.layoutPdf(
+    name: 'CP POS Hutang',
+    onLayout: (_) => doc.save(),
+  );
+}
+
 Future<void> printReceipt(SaleModel sale) async {
   final copies = (await printerCopies()).clamp(1, 2);
   if (await printerMode() == 'Bluetooth') {
