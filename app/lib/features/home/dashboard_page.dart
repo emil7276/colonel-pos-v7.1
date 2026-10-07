@@ -2041,7 +2041,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   rp(sale.total - returnedAmount),
                 ),
               if (sale.returned)
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(top: 8),
                   child: Text(
                     AppLocalizations.t('TRANSAKSI SUDAH DIRETUR SELURUHNYA', 'TRANSACTION FULLY RETURNED'),
