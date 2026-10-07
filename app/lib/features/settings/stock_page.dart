@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/constants.dart';
+import '../../core/app_localizations.dart';
 import '../../data/database.dart';
 import '../../models/models.dart';
 class StockPage
@@ -51,7 +52,7 @@ class _StockPageState
         builder: (context, setDialogState) =>
             AlertDialog(
           title: Text(
-            'Stok Masuk • '
+            AppLocalizations.t('Stok Masuk • ', 'Stock In • ')
             '${p.name}',
           ),
           content: Column(
@@ -62,7 +63,7 @@ class _StockPageState
                 children: [
                   IconButton(
                     tooltip:
-                        'Kurangi jumlah',
+                        AppLocalizations.t('Kurangi jumlah', 'Decrease quantity'),
                     onPressed: qty > 1
                         ? () {
                             setDialogState(() {
@@ -94,9 +95,9 @@ class _StockPageState
                       textAlign:
                           TextAlign.center,
                       decoration:
-                          const InputDecoration(
+                          InputDecoration(
                         labelText:
-                            'Jumlah',
+                            AppLocalizations.t('Jumlah', 'Quantity'),
                       ),
                       onChanged: (value) {
                         final parsed =
@@ -115,7 +116,7 @@ class _StockPageState
                   ),
                   IconButton(
                     tooltip:
-                        'Tambah jumlah',
+                        AppLocalizations.t('Tambah jumlah', 'Increase quantity'),
                     onPressed: () {
                       setDialogState(() {
                         qty++;
@@ -142,9 +143,9 @@ class _StockPageState
               TextField(
                 controller: note,
                 decoration:
-                    const InputDecoration(
+                    InputDecoration(
                   labelText:
-                      'Keterangan',
+                      AppLocalizations.t('Keterangan', 'Notes'),
                 ),
               ),
             ],
@@ -156,8 +157,8 @@ class _StockPageState
                 context,
               ),
               child:
-                  const Text(
-                'Batal',
+                  Text(
+                AppLocalizations.t('Batal', 'Cancel'),
               ),
             ),
             FilledButton(
@@ -198,7 +199,7 @@ class _StockPageState
                         .showSnackBar(
                       SnackBar(
                         content: Text(
-                          'Gagal menambah stok: '
+                          AppLocalizations.t('Gagal menambah stok: ', 'Failed to add stock: ')
                           '$e',
                         ),
                       ),
@@ -207,8 +208,8 @@ class _StockPageState
                 }
               },
               child:
-                  const Text(
-                'Tambah',
+                  Text(
+                AppLocalizations.t('Tambah', 'Add'),
               ),
             ),
           ],
@@ -229,7 +230,7 @@ class _StockPageState
     return Scaffold(
       appBar: AppBar(
         title:
-            const Text('Stok'),
+            Text(AppLocalizations.t('Stok', 'Stock'))
       ),
       body: ListView(
         padding:
@@ -246,7 +247,7 @@ class _StockPageState
               title: Text(p.name),
               subtitle: Text(
                 '${p.category} • '
-                'Saldo stok',
+                AppLocalizations.t('Saldo stok', 'Stock balance'),
               ),
               trailing: Row(
                 mainAxisSize:
@@ -270,7 +271,7 @@ class _StockPageState
                       Icons.add_box,
                     ),
                     tooltip:
-                        'Stok masuk',
+                        AppLocalizations.t('Stok masuk', 'Stock in'),
                   ),
                 ],
               ),
