@@ -10,6 +10,7 @@ import 'backup_page.dart';
 import 'printer_page.dart';
 import 'qa_page.dart';
 import 'contact_page.dart';
+import 'language_page.dart';
 class SettingsPage
     extends StatelessWidget {
   final String username;
@@ -25,6 +26,12 @@ class SettingsPage
       padding:
           const EdgeInsets.all(16),
       children: [
+        settingsTile(
+          context,
+          'Bahasa / Language',
+          Icons.language_rounded,
+          const LanguagePage(),
+        ),
         settingsTile(
           context,
           'Identitas Toko',

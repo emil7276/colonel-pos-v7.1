@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../core/constants.dart';
+import '../../core/language_service.dart';
 import '../../core/trial_service.dart';
 import '../../core/license/license_service.dart';
 import '../../core/widgets.dart';
@@ -281,6 +282,27 @@ String _trialLabel() {
           ],
         ),
         actions: [
+          if (index == 0)
+            FutureBuilder<String>(
+              future: LanguageService.getLanguage(),
+              builder: (context, snapshot) {
+                final language = snapshot.data ?? 'id';
+                return IconButton(
+                  tooltip: language == 'en'
+                      ? 'Language: English'
+                      : 'Bahasa: Indonesia',
+                  onPressed: () async {
+                    final next = language == 'id' ? 'en' : 'id';
+                    await LanguageService.setLanguage(next);
+                    if (mounted) setState(() {});
+                  },
+                  icon: Text(
+                    language == 'en' ? '🇬🇧' : '🇮🇩',
+                    style: const TextStyle(fontSize: 22),
+                  ),
+                );
+              },
+            ),
           if (index == 1)
             Container(
               decoration: BoxDecoration(
