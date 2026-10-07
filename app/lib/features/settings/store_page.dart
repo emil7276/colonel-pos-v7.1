@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/constants.dart';
+import '../../core/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class StorePage
     extends StatefulWidget {
@@ -79,9 +80,9 @@ class _StorePageState
 
       ScaffoldMessenger.of(context)
           .showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'Identitas toko disimpan.',
+            AppLocalizations.t('Identitas toko disimpan.', 'Store identity saved.'),
           ),
         ),
       );
@@ -92,7 +93,7 @@ class _StorePageState
           .showSnackBar(
         SnackBar(
           content: Text(
-            'Gagal menyimpan: $e',
+            AppLocalizations.t('Gagal menyimpan: $e', 'Failed to save: $e'),
           ),
         ),
       );
@@ -103,8 +104,8 @@ class _StorePageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Identitas Toko',
+        title: Text(
+          AppLocalizations.t('Identitas Toko', 'Store Identity'),
         ),
       ),
       body: ListView(
@@ -114,9 +115,9 @@ class _StorePageState
           TextField(
             controller: name,
             decoration:
-                const InputDecoration(
+                InputDecoration(
               labelText:
-                  'Nama Toko',
+                  AppLocalizations.t('Nama Toko', 'Store Name'),
               border:
                   OutlineInputBorder(),
             ),
@@ -127,8 +128,8 @@ class _StorePageState
           TextField(
             controller: address,
             decoration:
-                const InputDecoration(
-              labelText: 'Alamat',
+                InputDecoration(
+              labelText: AppLocalizations.t('Alamat', 'Address'),
               border:
                   OutlineInputBorder(),
             ),
@@ -141,9 +142,9 @@ class _StorePageState
             keyboardType:
                 TextInputType.phone,
             decoration:
-                const InputDecoration(
+                InputDecoration(
               labelText:
-                  'Nomor HP',
+                  AppLocalizations.t('Nomor HP', 'Phone Number'),
               border:
                   OutlineInputBorder(),
             ),
@@ -158,7 +159,7 @@ class _StorePageState
               backgroundColor: red,
             ),
             child:
-                const Text('SIMPAN'),
+                Text(AppLocalizations.t('SIMPAN', 'SAVE')),
           ),
         ],
       ),
