@@ -450,7 +450,7 @@ String _trialLabel() {
         selectedIndex: index,
         onDestinationSelected: selectPage,
         destinations: [
-          const NavigationDestination(
+          NavigationDestination(
             icon: Icon(Icons.dashboard_outlined),
             selectedIcon: Icon(Icons.dashboard_rounded),
             label: AppLocalizations.t('Dasbor', 'Dashboard'),
