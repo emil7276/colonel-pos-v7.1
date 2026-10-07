@@ -601,7 +601,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                   ),
                   const SizedBox(width: 11),
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -660,7 +660,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                 ),
                 const SizedBox(width: 11),
-                const Expanded(
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -1669,7 +1669,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 const SizedBox(height: 10),
                 if (sales.isEmpty)
-                  const Expanded(
+                  Expanded(
                     child: Center(
                       child: Text(AppLocalizations.t('Tidak ada transaksi pada rentang ini.', 'No transactions in this period.')),
                     ),
@@ -1731,7 +1731,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             padding: const EdgeInsets.all(14),
                             child: Row(
                               children: [
-                                const Expanded(
+                                Expanded(
                                   child: Text(
                                     AppLocalizations.t('Total Bersih', 'Net Total'),
                                     style: TextStyle(
@@ -1803,7 +1803,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 const SizedBox(height: 10),
                 if (rows.isEmpty)
-                  const Expanded(
+                  Expanded(
                     child: Center(
                       child: Text(AppLocalizations.t('Tidak ada hutang pada rentang ini.', 'No payables in this period.')),
                     ),
@@ -1897,7 +1897,7 @@ class _DashboardPageState extends State<DashboardPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
+              Text(
                 AppLocalizations.t('Rincian Laba Bersih', 'Net Profit Details'),
                 style: TextStyle(
                   fontSize: 20,
@@ -1921,7 +1921,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
               const Divider(),
               ListTile(
-                title: const Text(
+                title: Text(
                   AppLocalizations.t('Laba Bersih', 'Net Profit'),
                   style: TextStyle(fontWeight: FontWeight.w900),
                 ),
@@ -1995,7 +1995,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
               const SizedBox(height: 6),
               if (items.isEmpty)
-                const Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(vertical: 12),
                   child: Text(AppLocalizations.t('Detail item tidak tersedia.', 'Item details are not available.')),
                 )
@@ -2134,7 +2134,7 @@ class _DashboardPageState extends State<DashboardPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           AppLocalizations.t('Metode Pembayaran', 'Payment Methods'),
           style: TextStyle(
             fontSize: 19,
