@@ -118,7 +118,12 @@ class _DashboardPageState extends State<DashboardPage> {
 
     if (widget.role == 'Administrator') {
       expenseTotal = await DB.expenseTotal(start, end);
-      expenseDebt = await DB.expenseDebtTotal(start, end);
+      final activePayables = await DB.payables();
+      expenseDebt = activePayables.fold<int>(
+        0,
+        (sum, item) =>
+            sum + ((item['amount'] as num?)?.toInt() ?? 0),
+      );
       receivable = await DB.payLaterTotal(start, end);
       final reminders = await DB.reminderItems();
       final storage = const FlutterSecureStorage();
@@ -1016,18 +1021,11 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Future<void> showPayables() async {
-    final rows = await DB.expenses(start, end);
-
-    final filtered = rows.where((row) {
-      final status =
-          (row['payment_status'] ?? '').toString().trim().toLowerCase();
-
-      return status == 'hutang' || status == 'jatuh tempo';
-    }).toList();
+    final rows = await DB.payables();
 
     await _showExpenseSheet(
-      title: 'Riwayat Hutang',
-      rows: filtered,
+      title: 'Hutang Aktif',
+      rows: rows,
     );
   }
 
