@@ -1224,6 +1224,7 @@ class DB {
     DateTime to,
   ) async {
     final db = await database;
+
     return db.query(
       'expenses',
       where: 'expense_date >= ? AND expense_date < ?',
@@ -1237,21 +1238,63 @@ class DB {
     DateTime to,
   ) async {
     final db = await database;
+
     final rows = await db.rawQuery(
       '''
       SELECT COALESCE(SUM(amount), 0) AS total
       FROM expenses
-      WHERE expense_date >= ? AND expense_date < ?
+      WHERE expense_date >= ?
+        AND expense_date < ?
+        AND payment_status IN ('Lunas', 'Sudah Dibayar')
       ''',
       [_dbDate(from), _dbDate(to)],
     );
+
     return (rows.first['total'] as num).toInt();
   }
 
-  static Future<int> expenseDebtTotal(DateTime from, DateTime to) async {
+  static Future<int> expenseDebtTotal(
+    DateTime from,
+    DateTime to,
+  ) async {
     final db = await database;
-    final rows = await db.rawQuery("SELECT COALESCE(SUM(amount),0) total FROM expenses WHERE expense_date >= ? AND expense_date < ? AND payment_status='Jatuh Tempo'", [_dbDate(from), _dbDate(to)]);
+
+    final rows = await db.rawQuery(
+      '''
+      SELECT COALESCE(SUM(amount), 0) AS total
+      FROM expenses
+      WHERE expense_date >= ?
+        AND expense_date < ?
+        AND payment_status IN ('Hutang', 'Jatuh Tempo')
+      ''',
+      [_dbDate(from), _dbDate(to)],
+    );
+
     return (rows.first['total'] as num).toInt();
+  }
+
+  static Future<List<Map<String, dynamic>>> payables() async {
+    final db = await database;
+
+    return db.query(
+      'expenses',
+      where: "payment_status IN ('Hutang', 'Jatuh Tempo')",
+      orderBy: 'due_date ASC, expense_date DESC, id DESC',
+    );
+  }
+
+  static Future<void> settlePayable(int expenseId) async {
+    final db = await database;
+
+    await db.update(
+      'expenses',
+      {
+        'payment_status': 'Lunas',
+        'due_date': '',
+      },
+      where: 'id = ? AND payment_status IN (?, ?)',
+      whereArgs: [expenseId, 'Hutang', 'Jatuh Tempo'],
+    );
   }
 
   static Future<void> saveExpense({
@@ -1260,18 +1303,25 @@ class DB {
     required String category,
     required String note,
     required int amount,
-    String paymentStatus = 'Sudah Dibayar',
+    String paymentStatus = 'Lunas',
     DateTime? dueDate,
   }) async {
     if (category.trim().isEmpty) {
       throw Exception('Kategori wajib diisi.');
     }
+
     if (note.trim().isEmpty) {
       throw Exception('Keterangan wajib diisi.');
     }
+
     if (amount <= 0) {
       throw Exception('Nominal harus lebih dari 0.');
     }
+
+    final normalizedStatus =
+        paymentStatus == 'Jatuh Tempo' || paymentStatus == 'Hutang'
+            ? 'Hutang'
+            : 'Lunas';
 
     final db = await database;
 
@@ -1280,8 +1330,10 @@ class DB {
       'category': category.trim(),
       'note': note.trim(),
       'amount': amount,
-      'payment_status': paymentStatus,
-      'due_date': paymentStatus == 'Jatuh Tempo' && dueDate != null ? _dbDate(dueDate) : '',
+      'payment_status': normalizedStatus,
+      'due_date': normalizedStatus == 'Hutang' && dueDate != null
+          ? _dbDate(dueDate)
+          : '',
     };
 
     if (id == null) {
@@ -1298,6 +1350,7 @@ class DB {
 
   static Future<void> deleteExpense(int id) async {
     final db = await database;
+
     await db.delete(
       'expenses',
       where: 'id = ?',

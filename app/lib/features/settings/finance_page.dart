@@ -22,6 +22,8 @@ class _FinancePageState extends State<FinancePage> {
   int receivable = 0;
   int payable = 0;
   List<Map<String, dynamic>> expenseRows = [];
+  List<Map<String, dynamic>> receivableRows = [];
+  List<Map<String, dynamic>> payableRows = [];
 
   @override
   void initState() {
@@ -48,6 +50,8 @@ class _FinancePageState extends State<FinancePage> {
       DB.expenseTotal(from, to),
       DB.expenseDebtTotal(from, to),
       DB.expenses(from, to),
+      DB.receivables(),
+      DB.payables(),
     ]);
 
     if (!mounted) return;
@@ -60,6 +64,8 @@ class _FinancePageState extends State<FinancePage> {
       receivable = payLater;
       payable = debt;
       expenseRows = results[4] as List<Map<String, dynamic>>;
+      receivableRows = results[5] as List<Map<String, dynamic>>;
+      payableRows = results[6] as List<Map<String, dynamic>>;
     });
   }
 
@@ -98,7 +104,11 @@ class _FinancePageState extends State<FinancePage> {
       text: item?['note']?.toString() ?? '',
     );
     final amount = TextEditingController(text: item?['amount']?.toString() ?? '');
-    String paymentStatus = item?['payment_status']?.toString() ?? 'Sudah Dibayar';
+    String paymentStatus =
+        item?['payment_status']?.toString() == 'Hutang' ||
+                item?['payment_status']?.toString() == 'Jatuh Tempo'
+            ? 'Hutang'
+            : 'Lunas';
 
     DateTime date = item == null
         ? DateTime.now()
@@ -143,7 +153,27 @@ class _FinancePageState extends State<FinancePage> {
                         prefixText: 'Rp ',
                       ),
                     ),
-                    DropdownButtonFormField<String>(value:paymentStatus,decoration:const InputDecoration(labelText:'Status Pembayaran'),items:const [DropdownMenuItem(value:'Sudah Dibayar',child:Text('Sudah Dibayar')),DropdownMenuItem(value:'Jatuh Tempo',child:Text('Jatuh Tempo'))],onChanged:(v){if(v!=null)setDialogState(()=>paymentStatus=v);}),
+                    DropdownButtonFormField<String>(
+                      value: paymentStatus,
+                      decoration: const InputDecoration(
+                        labelText: 'Status Pembayaran',
+                      ),
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'Lunas',
+                          child: Text('Lunas'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'Hutang',
+                          child: Text('Hutang'),
+                        ),
+                      ],
+                      onChanged: (v) {
+                        if (v != null) {
+                          setDialogState(() => paymentStatus = v);
+                        }
+                      },
+                    ),
                     const SizedBox(height: 8),
                     ListTile(
                       contentPadding: EdgeInsets.zero,
@@ -191,7 +221,7 @@ class _FinancePageState extends State<FinancePage> {
                         note: note.text,
                         amount: nominal ?? 0,
                         paymentStatus: paymentStatus,
-                        dueDate: paymentStatus == 'Jatuh Tempo' ? date : null,
+                        dueDate: paymentStatus == 'Hutang' ? date : null,
                       );
 
                       if (dialogContext.mounted) {
@@ -228,6 +258,64 @@ class _FinancePageState extends State<FinancePage> {
     if (saved == true) {
       _load();
     }
+  }
+
+  Future<void> _settleReceivable(
+    Map<String, dynamic> item,
+  ) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Lunasi Piutang?'),
+        content: Text(
+          '${item['sale_no']} • ${rp(item['outstanding_amount'] as num)}',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Batal'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Lunasi'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true) return;
+
+    await DB.settleReceivable(item['id'] as int);
+    _load();
+  }
+
+  Future<void> _settlePayable(
+    Map<String, dynamic> item,
+  ) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Lunasi Hutang?'),
+        content: Text(
+          '${item['category']} • ${rp(item['amount'] as num)}',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Batal'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Lunasi'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true) return;
+
+    await DB.settlePayable(item['id'] as int);
+    _load();
   }
 
   Future<void> _deleteExpense(
@@ -423,6 +511,135 @@ class _FinancePageState extends State<FinancePage> {
             ),
 
             const SizedBox(height: 14),
+
+            Card(
+              child: ExpansionTile(
+                leading: const Icon(
+                  Icons.account_balance_rounded,
+                  color: red,
+                ),
+                title: const Text(
+                  'Piutang',
+                  style: TextStyle(fontWeight: FontWeight.w900),
+                ),
+                subtitle: Text(
+                  '${receivableRows.length} transaksi • ${rp(receivable)}',
+                ),
+                children: receivableRows.isEmpty
+                    ? const [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text('Tidak ada piutang aktif.'),
+                          ),
+                        ),
+                      ]
+                    : receivableRows.map((item) {
+                        final outstanding =
+                            (item['outstanding_amount'] as num).toInt();
+                        final returned =
+                            (item['returned_amount'] as num).toInt();
+
+                        return ListTile(
+                          title: Text(
+                            item['customer_name']?.toString().isNotEmpty == true
+                                ? item['customer_name'].toString()
+                                : 'Pelanggan Umum',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          subtitle: Text(
+                            '${item['sale_no']} • '
+                            '${item['sale_time'].toString().substring(0, 10)}'
+                            '${returned > 0 ? ' • Retur ${rp(returned)}' : ''}',
+                          ),
+                          trailing: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                rp(outstanding),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () => _settleReceivable(item),
+                                child: const Text('Lunasi'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            Card(
+              child: ExpansionTile(
+                leading: const Icon(
+                  Icons.receipt_long_rounded,
+                  color: red,
+                ),
+                title: const Text(
+                  'Hutang',
+                  style: TextStyle(fontWeight: FontWeight.w900),
+                ),
+                subtitle: Text(
+                  '${payableRows.length} transaksi • ${rp(payable)}',
+                ),
+                children: payableRows.isEmpty
+                    ? const [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text('Tidak ada hutang aktif.'),
+                          ),
+                        ),
+                      ]
+                    : payableRows.map((item) {
+                        final dueDate =
+                            item['due_date']?.toString() ?? '';
+
+                        return ListTile(
+                          title: Text(
+                            item['category'].toString(),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          subtitle: Text(
+                            '${item['note']} • '
+                            '${item['expense_date'].toString().substring(0, 10)}'
+                            '${dueDate.isNotEmpty ? ' • Jatuh tempo $dueDate' : ''}',
+                          ),
+                          trailing: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                rp(item['amount'] as num),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () => _settlePayable(item),
+                                child: const Text('Lunasi'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+              ),
+            ),
+
+            const SizedBox(height: 14),
+
 
             const Text(
               'Riwayat Pengeluaran',

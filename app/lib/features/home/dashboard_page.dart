@@ -24,7 +24,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  int omzet = 0, transaksi = 0, item = 0, retur = 0, pengeluaran = 0, piutang = 0, labaBersih = 0;
+  int omzet = 0, transaksi = 0, item = 0, retur = 0, pengeluaran = 0, piutang = 0, hutang = 0, labaBersih = 0;
   List<SaleModel> recent = [];
 
   DateTime selectedDate = DateTime.now();
@@ -62,8 +62,7 @@ class _DashboardPageState extends State<DashboardPage> {
     }
 
     final netIncome = summary['omzet'] as int;
-    final paidExpense = expenseTotal - expenseDebt;
-    final netProfit = netIncome - paidExpense;
+    final netProfit = netIncome - expenseTotal;
 
     if (!mounted) return;
 
@@ -73,6 +72,7 @@ class _DashboardPageState extends State<DashboardPage> {
       retur = summary['returned'] as int;
       pengeluaran = expenseTotal;
       piutang = receivable;
+      hutang = expenseDebt;
       labaBersih = netProfit;
 
       recent = (summary['sales'] as List)
@@ -292,6 +292,20 @@ class _DashboardPageState extends State<DashboardPage> {
                       'Piutang',
                       rp(piutang),
                       Icons.account_balance_rounded,
+                      false,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const FinancePage(),
+                          ),
+                        );
+                      },
+                    ),
+                    _stat(
+                      'Hutang',
+                      rp(hutang),
+                      Icons.receipt_long_rounded,
                       false,
                       onTap: () {
                         Navigator.push(
