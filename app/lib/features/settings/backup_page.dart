@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import '../../core/app_localizations.dart';
 import '../../core/widgets.dart';
 import '../../data/database.dart';
 import '../../services/google_drive_backup_service.dart';
@@ -39,7 +40,10 @@ class _BackupPageState extends State<BackupPage> {
           'colonel_pos_v65_backup_${DateTime.now().millisecondsSinceEpoch}.json';
 
       final savedPath = await FilePicker.platform.saveFile(
-        dialogTitle: 'Simpan Backup CP Colonel POS',
+        dialogTitle: AppLocalizations.t(
+          'Simpan Backup CP Colonel POS',
+          'Save CP Colonel POS Backup',
+        ),
         fileName: fileName,
         type: FileType.custom,
         allowedExtensions: ['json'],
@@ -50,17 +54,38 @@ class _BackupPageState extends State<BackupPage> {
 
       if (savedPath == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Backup dibatalkan.')),
+          SnackBar(
+          content: Text(
+            AppLocalizations.t(
+              'Backup dibatalkan.',
+              'Backup cancelled.',
+            ),
+          ),
+        ),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Backup berhasil disimpan.')),
+          SnackBar(
+          content: Text(
+            AppLocalizations.t(
+              'Backup berhasil disimpan.',
+              'Backup saved successfully.',
+            ),
+          ),
+        ),
         );
       }
     } catch(e) {
       if(mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content:Text('Backup gagal: $e')),
+          SnackBar(
+          content: Text(
+            AppLocalizations.t(
+              'Backup gagal: $e',
+              'Backup failed: $e',
+            ),
+          ),
+        ),
         );
       }
     } finally {
@@ -83,14 +108,24 @@ class _BackupPageState extends State<BackupPage> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Backup Google Drive berhasil: $fileName'),
+          content: Text(
+              AppLocalizations.t(
+                'Backup Google Drive berhasil: $fileName',
+                'Google Drive backup successful: $fileName',
+              ),
+            ),
         ),
       );
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Backup Google Drive gagal: $e'),
+            content: Text(
+              AppLocalizations.t(
+                'Backup Google Drive gagal: $e',
+                'Google Drive backup failed: $e',
+              ),
+            ),
           ),
         );
       }
@@ -105,11 +140,31 @@ class _BackupPageState extends State<BackupPage> {
       context:context,
       builder:(_)=>AlertDialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-        title:const Text('Restore database?'),
-        content:const Text('Data saat ini akan diganti dengan isi file backup. Pastikan file berasal dari CP POS.'),
+        title: Text(
+          AppLocalizations.t(
+            'Restore database?',
+            'Restore database?',
+          ),
+        ),
+        content: Text(
+          AppLocalizations.t(
+            'Data saat ini akan diganti dengan isi file backup. Pastikan file berasal dari CP POS.',
+            'Current data will be replaced with the contents of the backup file. Make sure the file comes from CP POS.',
+          ),
+        ),
         actions:[
-          TextButton(onPressed:()=>Navigator.pop(context,false),child:const Text('Batal')),
-          FilledButton(onPressed:()=>Navigator.pop(context,true),child:const Text('Restore')),
+          TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          child: Text(
+            AppLocalizations.t('Batal', 'Cancel'),
+          ),
+        ),
+          FilledButton(
+          onPressed: () => Navigator.pop(context, true),
+          child: Text(
+            AppLocalizations.t('Restore', 'Restore'),
+          ),
+        ),
         ],
       ),
     );
@@ -121,14 +176,28 @@ class _BackupPageState extends State<BackupPage> {
       final f=result.files.single;
       final raw=f.bytes!=null ? utf8.decode(f.bytes!) : await File(f.path!).readAsString();
       final decoded=jsonDecode(raw);
-      if(decoded is! Map<String,dynamic>) throw Exception('File backup tidak valid.');
+      if(decoded is! Map<String,dynamic>) throw Exception(AppLocalizations.t('File backup tidak valid.', 'Invalid backup file.'));
       await DB.restoreBackup(decoded);
       if(mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text('Restore berhasil.')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            AppLocalizations.t(
+              'Restore berhasil.',
+              'Restore completed successfully.',
+            ),
+          ),
+        ));
         Navigator.pop(context);
       }
     } catch(e) {
-      if(mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text('Restore gagal: $e')));
+      if(mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            AppLocalizations.t(
+              'Restore gagal: $e',
+              'Restore failed: $e',
+            ),
+          ),
+        ));
     } finally {
       if(mounted) setState(()=>working=false);
     }
@@ -137,7 +206,14 @@ class _BackupPageState extends State<BackupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:AppBar(title:const Text('Backup & Restore')),
+      appBar: AppBar(
+        title: Text(
+          AppLocalizations.t(
+            'Backup & Restore',
+            'Backup & Restore',
+          ),
+        ),
+      ),
       body:ListView(
         padding:const EdgeInsets.all(16),
         children:[
@@ -147,14 +223,32 @@ class _BackupPageState extends State<BackupPage> {
               child:Column(
                 crossAxisAlignment:CrossAxisAlignment.start,
                 children:[
-                  const Text('Backup & Restore Database',style:TextStyle(fontSize:19,fontWeight:FontWeight.w900)),
+                  Text(
+              AppLocalizations.t(
+                'Backup & Restore Database',
+                'Backup & Restore Database',
+              ),
+              style: const TextStyle(
+                fontSize: 19,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
                   const SizedBox(height:8),
-                  const Text('Backup menyimpan menu, pengguna, transaksi, detail transaksi dan stok. Restore mengganti seluruh data dengan file backup.'),
+                  Text(
+              AppLocalizations.t(
+                'Backup menyimpan menu, pengguna, transaksi, detail transaksi dan stok. Restore mengganti seluruh data dengan file backup.',
+                'Backup saves menus, users, transactions, transaction details, and inventory. Restore replaces all data with the backup file.',
+              ),
+            ),
                   const SizedBox(height:16),
                   Row(children:[
-                    Expanded(child:FilledButton.icon(onPressed:working?null:backup,icon:const Icon(Icons.backup_rounded),label:const Text('BACKUP'))),
+                    Expanded(child:FilledButton.icon(onPressed:working?null:backup,icon:const Icon(Icons.backup_rounded),label: Text(
+                      AppLocalizations.t('BACKUP', 'BACKUP'),
+                    ))),
                     const SizedBox(width:10),
-                    Expanded(child:OutlinedButton.icon(onPressed:working?null:restore,icon:const Icon(Icons.restore_rounded),label:const Text('RESTORE'))),
+                    Expanded(child:OutlinedButton.icon(onPressed:working?null:restore,icon:const Icon(Icons.restore_rounded),label: Text(
+                      AppLocalizations.t('RESTORE', 'RESTORE'),
+                    ))),
                   ]),
                   const SizedBox(height:10),
                   SizedBox(
@@ -162,7 +256,12 @@ class _BackupPageState extends State<BackupPage> {
                     child: OutlinedButton.icon(
                       onPressed: working ? null : backupToGoogleDrive,
                       icon: const Icon(Icons.cloud_upload_rounded),
-                      label: const Text('BACKUP KE GOOGLE DRIVE'),
+                      label: Text(
+                          AppLocalizations.t(
+                            'BACKUP KE GOOGLE DRIVE',
+                            'BACKUP TO GOOGLE DRIVE',
+                          ),
+                        ),
                     ),
                   ),
                 ],
@@ -170,7 +269,16 @@ class _BackupPageState extends State<BackupPage> {
             ),
           ),
           const SizedBox(height:10),
-          const Text('Simpan file backup di lokasi aman sebelum melakukan restore.',style:TextStyle(color:Color(0xFF6F7177),fontSize:12)),
+          Text(
+          AppLocalizations.t(
+            'Simpan file backup di lokasi aman sebelum melakukan restore.',
+            'Save the backup file in a secure location before performing a restore.',
+          ),
+          style: const TextStyle(
+            color: Color(0xFF6F7177),
+            fontSize: 12,
+          ),
+        ),
           const CopyrightFooter(),
         ],
       ),
