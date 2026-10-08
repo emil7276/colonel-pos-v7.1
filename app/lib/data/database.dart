@@ -853,7 +853,6 @@ class DB {
       WHERE TRIM(COALESCE(customer_name,'')) != ''
         AND customer_name LIKE ?
       ORDER BY customer_name
-      LIMIT 10
       ''',
       ['$keyword%'],
     );

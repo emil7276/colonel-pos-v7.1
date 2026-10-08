@@ -1536,6 +1536,38 @@ class PosPageState extends State<PosPage> {
                               textEditingValue.text.trim(),
                             );
                           },
+                            optionsViewBuilder: (context, onSelected, options) {
+                              final items = options.toList();
+                              return Align(
+                                alignment: Alignment.topLeft,
+                                child: Material(
+                                  elevation: 4,
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: ConstrainedBox(
+                                    constraints: const BoxConstraints(
+                                      maxHeight: 240,
+                                    ),
+                                    child: ListView.builder(
+                                      padding: EdgeInsets.zero,
+                                      shrinkWrap: true,
+                                      itemCount: items.length,
+                                      itemBuilder: (context, index) {
+                                        final option = items[index];
+                                        return ListTile(
+                                          dense: true,
+                                          title: Text(
+                                            option,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          onTap: () => onSelected(option),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
                           onSelected: (selection) {
                             customerNameController.text = selection;
                             _customerAutocompleteController?.value =
