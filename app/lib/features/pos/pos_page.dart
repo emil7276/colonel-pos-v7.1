@@ -313,7 +313,7 @@ class PosPageState extends State<PosPage> {
     final phoneController =
         TextEditingController(text: customerPhoneController.text);
 
-    final result = await showDialog<bool>(
+    await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),

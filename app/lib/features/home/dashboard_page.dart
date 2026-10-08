@@ -347,7 +347,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
-                Text(
+                child: Text(
                   AppLocalizations.t(
                     'Berlangganan Sekarang • cp.colonel.pos@gmail.com',
                     'Subscribe Now • cp.colonel.pos@gmail.com',
