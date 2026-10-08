@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'constants.dart';
+import 'app_localizations.dart';
 
 class CpLogo extends StatelessWidget {
   final double size;
@@ -98,13 +99,27 @@ class CopyrightFooter extends StatelessWidget {
   const CopyrightFooter({super.key});
 
   @override
-  Widget build(BuildContext context) => const Padding(
-        padding: EdgeInsets.symmetric(vertical: 24),
-        child: Column(
-          children: [
-            Text(copyright1, textAlign: TextAlign.center, style: TextStyle(fontSize: 12)),
-            Text(copyright2, textAlign: TextAlign.center, style: TextStyle(fontSize: 11)),
-          ],
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 24),
+    child: Column(
+      children: [
+        Text(
+          AppLocalizations.t(
+            'Copyright © CP Colonel Pos',
+            'Copyright © CP Colonel Pos',
+          ),
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 12),
         ),
-      );
+        Text(
+          AppLocalizations.t(
+            'Hak cipta dilindungi Undang-Undang',
+            'All rights reserved',
+          ),
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 11),
+        ),
+      ],
+    ),
+  );
 }
