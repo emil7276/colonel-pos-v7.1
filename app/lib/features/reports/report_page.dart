@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/app_localizations.dart';
 import '../../core/constants.dart';
 import '../../core/utils.dart';
 import '../../core/widgets.dart';
@@ -50,7 +51,7 @@ class _ReportPageState extends State<ReportPage> {
         returnedSales = (summary['returnedSales'] as List).map((e)=>SaleModel.fromMap(e as Map<String,dynamic>)).toList();
         best = b; hours = h; customers = c; monthSales = month; trend = t; loading = false;
       });
-    } catch(e) { if (!mounted) return; setState(()=>loading=false); ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text('Gagal memuat laporan: $e'))); }
+    } catch(e) { if (!mounted) return; setState(()=>loading=false); ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(AppLocalizations.t('Gagal memuat laporan: $e', 'Failed to load report: $e')))); }
   }
 
   @override void initState(){ super.initState(); load(); }
@@ -62,23 +63,23 @@ class _ReportPageState extends State<ReportPage> {
 
   @override Widget build(BuildContext context){
     return RefreshIndicator(onRefresh:load,child:ListView(padding:const EdgeInsets.fromLTRB(16,16,16,28),children:[
-      Row(children:[Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[const Text('Laporan',style:TextStyle(fontSize:23,fontWeight:FontWeight.w900)),Text('${displayDate(start)} - ${displayDate(end.subtract(const Duration(days:1)))}',style:TextStyle(color:Theme.of(context).colorScheme.onSurfaceVariant))])),OutlinedButton.icon(onPressed:pickDate,icon:const Icon(Icons.calendar_month_outlined),label:const Text('Pilih rentang tanggal'))]),
+      Row(children:[Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text(AppLocalizations.t('Laporan', 'Reports'),style:const TextStyle(fontSize:23,fontWeight:FontWeight.w900)),Text('${displayDate(start)} - ${displayDate(end.subtract(const Duration(days:1)))}',style:TextStyle(color:Theme.of(context).colorScheme.onSurfaceVariant))])),OutlinedButton.icon(onPressed:pickDate,icon:const Icon(Icons.calendar_month_outlined),label:Text(AppLocalizations.t('Pilih rentang tanggal', 'Select date range')))]),
       const SizedBox(height:16),
       if(loading) const LinearProgressIndicator(minHeight:3),
       const SizedBox(height:8),
-      LayoutBuilder(builder:(context,c){final cols=c.maxWidth>=900?4:2; return GridView.count(crossAxisCount:cols,shrinkWrap:true,physics:const NeverScrollableScrollPhysics(),crossAxisSpacing:10,mainAxisSpacing:10,childAspectRatio:2.15,children:[_metric('Omzet',rp(omzet),Icons.payments_outlined),_metric('Transaksi','$transaksi',Icons.receipt_long_outlined,onTap:showTransactions),_metric('Item Terjual','$item',Icons.fastfood_outlined,onTap:showItemsSold),_metric('Retur','$retur',Icons.assignment_return_outlined,onTap:showReturns) ]);}),
+      LayoutBuilder(builder:(context,c){final cols=c.maxWidth>=900?4:2; return GridView.count(crossAxisCount:cols,shrinkWrap:true,physics:const NeverScrollableScrollPhysics(),crossAxisSpacing:10,mainAxisSpacing:10,childAspectRatio:2.15,children:[_metric(AppLocalizations.t('Omzet', 'Revenue'),rp(omzet),Icons.payments_outlined),_metric(AppLocalizations.t('Transaksi', 'Transactions'),'$transaksi',Icons.receipt_long_outlined,onTap:showTransactions),_metric(AppLocalizations.t('Item Terjual', 'Items Sold'),'$item',Icons.fastfood_outlined,onTap:showItemsSold),_metric(AppLocalizations.t('Retur', 'Returns'),'$retur',Icons.assignment_return_outlined,onTap:showReturns) ]);}),
       const SizedBox(height:16),
       _monthSalesCard(),
       _trendCard(),
       _customerSection(),
       _paymentSummary(),
       _itemSalesSection(),
-      _section('Jam Transaksi',hours.isEmpty?[const ListTile(title:Text('Belum ada penjualan.'))]:hours.take(8).map((x)=>ListTile(leading:const Icon(Icons.schedule_outlined),title:Text('${x['jam']}:00'),trailing:Text('${x['transaksi']} transaksi'))).toList()),
+      _section(AppLocalizations.t('Jam Transaksi', 'Transaction Hours'),hours.isEmpty?[ListTile(title:Text(AppLocalizations.t('Belum ada penjualan.', 'No sales yet.')))]:hours.take(8).map((x)=>ListTile(leading:const Icon(Icons.schedule_outlined),title:Text('${x['jam']}:00'),trailing:Text('${x['transaksi']} ${AppLocalizations.t('transaksi', 'transactions')}'))).toList()),
       const SizedBox(height:6),
-      const Text('Transaksi Hari Ini',style:TextStyle(fontSize:18,fontWeight:FontWeight.w800)),
+      Text(AppLocalizations.t('Transaksi Hari Ini', "Today's Transactions"),style:const TextStyle(fontSize:18,fontWeight:FontWeight.w800)),
       const SizedBox(height:8),
-      if(sales.isEmpty) Card(child:Padding(padding:const EdgeInsets.all(18),child:Text('Tidak ada transaksi pada ${displayDate(selectedDate)}.'))),
-      ...sales.map((s)=>Card(child:ListTile(onTap:()=>saleDetail(s),leading:CircleAvatar(child:Icon(s.returned?Icons.undo:Icons.receipt_long_outlined)),title:Text(s.no,style:const TextStyle(fontWeight:FontWeight.w700)),subtitle:Text('${s.time} • ${s.cashier} • ${s.payment}'),trailing:Text(s.returned?'RETUR':rp(s.total),style:TextStyle(fontWeight:FontWeight.w800,color:s.returned?Colors.red:null))))),
+      if(sales.isEmpty) Card(child:Padding(padding:const EdgeInsets.all(18),child:Text(AppLocalizations.t('Tidak ada transaksi pada ${displayDate(selectedDate)}.', 'No transactions on ${displayDate(selectedDate)}.')))),
+      ...sales.map((s)=>Card(child:ListTile(onTap:()=>saleDetail(s),leading:CircleAvatar(child:Icon(s.returned?Icons.undo:Icons.receipt_long_outlined)),title:Text(s.no,style:const TextStyle(fontWeight:FontWeight.w700)),subtitle:Text('${s.time} • ${s.cashier} • ${s.payment}'),trailing:Text(s.returned?AppLocalizations.t('RETUR', 'RETURN'):rp(s.total),style:TextStyle(fontWeight:FontWeight.w800,color:s.returned?Colors.red:null))))),
       const CopyrightFooter(),
     ]));
   }
@@ -103,10 +104,10 @@ class _ReportPageState extends State<ReportPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Penjualan Bulan Ini', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: inkMuted)),
+                  Text(AppLocalizations.t('Penjualan Bulan Ini', 'Sales This Month'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: inkMuted)),
                   const SizedBox(height: 3),
                   Text(rp(monthSales), style: const TextStyle(fontSize: 23, fontWeight: FontWeight.w900, color: red)),
-                  Text('Omzet bulan berjalan', style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant)),
+                  Text(AppLocalizations.t('Omzet bulan berjalan', 'Current Month Revenue'), style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant)),
                 ],
               ),
             ),
@@ -127,7 +128,7 @@ class _ReportPageState extends State<ReportPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Grafik Penjualan', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w900)),
+            Text(AppLocalizations.t('Grafik Penjualan', 'Sales Chart'), style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900)),
             const SizedBox(height: 8),
             SizedBox(
               height: 38,
@@ -140,7 +141,11 @@ class _ReportPageState extends State<ReportPage> {
                   final mode = modes[i];
                   final selected = trendMode == mode;
                   return ChoiceChip(
-                    label: Text(mode),
+                    label: Text([
+                                    AppLocalizations.t('Hari', 'Day'),
+                                    AppLocalizations.t('Bulan', 'Month'),
+                                    AppLocalizations.t('Tahun', 'Year'),
+                                  ][i]),
                     selected: selected,
                     onSelected: (_) async { setState(() => trendMode = mode); await load(); },
                     selectedColor: redSoft,
@@ -153,7 +158,7 @@ class _ReportPageState extends State<ReportPage> {
             ),
             const SizedBox(height: 10),
             if (data.isEmpty)
-              const Padding(padding: EdgeInsets.symmetric(vertical: 18), child: Text('Belum ada data penjualan.'))
+              Padding(padding: const EdgeInsets.symmetric(vertical: 18), child: Text(AppLocalizations.t('Belum ada data penjualan.', 'No sales data.')))
             else
               SizedBox(
                 height: 150,
@@ -198,12 +203,12 @@ class _ReportPageState extends State<ReportPage> {
       margin: const EdgeInsets.only(bottom: 12),
       child: ExpansionTile(
         initiallyExpanded: true,
-        title: const Text(
-          'Penjualan Berdasarkan Pelanggan',
+        title: Text(
+          AppLocalizations.t('Penjualan Berdasarkan Pelanggan', 'Sales by Customer'),
           style: TextStyle(fontWeight: FontWeight.w900),
         ),
         children: sortedCustomers.isEmpty
-            ? [const ListTile(title: Text('Belum ada penjualan pada periode ini.'))]
+            ? [ListTile(title: Text(AppLocalizations.t('Belum ada penjualan pada periode ini.', 'No sales for this period.')))]
             : [
                 SizedBox(
                   height: 300,
@@ -223,7 +228,7 @@ class _ReportPageState extends State<ReportPage> {
                           x['customer_name'].toString(),
                           style: const TextStyle(fontWeight: FontWeight.w800),
                         ),
-                        subtitle: Text('${x['customer_type']} • ${x['transaksi']} transaksi'),
+                        subtitle: Text('${x['customer_type']} • ${x['transaksi']} ${AppLocalizations.t('transaksi', 'transactions')}'),
                         trailing: Text(
                           rp(x['omzet'] as num),
                           style: const TextStyle(fontWeight: FontWeight.w800),
@@ -245,12 +250,12 @@ class _ReportPageState extends State<ReportPage> {
       margin: const EdgeInsets.only(bottom: 12),
       child: ExpansionTile(
         initiallyExpanded: true,
-        title: const Text(
-          'Penjualan Berdasarkan Item',
+        title: Text(
+          AppLocalizations.t('Penjualan Berdasarkan Item', 'Sales by Item'),
           style: TextStyle(fontWeight: FontWeight.w900),
         ),
         children: sortedItems.isEmpty
-            ? [const ListTile(title: Text('Belum ada penjualan.'))]
+            ? [ListTile(title: Text(AppLocalizations.t('Belum ada penjualan.', 'No sales yet.')))]
             : [
                 SizedBox(
                   height: 300,
@@ -289,12 +294,12 @@ class _ReportPageState extends State<ReportPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Ringkasan Pembayaran', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w900)),
+            Text(AppLocalizations.t('Ringkasan Pembayaran', 'Payment Summary'), style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900)),
             const SizedBox(height: 14),
             if (payments.isEmpty)
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: Text('Belum ada transaksi pada tanggal ini.'),
+                child: Text(AppLocalizations.t('Belum ada transaksi pada tanggal ini.', 'No transactions on this date.')),
               )
             else
               Row(
@@ -306,7 +311,7 @@ class _ReportPageState extends State<ReportPage> {
                       painter: _DonutPainter(values: payments.values.toList()),
                       child: Center(
                         child: Text(
-                          '$total\\ntransaksi',
+                          '$total\\n${AppLocalizations.t('transaksi', 'transactions')}',
                           textAlign: TextAlign.center,
                           style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w900),
                         ),
@@ -429,7 +434,7 @@ class _ReportPageState extends State<ReportPage> {
 
     if (returnedSales.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Belum ada transaksi retur pada tanggal ini.')),
+        SnackBar(content: Text(AppLocalizations.t('Belum ada transaksi retur pada tanggal ini.', 'No return transactions on this date.'))),
       );
       return;
     }
@@ -445,8 +450,8 @@ class _ReportPageState extends State<ReportPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Transaksi Retur',
+                Text(
+                  AppLocalizations.t('Transaksi Retur', 'Return Transactions'),
                   style: TextStyle(fontSize: 19, fontWeight: FontWeight.w900),
                 ),
                 const SizedBox(height: 8),
@@ -471,7 +476,7 @@ class _ReportPageState extends State<ReportPage> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              tooltip: 'Cetak retur',
+                              tooltip: AppLocalizations.t('Cetak retur', 'Print return'),
                               icon: const Icon(
                                 Icons.print_outlined,
                               ),
@@ -496,8 +501,8 @@ class _ReportPageState extends State<ReportPage> {
                                 }
                               },
                             ),
-                            const Text(
-                              'RETUR',
+                            Text(
+                              AppLocalizations.t('RETUR', 'RETURN'),
                               style: TextStyle(
                                 fontWeight: FontWeight.w800,
                                 color: Colors.red,
@@ -520,7 +525,7 @@ class _ReportPageState extends State<ReportPage> {
   Future<void> showTransactions() async {
     if (sales.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Belum ada transaksi pada tanggal ini.')),
+        SnackBar(content: Text(AppLocalizations.t('Belum ada transaksi pada tanggal ini.', 'No transactions on this date.'))),
       );
       return;
     }
@@ -535,7 +540,7 @@ class _ReportPageState extends State<ReportPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Transaksi', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w900)),
+                Text(AppLocalizations.t('Transaksi', 'Transactions'), style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w900)),
                 const SizedBox(height: 8),
                 Expanded(
                   child: ListView.builder(
@@ -549,7 +554,7 @@ class _ReportPageState extends State<ReportPage> {
                         title: Text(s.no, style: const TextStyle(fontWeight: FontWeight.w800)),
                         subtitle: Text('${s.time} • ${s.payment}'),
                         trailing: Text(
-                          s.returned ? 'RETUR' : rp(s.total),
+                          s.returned ? AppLocalizations.t('RETUR', 'RETURN') : rp(s.total),
                           style: const TextStyle(fontWeight: FontWeight.w800),
                         ),
                       );
@@ -567,7 +572,7 @@ class _ReportPageState extends State<ReportPage> {
   Future<void> showItemsSold() async {
     if (best.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Belum ada item terjual pada tanggal ini.')),
+        SnackBar(content: Text(AppLocalizations.t('Belum ada item terjual pada tanggal ini.', 'No items sold on this date.'))),
       );
       return;
     }
@@ -581,7 +586,7 @@ class _ReportPageState extends State<ReportPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Item Terjual', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w900)),
+              Text(AppLocalizations.t('Item Terjual', 'Items Sold'), style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w900)),
               const SizedBox(height: 8),
               ...best.take(12).map(
                 (x) => ListTile(
@@ -625,7 +630,7 @@ class _ReportPageState extends State<ReportPage> {
                     alignment: Alignment.centerLeft,
                     child: Chip(
                       avatar: Icon(Icons.assignment_return_outlined, size: 18),
-                      label: Text('RETUR'),
+                      label: Text(AppLocalizations.t('RETUR', 'RETURN')),
                     ),
                   ),
                 ),
@@ -637,7 +642,7 @@ class _ReportPageState extends State<ReportPage> {
                     trailing: Text(rp((i['price'] as int) * (i['qty'] as int))),
                   )),
               ListTile(
-                title: const Text('TOTAL', style: TextStyle(fontWeight: FontWeight.w800)),
+                title: Text(AppLocalizations.t('TOTAL', 'TOTAL'), style: const TextStyle(fontWeight: FontWeight.w800)),
                 trailing: Text(rp(s.total), style: const TextStyle(fontWeight: FontWeight.w800)),
               ),
               Row(
@@ -649,7 +654,7 @@ class _ReportPageState extends State<ReportPage> {
                         printReceipt(s);
                       },
                       icon: const Icon(Icons.print_outlined),
-                      label: const Text('Cetak'),
+                      label: Text(AppLocalizations.t('Cetak', 'Print')),
                     ),
                   ),
                   if (widget.role == 'Administrator' && !s.returned) ...[
@@ -661,7 +666,7 @@ class _ReportPageState extends State<ReportPage> {
                           authorizeReturn(s);
                         },
                         icon: const Icon(Icons.undo),
-                        label: const Text('Retur'),
+                        label: Text(AppLocalizations.t('Retur', 'Return')),
                       ),
                     ),
                   ],
@@ -681,18 +686,18 @@ class _ReportPageState extends State<ReportPage> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-        title: const Text('Otorisasi Retur Admin'),
+        title: Text(AppLocalizations.t('Otorisasi Retur Admin', 'Admin Return Authorization')),
         content: TextField(
           controller: pass,
           obscureText: true,
-          decoration: const InputDecoration(
-            labelText: 'Password Admin',
+          decoration: InputDecoration(
+            labelText: AppLocalizations.t('Password Admin', 'Admin Password'),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),
-            child: const Text('Batal'),
+            child: Text(AppLocalizations.t('Batal', 'Cancel')),
           ),
           FilledButton(
             onPressed: () async {
@@ -704,7 +709,7 @@ class _ReportPageState extends State<ReportPage> {
                 admin != null && admin['role'] == 'Administrator',
               );
             },
-            child: const Text('OTORISASI'),
+            child: Text(AppLocalizations.t('OTORISASI', 'AUTHORIZE')),
           ),
         ],
       ),
@@ -729,7 +734,7 @@ class _ReportPageState extends State<ReportPage> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-        title: Text('Retur Sebagian #${sale.id}'),
+        title: Text('${AppLocalizations.t('Retur Sebagian', 'Partial Return')} #${sale.id}'),
         content: SizedBox(
           width: 500,
           child: SingleChildScrollView(
@@ -763,7 +768,7 @@ class _ReportPageState extends State<ReportPage> {
                                   ),
                                   const SizedBox(height: 3),
                                   Text(
-                                    'Qty: $qty • Sudah retur: $returned • Sisa: $remaining',
+                                    'Qty: $qty • ${AppLocalizations.t('Sudah retur', 'Already returned')}: $returned • ${AppLocalizations.t('Sisa', 'Remaining')}: $remaining',
                                     style: Theme.of(itemContext)
                                         .textTheme
                                         .bodySmall,
@@ -778,8 +783,8 @@ class _ReportPageState extends State<ReportPage> {
                                 controller: controllers[itemId],
                                 enabled: remaining > 0,
                                 keyboardType: TextInputType.number,
-                                decoration: const InputDecoration(
-                                  labelText: 'Retur',
+                                decoration: InputDecoration(
+                                  labelText: AppLocalizations.t('Retur', 'Return'),
                                   isDense: true,
                                 ),
                               ),
@@ -796,7 +801,7 @@ class _ReportPageState extends State<ReportPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Batal'),
+            child: Text(AppLocalizations.t('Batal', 'Cancel')),
           ),
           FilledButton(
             onPressed: () {
@@ -817,7 +822,7 @@ class _ReportPageState extends State<ReportPage> {
                   ScaffoldMessenger.of(dialogContext).showSnackBar(
                     SnackBar(
                       content: Text(
-                        'Qty retur ${item['name']} harus 0 sampai $remaining.',
+                        '${AppLocalizations.t('Qty retur', 'Return qty')} ${item['name']} ${AppLocalizations.t('harus 0 sampai', 'must be between 0 and')} $remaining.',
                       ),
                     ),
                   );
@@ -832,8 +837,8 @@ class _ReportPageState extends State<ReportPage> {
 
               if (total == 0) {
                 ScaffoldMessenger.of(dialogContext).showSnackBar(
-                  const SnackBar(
-                    content: Text('Masukkan minimal 1 qty untuk diretur.'),
+                  SnackBar(
+                    content: Text(AppLocalizations.t('Masukkan minimal 1 qty untuk diretur.', 'Enter at least 1 quantity to return.')),
                   ),
                 );
                 return;
@@ -841,7 +846,7 @@ class _ReportPageState extends State<ReportPage> {
 
               Navigator.pop(dialogContext, result);
             },
-            child: const Text('PROSES RETUR'),
+            child: Text(AppLocalizations.t('PROSES RETUR', 'PROCESS RETURN')),
           ),
         ],
       ),
@@ -863,8 +868,8 @@ class _ReportPageState extends State<ReportPage> {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Retur berhasil. Stok dikembalikan.'),
+        SnackBar(
+          content: Text(AppLocalizations.t('Retur berhasil. Stok dikembalikan.', 'Return successful. Stock restored.')),
         ),
       );
 
@@ -874,7 +879,7 @@ class _ReportPageState extends State<ReportPage> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Retur gagal: $e'),
+          content: Text(AppLocalizations.t('Retur gagal: $e', 'Return failed: $e')),
         ),
       );
     }
