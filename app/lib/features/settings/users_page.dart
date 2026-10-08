@@ -86,7 +86,7 @@ class _UsersPageState
               TextField(
                 controller: username,
                 decoration:
-                    const InputDecoration(
+                    InputDecoration(
                   labelText:
                       AppLocalizations.t('Username', 'Username'),
                 ),
@@ -96,7 +96,7 @@ class _UsersPageState
                 obscureText:
                     true,
                 decoration:
-                    const InputDecoration(
+                    InputDecoration(
                   labelText:
                       AppLocalizations.t('Password', 'Password'),
                 ),
@@ -128,7 +128,7 @@ class _UsersPageState
                   }
                 },
                 decoration:
-                    const InputDecoration(
+                    InputDecoration(
                   labelText:
                       AppLocalizations.t('Role', 'Role'),
                 ),
@@ -142,7 +142,7 @@ class _UsersPageState
                   );
                 },
                 title:
-                    const Text(
+                    Text(
                   AppLocalizations.t('Aktif', 'Active'),
                 ),
               ),
@@ -199,7 +199,7 @@ class _UsersPageState
                 }
               },
               child:
-                  const Text(
+                  Text(
                 AppLocalizations.t('Simpan', 'Save'),
               ),
             ),
@@ -218,7 +218,7 @@ class _UsersPageState
     return Scaffold(
       appBar: AppBar(
         title:
-            const Text(
+            Text(
           AppLocalizations.t('Manajemen Pengguna', 'User Management'),
         ),
         actions: [

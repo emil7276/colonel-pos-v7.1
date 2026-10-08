@@ -52,8 +52,7 @@ class _StockPageState
         builder: (context, setDialogState) =>
             AlertDialog(
           title: Text(
-            AppLocalizations.t('Stok Masuk • ', 'Stock In • ')
-            '${p.name}',
+            AppLocalizations.t('Stok Masuk • ', 'Stock In • ') + p.name,
           ),
           content: Column(
             mainAxisSize:
@@ -199,8 +198,7 @@ class _StockPageState
                         .showSnackBar(
                       SnackBar(
                         content: Text(
-                          AppLocalizations.t('Gagal menambah stok: ', 'Failed to add stock: ')
-                          '$e',
+                          AppLocalizations.t('Gagal menambah stok: ', 'Failed to add stock: ') + e.toString(),
                         ),
                       ),
                     );
@@ -246,8 +244,7 @@ class _StockPageState
               ),
               title: Text(p.name),
               subtitle: Text(
-                '${p.category} • '
-                AppLocalizations.t('Saldo stok', 'Stock balance'),
+                '${p.category} • ${AppLocalizations.t('Saldo stok', 'Stock balance')}',
               ),
               trailing: Row(
                 mainAxisSize:
