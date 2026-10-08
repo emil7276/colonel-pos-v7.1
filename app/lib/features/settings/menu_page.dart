@@ -109,7 +109,7 @@ class _MenuPageState extends State<MenuPage> {
                             value: category,
                             child: Text(category, overflow: TextOverflow.ellipsis),
                           )),
-                      const DropdownMenuItem<String>(
+                      DropdownMenuItem<String>(
                         value: '__new__',
                         child: Row(
                           children: [

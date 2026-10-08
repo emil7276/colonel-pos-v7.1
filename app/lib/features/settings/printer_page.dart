@@ -386,7 +386,7 @@ class _PrinterPageState extends State<PrinterPage> {
             child: const Icon(Icons.print_rounded, color: Colors.white, size: 30),
           ),
           const SizedBox(width: 14),
-          const Expanded(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
