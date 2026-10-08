@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/constants.dart';
+import '../../core/app_localizations.dart';
 import '../../core/utils.dart';
 import '../../data/database.dart';
 
@@ -179,8 +180,8 @@ class _FinancePageState extends State<FinancePage> {
               insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
               title: Text(
                 item == null
-                    ? 'Catat Pengeluaran'
-                    : 'Edit Pengeluaran',
+                    ? AppLocalizations.t('Catat Pengeluaran', 'Record Expense')
+                    : AppLocalizations.t('Edit Pengeluaran', 'Edit Expense'),
               ),
               content: SingleChildScrollView(
                 child: Column(
@@ -188,38 +189,38 @@ class _FinancePageState extends State<FinancePage> {
                   children: [
                     TextField(
                       controller: category,
-                      decoration: const InputDecoration(
-                        labelText: 'Kategori',
-                        hintText: 'Contoh: Listrik',
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.t('Kategori', 'Category'),
+                        hintText: AppLocalizations.t('Contoh: Listrik', 'Example: Electricity'),
                       ),
                     ),
                     TextField(
                       controller: note,
-                      decoration: const InputDecoration(
-                        labelText: 'Keterangan',
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.t('Keterangan', 'Description'),
                       ),
                     ),
                     TextField(
                       controller: amount,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Nominal',
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.t('Nominal', 'Amount'),
                         prefixText: 'Rp ',
                       ),
                     ),
                     DropdownButtonFormField<String>(
                       value: paymentStatus,
-                      decoration: const InputDecoration(
-                        labelText: 'Status Pembayaran',
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.t('Status Pembayaran', 'Payment Status'),
                       ),
-                      items: const [
+                      items: [
                         DropdownMenuItem(
                           value: 'Lunas',
-                          child: Text('Lunas'),
+                          child: Text(AppLocalizations.t('Lunas', 'Paid')),
                         ),
                         DropdownMenuItem(
                           value: 'Hutang',
-                          child: Text('Hutang'),
+                          child: Text(AppLocalizations.t('Hutang', 'Debt')),
                         ),
                       ],
                       onChanged: (v) {
@@ -234,7 +235,7 @@ class _FinancePageState extends State<FinancePage> {
                       leading: const Icon(
                         Icons.calendar_today_outlined,
                       ),
-                      title: const Text('Tanggal'),
+                      title: Text(AppLocalizations.t('Tanggal', 'Date')),
                       subtitle: Text(displayDate(date)),
                       onTap: () async {
                         final result = await showDatePicker(
@@ -256,7 +257,7 @@ class _FinancePageState extends State<FinancePage> {
                 TextButton(
                   onPressed: () =>
                       Navigator.pop(dialogContext, false),
-                  child: const Text('Batal'),
+                  child: Text(AppLocalizations.t('Batal', 'Cancel')),
                 ),
                 FilledButton(
                   onPressed: () async {
@@ -296,7 +297,7 @@ class _FinancePageState extends State<FinancePage> {
                       );
                     }
                   },
-                  child: const Text('Simpan'),
+                  child: Text(AppLocalizations.t('Simpan', 'Save')),
                 ),
               ],
             );
@@ -321,18 +322,18 @@ class _FinancePageState extends State<FinancePage> {
       context: context,
       builder: (context) => AlertDialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-        title: const Text('Lunasi Piutang?'),
+        title: Text(AppLocalizations.t('Lunasi Piutang?', 'Settle Receivable?')),
         content: Text(
           '${item['sale_no']} • ${rp(item['outstanding_amount'] as num)}',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Batal'),
+            child: Text(AppLocalizations.t('Batal', 'Cancel')),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Lunasi'),
+            child: Text(AppLocalizations.t('Lunasi', 'Settle')),
           ),
         ],
       ),
@@ -351,18 +352,18 @@ class _FinancePageState extends State<FinancePage> {
       context: context,
       builder: (context) => AlertDialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-        title: const Text('Lunasi Hutang?'),
+        title: Text(AppLocalizations.t('Lunasi Hutang?', 'Settle Debt?')),
         content: Text(
           '${item['category']} • ${rp(item['amount'] as num)}',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Batal'),
+            child: Text(AppLocalizations.t('Batal', 'Cancel')),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Lunasi'),
+            child: Text(AppLocalizations.t('Lunasi', 'Settle')),
           ),
         ],
       ),
@@ -381,18 +382,18 @@ class _FinancePageState extends State<FinancePage> {
       context: context,
       builder: (context) => AlertDialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-        title: const Text('Hapus Pengeluaran?'),
+        title: Text(AppLocalizations.t('Hapus Pengeluaran?', 'Delete Expense?')),
         content: Text(
           '${item['category']} • ${rp(item['amount'] as num)}',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Batal'),
+            child: Text(AppLocalizations.t('Batal', 'Cancel')),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Hapus'),
+            child: Text(AppLocalizations.t('Hapus', 'Delete')),
           ),
         ],
       ),
@@ -449,14 +450,14 @@ class _FinancePageState extends State<FinancePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Keuangan'),
+        title: Text(AppLocalizations.t('Keuangan', 'Finance')),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showExpenseDialog(),
         backgroundColor: red,
         foregroundColor: Colors.white,
         icon: const Icon(Icons.add),
-        label: const Text('Pengeluaran'),
+        label: Text(AppLocalizations.t('Pengeluaran', 'Expenses')),
       ),
       body: RefreshIndicator(
         onRefresh: _load,
@@ -467,8 +468,8 @@ class _FinancePageState extends State<FinancePage> {
               children: [
                 Expanded(
                   child: InputDecorator(
-                    decoration: const InputDecoration(
-                      labelText: 'Rentang Tanggal',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.t('Rentang Tanggal', 'Date Range'),
                       border: OutlineInputBorder(),
                     ),
                     child: Text(
@@ -483,7 +484,7 @@ class _FinancePageState extends State<FinancePage> {
                 IconButton.filled(
                   onPressed: _pickDate,
                   icon: const Icon(Icons.calendar_month),
-                  tooltip: 'Pilih tanggal',
+                  tooltip: AppLocalizations.t('Pilih tanggal', 'Select date'),
                 ),
               ],
             ),
@@ -492,7 +493,7 @@ class _FinancePageState extends State<FinancePage> {
               children: [
                 Expanded(
                   child: _metric(
-                    'Pendapatan',
+                    AppLocalizations.t('Pendapatan', 'Revenue'),
                     income,
                     Icons.trending_up_rounded,
                   ),
@@ -500,7 +501,7 @@ class _FinancePageState extends State<FinancePage> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: _metric(
-                    'Bayar Tunda',
+                    AppLocalizations.t('Bayar Tunda', 'Pay Later'),
                     payLater,
                     Icons.schedule_rounded,
                   ),
@@ -508,7 +509,7 @@ class _FinancePageState extends State<FinancePage> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: _metric(
-                    'Pengeluaran',
+                    AppLocalizations.t('Pengeluaran', 'Expenses'),
                     expense,
                     Icons.trending_down_rounded,
                   ),
@@ -522,7 +523,7 @@ class _FinancePageState extends State<FinancePage> {
               children: [
                 Expanded(
                   child: _metric(
-                    'Kas Aktual',
+                    AppLocalizations.t('Kas Aktual', 'Actual Cash'),
                     actualCash,
                     Icons.account_balance_wallet_rounded,
                   ),
@@ -530,7 +531,7 @@ class _FinancePageState extends State<FinancePage> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: _metric(
-                    'Hasil Bersih',
+                    AppLocalizations.t('Hasil Bersih', 'Net Result'),
                     net,
                     Icons.trending_up_rounded,
                   ),
@@ -547,20 +548,20 @@ class _FinancePageState extends State<FinancePage> {
                   Icons.account_balance_rounded,
                   color: red,
                 ),
-                title: const Text(
-                  'Piutang',
+                title: Text(
+                  AppLocalizations.t('Piutang', 'Receivables'),
                   style: TextStyle(fontWeight: FontWeight.w900),
                 ),
                 subtitle: Text(
                   '${receivableRows.length} transaksi • ${rp(receivable)}',
                 ),
                 children: receivableRows.isEmpty
-                    ? const [
+                    ? [
                         Padding(
                           padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
                           child: Align(
                             alignment: Alignment.centerLeft,
-                            child: Text('Tidak ada piutang aktif.'),
+                            child: Text(AppLocalizations.t('Tidak ada piutang aktif.', 'No active receivables.')),
                           ),
                         ),
                       ]
@@ -574,7 +575,7 @@ class _FinancePageState extends State<FinancePage> {
                           title: Text(
                             item['customer_name']?.toString().isNotEmpty == true
                                 ? item['customer_name'].toString()
-                                : 'Pelanggan Umum',
+                                : AppLocalizations.t('Pelanggan Umum', 'General Customer'),
                             style: const TextStyle(
                               fontWeight: FontWeight.w800,
                             ),
@@ -582,7 +583,7 @@ class _FinancePageState extends State<FinancePage> {
                           subtitle: Text(
                             '${item['sale_no']} • '
                             '${item['sale_time'].toString().substring(0, 10)}'
-                            '${returned > 0 ? ' • Retur ${rp(returned)}' : ''}',
+                            '${returned > 0 ? ' • ${AppLocalizations.t('Retur', 'Return')} ${rp(returned)}' : ''}',
                           ),
                           trailing: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -596,7 +597,7 @@ class _FinancePageState extends State<FinancePage> {
                               ),
                               TextButton(
                                 onPressed: () => _settleReceivable(item),
-                                child: const Text('Lunasi'),
+                                child: Text(AppLocalizations.t('Lunasi', 'Settle')),
                               ),
                             ],
                           ),
@@ -613,20 +614,20 @@ class _FinancePageState extends State<FinancePage> {
                   Icons.receipt_long_rounded,
                   color: red,
                 ),
-                title: const Text(
-                  'Hutang',
+                title: Text(
+                  AppLocalizations.t('Hutang', 'Debt'),
                   style: TextStyle(fontWeight: FontWeight.w900),
                 ),
                 subtitle: Text(
                   '${payableRows.length} transaksi • ${rp(payable)}',
                 ),
                 children: payableRows.isEmpty
-                    ? const [
+                    ? [
                         Padding(
                           padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
                           child: Align(
                             alignment: Alignment.centerLeft,
-                            child: Text('Tidak ada hutang aktif.'),
+                            child: Text(AppLocalizations.t('Tidak ada hutang aktif.', 'No active debts.')),
                           ),
                         ),
                       ]
@@ -644,7 +645,7 @@ class _FinancePageState extends State<FinancePage> {
                           subtitle: Text(
                             '${item['note']} • '
                             '${item['expense_date'].toString().substring(0, 10)}'
-                            '${dueDate.isNotEmpty ? ' • Jatuh tempo $dueDate' : ''}',
+                            '${dueDate.isNotEmpty ? ' • ${AppLocalizations.t('Jatuh tempo', 'Due date')} $dueDate' : ''}',
                           ),
                           trailing: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -658,7 +659,7 @@ class _FinancePageState extends State<FinancePage> {
                               ),
                               TextButton(
                                 onPressed: () => _settlePayable(item),
-                                child: const Text('Lunasi'),
+                                child: Text(AppLocalizations.t('Lunasi', 'Settle')),
                               ),
                             ],
                           ),
@@ -670,8 +671,8 @@ class _FinancePageState extends State<FinancePage> {
             const SizedBox(height: 14),
 
 
-            const Text(
-              'Riwayat Pengeluaran',
+            Text(
+              AppLocalizations.t('Riwayat Pengeluaran', 'Expense History'),
               style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.w900,
@@ -680,10 +681,13 @@ class _FinancePageState extends State<FinancePage> {
             const SizedBox(height: 8),
 
             if (expenseRows.isEmpty)
-              const Card(
+              Card(
                 child: ListTile(
                   title: Text(
-                    'Belum ada pengeluaran pada periode ini.',
+                    AppLocalizations.t(
+                      'Belum ada pengeluaran pada periode ini.',
+                      'No expenses for this period.',
+                    ),
                   ),
                 ),
               )
@@ -725,14 +729,14 @@ class _FinancePageState extends State<FinancePage> {
                               _deleteExpense(item);
                             }
                           },
-                          itemBuilder: (_) => const [
+                          itemBuilder: (_) => [
                             PopupMenuItem(
                               value: 'edit',
-                              child: Text('Edit'),
+                              child: Text(AppLocalizations.t('Edit', 'Edit')),
                             ),
                             PopupMenuItem(
                               value: 'delete',
-                              child: Text('Hapus'),
+                              child: Text(AppLocalizations.t('Hapus', 'Delete')),
                             ),
                           ],
                         ),
