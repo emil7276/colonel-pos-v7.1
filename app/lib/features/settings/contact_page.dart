@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/app_localizations.dart';
 import '../../core/constants.dart';
 
 class ContactPage extends StatelessWidget {
@@ -7,7 +8,7 @@ class ContactPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Hubungi Kami')),
+      appBar: AppBar(title: Text(AppLocalizations.t('Hubungi Kami', 'Contact Us'))),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
@@ -31,8 +32,11 @@ class ContactPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 14),
-                  const Text(
-                    'Untuk perpanjangan dan pengembangan layanan hubungi:',
+                  Text(
+                    AppLocalizations.t(
+                      'Untuk perpanjangan dan pengembangan layanan hubungi:',
+                      'For service renewal and development, please contact:',
+                    ),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: inkMuted,
