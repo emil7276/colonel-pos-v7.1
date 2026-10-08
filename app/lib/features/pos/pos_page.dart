@@ -33,6 +33,7 @@ class PosPageState extends State<PosPage> {
   final TextEditingController customerNameController = TextEditingController();
   final TextEditingController customerPhoneController = TextEditingController();
   final TextEditingController searchController = TextEditingController();
+  TextEditingController? _customerAutocompleteController;
 
 
   String searchQuery = '';
@@ -169,6 +170,89 @@ class PosPageState extends State<PosPage> {
     });
   }
 
+  Future<void> cartItemsDialog() async {
+    if (cart.isEmpty) return;
+
+    await showDialog<void>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(
+          AppLocalizations.t('Daftar Belanja', 'Purchased Items'),
+        ),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemCount: cart.length,
+            separatorBuilder: (_, __) => const Divider(height: 1),
+            itemBuilder: (_, i) {
+              final line = cart[i];
+              return ListTile(
+                dense: true,
+                contentPadding: EdgeInsets.zero,
+                title: Text(
+                  line.product.name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
+                subtitle: Text(
+                  '${line.qty} ${AppLocalizations.t('item', 'items')}',
+                ),
+                trailing: Text(
+                  rp(line.product.price * line.qty),
+                  style: const TextStyle(fontWeight: FontWeight.w800),
+                ),
+              );
+            },
+          ),
+        ),
+        actions: [
+          FilledButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(AppLocalizations.t('Tutup', 'Close')),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> cancelShopping() async {
+    if (cart.isEmpty && discount == 0) return;
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(
+          AppLocalizations.t('CANCEL Belanja', 'CANCEL Sale'),
+        ),
+        content: Text(
+          AppLocalizations.t(
+            'Batalkan belanja yang sedang berlangsung?',
+            'Cancel the current sale?',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(AppLocalizations.t('Tidak', 'No')),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(AppLocalizations.t('Ya, CANCEL', 'Yes, CANCEL')),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    setState(() {
+      cart.clear();
+      discount = 0;
+    });
+  }
+
   Future<void> discountDialog() async {
     final c = TextEditingController(
       text: discount == 0
@@ -266,6 +350,8 @@ class PosPageState extends State<PosPage> {
 
               customerNameController.text = nameController.text.trim();
               customerPhoneController.text = phoneController.text.trim();
+              _customerAutocompleteController?.value =
+                  customerNameController.value;
 
               Navigator.pop(context, true);
             },
@@ -275,7 +361,7 @@ class PosPageState extends State<PosPage> {
       ),
     );
 
-    if (result != true && mounted) {
+    if (mounted) {
       setState(() => saveCustomer = false);
     }
 
@@ -1400,6 +1486,29 @@ class PosPageState extends State<PosPage> {
                 contentPadding: EdgeInsets.symmetric(horizontal: 10),
                 leading: Icon(Icons.shopping_cart_rounded, color: red, size: 20),
                 title: Text(AppLocalizations.t('Keranjang', 'Cart'), style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13, color: red)),
+                trailing: OutlinedButton(
+                  onPressed: cart.isEmpty ? null : cancelShopping,
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: red,
+                    side: const BorderSide(color: red, width: 1.2),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    minimumSize: const Size(0, 32),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: Text(
+                    AppLocalizations.t(
+                      'CANCEL Belanja',
+                      'CANCEL Sale',
+                    ),
+                    style: const TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
               ),
 
               Padding(
@@ -1429,6 +1538,8 @@ class PosPageState extends State<PosPage> {
                           },
                           onSelected: (selection) {
                             customerNameController.text = selection;
+                            _customerAutocompleteController?.value =
+                                customerNameController.value;
                           },
                           fieldViewBuilder: (
                             context,
@@ -1436,6 +1547,13 @@ class PosPageState extends State<PosPage> {
                             focusNode,
                             onFieldSubmitted,
                           ) {
+                            _customerAutocompleteController =
+                                textEditingController;
+                            if (textEditingController.text !=
+                                customerNameController.text) {
+                              textEditingController.value =
+                                  customerNameController.value;
+                            }
                             return TextField(
                               controller: textEditingController,
                               focusNode: focusNode,
@@ -1466,12 +1584,22 @@ class PosPageState extends State<PosPage> {
                             ),
                           ),
                           const Spacer(),
-                          Text(
-                            '$totalItems ${AppLocalizations.t('item', 'items')}',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 12,
-                              color: Colors.black54,
+                          InkWell(
+                            onTap: cart.isEmpty ? null : cartItemsDialog,
+                            borderRadius: BorderRadius.circular(6),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 4,
+                                vertical: 2,
+                              ),
+                              child: Text(
+                                '$totalItems ${AppLocalizations.t('item', 'items')}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 13,
+                                  color: Colors.black54,
+                                ),
+                              ),
                             ),
                           ),
                         ],
