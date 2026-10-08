@@ -297,8 +297,8 @@ class _ReportPageState extends State<ReportPage> {
             Text(AppLocalizations.t('Ringkasan Pembayaran', 'Payment Summary'), style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900)),
             const SizedBox(height: 14),
             if (payments.isEmpty)
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Text(AppLocalizations.t('Belum ada transaksi pada tanggal ini.', 'No transactions on this date.')),
               )
             else
@@ -624,8 +624,8 @@ class _ReportPageState extends State<ReportPage> {
               Text(s.no, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 20)),
               Text('${s.time} • Kasir: ${s.cashier}'),
               if (s.returned)
-                const Padding(
-                  padding: EdgeInsets.only(top: 8),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Chip(
