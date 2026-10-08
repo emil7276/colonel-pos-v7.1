@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/constants.dart';
+import '../../core/app_localizations.dart';
 import '../../data/database.dart';
 class UsersPage
     extends StatefulWidget {
@@ -35,8 +36,7 @@ class _UsersPageState
           .showSnackBar(
         SnackBar(
           content: Text(
-            'Gagal memuat pengguna: '
-            '$e',
+            AppLocalizations.t('Gagal memuat pengguna: $e', 'Failed to load users: $e'),
           ),
         ),
       );
@@ -76,8 +76,8 @@ class _UsersPageState
               insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
           title: Text(
             u == null
-                ? 'Tambah Pengguna'
-                : 'Edit Pengguna',
+                ? AppLocalizations.t('Tambah Pengguna', 'Add User')
+                : AppLocalizations.t('Edit Pengguna', 'Edit User'),
           ),
           content: Column(
             mainAxisSize:
@@ -88,7 +88,7 @@ class _UsersPageState
                 decoration:
                     const InputDecoration(
                   labelText:
-                      'Username',
+                      AppLocalizations.t('Username', 'Username'),
                 ),
               ),
               TextField(
@@ -98,7 +98,7 @@ class _UsersPageState
                 decoration:
                     const InputDecoration(
                   labelText:
-                      'Password',
+                      AppLocalizations.t('Password', 'Password'),
                 ),
               ),
               DropdownButtonFormField<
@@ -130,7 +130,7 @@ class _UsersPageState
                 decoration:
                     const InputDecoration(
                   labelText:
-                      'Role',
+                      AppLocalizations.t('Role', 'Role'),
                 ),
               ),
               SwitchListTile(
@@ -143,7 +143,7 @@ class _UsersPageState
                 },
                 title:
                     const Text(
-                  'Aktif',
+                  AppLocalizations.t('Aktif', 'Active'),
                 ),
               ),
             ],
@@ -155,8 +155,8 @@ class _UsersPageState
                 context,
               ),
               child:
-                  const Text(
-                'Batal',
+                  Text(
+                AppLocalizations.t('Batal', 'Cancel'),
               ),
             ),
             FilledButton(
@@ -191,8 +191,7 @@ class _UsersPageState
                           seconds: 5,
                         ),
                         content: Text(
-                          'Gagal menyimpan pengguna:\n'
-                          '$e',
+                          AppLocalizations.t('Gagal menyimpan pengguna: $e', 'Failed to save user: $e'),
                         ),
                       ),
                     );
@@ -201,7 +200,7 @@ class _UsersPageState
               },
               child:
                   const Text(
-                'Simpan',
+                AppLocalizations.t('Simpan', 'Save'),
               ),
             ),
           ],
@@ -220,7 +219,7 @@ class _UsersPageState
       appBar: AppBar(
         title:
             const Text(
-          'Manajemen Pengguna',
+          AppLocalizations.t('Manajemen Pengguna', 'User Management'),
         ),
         actions: [
           IconButton(
@@ -288,7 +287,7 @@ class _UsersPageState
                           SnackBar(
                             content:
                                 Text(
-                              'Gagal: $e',
+                              AppLocalizations.t('Gagal: $e', 'Failed: $e'),
                             ),
                           ),
                         );
