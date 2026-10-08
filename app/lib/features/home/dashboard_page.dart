@@ -609,7 +609,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Grafik Keuangan',
+                          AppLocalizations.t('Grafik Keuangan', 'Financial Chart'),
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w900,
@@ -668,7 +668,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Grafik Keuangan',
+                        AppLocalizations.t('Grafik Keuangan', 'Financial Chart'),
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w900,
