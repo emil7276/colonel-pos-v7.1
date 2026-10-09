@@ -69,8 +69,57 @@ jobs:
         working-directory: app
         run: sed -i 's/android:label="[^"]*"/android:label="Colonel POS v7.2"/' android/app/src/main/AndroidManifest.xml
 
+      - name: Configure Android release signing
+        working-directory: app
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          test -n "$ANDROID_KEYSTORE_BASE64"
+          test -n "$ANDROID_KEYSTORE_PASSWORD"
+          test -n "$ANDROID_KEY_ALIAS"
+          test -n "$ANDROID_KEY_PASSWORD"
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/release-keystore.jks
+          keytool -list -keystore android/app/release-keystore.jks -storepass "$ANDROID_KEYSTORE_PASSWORD" -alias "$ANDROID_KEY_ALIAS" >/dev/null
+          cat > /tmp/configure-signing.py <<'PYTHON'
+          from pathlib import Path
+
+          p = Path("android/app/build.gradle.kts")
+          s = p.read_text()
+          old = 'signingConfig = signingConfigs.getByName("debug")'
+          marker = "    buildTypes {"
+
+          assert s.count(old) == 1, "Baris signing debug tidak ditemukan tepat satu kali"
+          assert s.count(marker) == 1, "Blok buildTypes tidak ditemukan tepat satu kali"
+
+          signing = "\\n".join([
+              '    signingConfigs {',
+              '        create("release") {',
+              '            storeFile = file("release-keystore.jks")',
+              '            storePassword = System.getenv("ANDROID_KEYSTORE_PASSWORD")',
+              '            keyAlias = System.getenv("ANDROID_KEY_ALIAS")',
+              '            keyPassword = System.getenv("ANDROID_KEY_PASSWORD")',
+              '        }',
+              '    }',
+              '',
+              ''
+          ])
+          s = s.replace(marker, signing + marker, 1)
+          s = s.replace(old, 'signingConfig = signingConfigs.getByName("release")', 1)
+          p.write_text(s)
+          print("Release signing dikonfigurasi.")
+          PYTHON
+          python3 /tmp/configure-signing.py
+
       - name: Build APK
         working-directory: app
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: flutter build apk --release
 
       - name: Rename APK
