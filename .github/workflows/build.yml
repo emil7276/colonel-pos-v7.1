@@ -78,12 +78,16 @@ jobs:
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
           set -euo pipefail
+          echo 'Checking signing secrets...'
           test -n "$ANDROID_KEYSTORE_BASE64"
           test -n "$ANDROID_KEYSTORE_PASSWORD"
           test -n "$ANDROID_KEY_ALIAS"
           test -n "$ANDROID_KEY_PASSWORD"
+          echo 'Decoding keystore...'
           printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/release-keystore.jks
-          keytool -list -keystore android/app/release-keystore.jks -storepass "$ANDROID_KEYSTORE_PASSWORD" -alias "$ANDROID_KEY_ALIAS" >/dev/null
+          echo 'Validating keystore...'
+          if keytool -list -keystore android/app/release-keystore.jks -storepass "$ANDROID_KEYSTORE_PASSWORD" -alias "$ANDROID_KEY_ALIAS" >/dev/null; then echo 'Keystore valid.'; else echo '::error::Keystore validation failed; check the keystore, store password, and alias secrets.'; exit 1; fi
+          echo 'Configuring Gradle signing...'
           cat > /tmp/configure-signing.py <<'PYTHON'
           from pathlib import Path
 
@@ -95,7 +99,7 @@ jobs:
           assert s.count(old) == 1, "Baris signing debug tidak ditemukan tepat satu kali"
           assert s.count(marker) == 1, "Blok buildTypes tidak ditemukan tepat satu kali"
 
-          signing = "\\n".join([
+          signing = chr(10).join([
               '    signingConfigs {',
               '        create("release") {',
               '            storeFile = file("release-keystore.jks")',
