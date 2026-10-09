@@ -86,7 +86,17 @@ jobs:
           echo 'Decoding keystore...'
           printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/release-keystore.jks
           echo 'Validating keystore...'
-          if keytool -list -keystore android/app/release-keystore.jks -storepass "$ANDROID_KEYSTORE_PASSWORD" -alias "$ANDROID_KEY_ALIAS" >/dev/null; then echo 'Keystore valid.'; else echo '::error::Keystore validation failed; check the keystore, store password, and alias secrets.'; exit 1; fi
+          if keytool -list \
+            -keystore android/app/release-keystore.jks \
+            -storepass "$ANDROID_KEYSTORE_PASSWORD" \
+            -alias "$ANDROID_KEY_ALIAS" \
+            >/tmp/keytool-check.log 2>&1; then
+            echo 'Keystore valid.'
+          else
+            cat /tmp/keytool-check.log
+            echo '::error::Keystore validation failed. See keytool error above.'
+            exit 1
+          fi
           echo 'Configuring Gradle signing...'
           cat > /tmp/configure-signing.py <<'PYTHON'
           from pathlib import Path
