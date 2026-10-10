@@ -130,6 +130,49 @@ class _AiAssistantPanelState extends State<AiAssistantPanel> {
             'Jika masih gagal, minta Admin memeriksa pengaturan printer.';
     }
 
+    // FAQ_SECURITY_AND_SUBSCRIPTION_V72
+    if ([
+      'aman', 'keamanan', 'keamanan data', 'data pribadi',
+      'privasi', 'security', 'safe', 'secure', 'privacy',
+      'personal data',
+    ].any(q.contains)) {
+      return _en
+          ? 'Good question 😊 No application should be assumed to be 100% '
+            'secure. Use a strong, unique password, do not share your login, '
+            'lock your device, and give Administrator access only to '
+            'trusted people. Keep backups where supported and use official '
+            'support channels if you notice anything suspicious. I cannot '
+            'confirm specific security protections without verified details.'
+          : 'Pertanyaan bagus 😊 Tidak ada aplikasi yang bisa dianggap '
+            '100% aman. Gunakan kata sandi yang kuat dan berbeda, jangan '
+            'bagikan akun, kunci perangkat, dan berikan akses Administrator '
+            'hanya kepada orang tepercaya. Simpan cadangan jika fitur '
+            'tersebut tersedia, dan hubungi dukungan resmi jika menemukan '
+            'hal mencurigakan. Saya belum bisa memastikan perlindungan '
+            'keamanan tertentu tanpa informasi yang terverifikasi.';
+    }
+
+    if ([
+      'langganan', 'berlangganan', 'biaya langganan',
+      'harga langganan', 'paket langganan', 'cara berlangganan',
+      'lisensi', 'aktivasi lisensi', 'subscription', 'subscribe',
+      'subscription price', 'pricing', 'license', 'licence',
+    ].any(q.contains)) {
+      return _en
+          ? 'For subscription or license details, please check the official '
+            'Colonel POS information or contact the application provider '
+            'or your Administrator. I do not have verified current pricing, '
+            'plans, or activation instructions, so I do not want to guess. '
+            'Please verify payment details through an official channel '
+            'before paying.'
+          : 'Untuk informasi langganan atau lisensi, silakan periksa '
+            'informasi resmi Colonel POS atau hubungi penyedia aplikasi '
+            'maupun Administrator kamu. Saya belum memiliki informasi '
+            'terverifikasi tentang harga, paket, atau cara aktivasi saat '
+            'ini, jadi saya tidak ingin menebak. Pastikan detail pembayaran '
+            'melalui kanal resmi sebelum membayar.';
+    }
+
     return _en
         ? 'I’m not sure about that yet, and I don’t want to give incorrect '
           'instructions. Please describe what happened and which step '
