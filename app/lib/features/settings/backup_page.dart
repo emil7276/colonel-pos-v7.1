@@ -467,7 +467,15 @@ class _BackupPageState extends State<BackupPage> {
                   SizedBox(
   width: double.infinity,
   child: FilledButton.icon(
-    style: FilledButton.styleFrom(backgroundColor: const Color(0xFF4285F4)),
+    style: FilledButton.styleFrom(
+  backgroundColor: const Color(0xFF1877D2),
+  foregroundColor: Colors.white,
+  minimumSize: const Size.fromHeight(58),
+  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+  textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w900, letterSpacing: 0.4),
+  elevation: 2,
+),
     onPressed: working ? null : backupToGoogleDrive,
     icon: const Icon(Icons.cloud_upload_rounded),
     label: Text(AppLocalizations.t('BACKUP KE GOOGLE DRIVE', 'BACKUP TO GOOGLE DRIVE')),
@@ -478,7 +486,15 @@ Row(
   children: [
     Expanded(
       child: FilledButton.icon(
-        style: FilledButton.styleFrom(backgroundColor: const Color(0xFF217346)),
+        style: FilledButton.styleFrom(
+  backgroundColor: const Color(0xFF16A34A),
+  foregroundColor: Colors.white,
+  minimumSize: const Size(0, 68),
+  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+  textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 0.2),
+  elevation: 2,
+),
         onPressed: working ? null : exportExcelReport,
         icon: const Icon(Icons.table_chart_rounded),
         label: const Text('EXPORT TO EXCELL'),
@@ -487,7 +503,15 @@ Row(
     const SizedBox(width: 10),
     Expanded(
       child: FilledButton.icon(
-        style: FilledButton.styleFrom(backgroundColor: const Color(0xFFC62828)),
+        style: FilledButton.styleFrom(
+  backgroundColor: const Color(0xFFDC2626),
+  foregroundColor: Colors.white,
+  minimumSize: const Size(0, 68),
+  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+  textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 0.2),
+  elevation: 2,
+),
         onPressed: working ? null : exportPdfReport,
         icon: const Icon(Icons.picture_as_pdf_rounded),
         label: const Text('EXPORT PDF'),
