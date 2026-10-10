@@ -619,8 +619,8 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
                 const Icon(Icons.support_agent_rounded, color: Colors.green),
                 const SizedBox(width: 8),
                 Expanded(child: Text(
-                  AppLocalizations.t('Asisten Colonel POS', 'Colonel POS Assistant'),
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Colors.red),
+                  AppLocalizations.t('Colonel Smart Assistent', 'Colonel Smart Assistent'),
+                  style: const TextStyle(fontFamily: 'sans-serif-condensed', fontSize: 16, fontWeight: FontWeight.w800, color: Colors.red),
                 )),
                 Container(
                   width: 9,
@@ -727,6 +727,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
                     onSubmitted: (_) => _ask(),
                     decoration: InputDecoration(
                       hintText: AppLocalizations.t('Omset aku berapa, Min?', 'How much were my sales today?'),
+                      hintStyle: const TextStyle(color: Color(0xFF9CA3AF)),
                       isDense: true,
                       border: const OutlineInputBorder(),
                       contentPadding: const EdgeInsets.all(10),
@@ -738,7 +739,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
                   tooltip: AppLocalizations.t('Kirim', 'Send'),
                   style: IconButton.styleFrom(backgroundColor: const Color(0xFF38BDF8), foregroundColor: Colors.white),
                   onPressed: _ask,
-                  icon: const Icon(Icons.send_rounded),
+                  icon: const Icon(Icons.arrow_upward_rounded),
                 ),
               ]),
             ],
