@@ -50,29 +50,88 @@ Future<String?> printerMac() async {
   return p.getString('printer_mac');
 }
 
-PdfPageFormat _paperFormat(String paper) {
+PdfPageFormat _paperFormat(String paper, {double heightMm = 220}) {
   final width = paper == '80 mm' ? 80.0 : 58.0;
   final widthPt = width / 25.4 * 72.0;
-  final heightPt = 220.0 / 25.4 * 72.0;
+  final heightPt = heightMm / 25.4 * 72.0;
   return PdfPageFormat(widthPt, heightPt, marginAll: 8);
 }
 
+double _saleReceiptHeightMm(
+  List<Map<String, dynamic>> items,
+  SaleModel sale,
+  String address,
+  String phone,
+  String paper,
+) {
+  final headerCharsPerLine = paper == '80 mm' ? 30 : 20;
+
+  // Perkiraan konservatif karena kolom harga mengurangi ruang nama produk.
+  final itemCharsPerLine = paper == '80 mm' ? 28 : 16;
+
+  int linesFor(String value, int charsPerLine) {
+    if (value.isEmpty) return 0;
+
+    return value.split('\n').fold<int>(0, (total, part) {
+      if (part.isEmpty) return total + 1;
+      return total + (part.length + charsPerLine - 1) ~/ charsPerLine;
+    });
+  }
+
+  var itemLines = 0;
+
+  for (final item in items) {
+    final label = '${item['name']} x${item['qty']}';
+    final lines = linesFor(label, itemCharsPerLine);
+    itemLines += lines < 1 ? 1 : lines;
+  }
+
+  final hasCustomer = sale.customerName.trim().isNotEmpty &&
+      sale.customerName.trim().toLowerCase() != 'pelanggan umum';
+
+  var extraHeaderLines = linesFor(address, headerCharsPerLine) +
+      linesFor(phone, headerCharsPerLine) +
+      linesFor(
+        '${sale.no}\n${sale.time}\nKasir: ${sale.cashier}',
+        headerCharsPerLine,
+      );
+
+  if (hasCustomer) {
+    extraHeaderLines += linesFor(
+      'Pelanggan: ${sale.customerName.trim()}',
+      headerCharsPerLine,
+    );
+  }
+
+  // Ruang dasar mencakup isi nota dan cadangan bawah sekitar 20 mm.
+  // Tinggi tetap estimasi; perlu divalidasi pada hasil render APK.
+  return 105.0 +
+      (itemLines * 4.8) +
+      (extraHeaderLines * 3.5) +
+      (sale.payment == 'Tunai' ? 8.0 : 0.0);
+}
 Future<pw.Document> _buildReceipt(SaleModel sale, {int copies = 1, String? paperOverride}) async {
   final name = await storeName();
   final address = await storeAddress();
   final phone = await storePhone();
   final items = await DB.saleItems(sale.id);
   final doc = pw.Document();
-  final format = _paperFormat(paperOverride ?? await printerPaper());
+  final paper = paperOverride ?? await printerPaper();
+  final format = _paperFormat(
+    paper,
+    heightMm: _saleReceiptHeightMm(items, sale, address, phone, paper),
+  );
 
   for (var copy = 0; copy < copies; copy++) {
     doc.addPage(
       pw.Page(
         pageFormat: format,
-        build: (_) => pw.Column(
+        build: (_) => pw.DefaultTextStyle(
+            style: pw.TextStyle(fontSize: 8.4),
+            child: pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.center,
           children: [
-            pw.Text(name, style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold), textAlign: pw.TextAlign.center),
+            pw.Text(name, style: pw.TextStyle(fontSize: 11.2, fontWeight: pw.FontWeight.bold), textAlign: pw.TextAlign.center),
             if (address.isNotEmpty) pw.Text(address, textAlign: pw.TextAlign.center),
             if (phone.isNotEmpty) pw.Text(phone, textAlign: pw.TextAlign.center),
             pw.SizedBox(height: 7),
@@ -113,9 +172,10 @@ Future<pw.Document> _buildReceipt(SaleModel sale, {int copies = 1, String? paper
             pw.SizedBox(height: 14),
             pw.Text('Terima kasih'),
             pw.SizedBox(height: 10),
-            pw.Text(copyright1),
-            pw.Text(copyright2),
+            pw.Text(copyright1, style: pw.TextStyle(fontSize: 4.8)),
+            pw.Text(copyright2, style: pw.TextStyle(fontSize: 4.8)),
           ],
+        ),
         ),
       ),
     );

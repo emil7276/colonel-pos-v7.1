@@ -559,11 +559,15 @@ class _BackupPageState extends State<BackupPage> {
 const SizedBox(height: 10),
 SizedBox(
   width: double.infinity,
-  child: OutlinedButton.icon(
+  child: FilledButton.icon(
     onPressed: working ? null : restoreFromGoogleDrive,
     icon: const Icon(Icons.cloud_download_rounded),
     label: Text(AppLocalizations.t('RESTORE DARI GOOGLE DRIVE', 'RESTORE FROM GOOGLE DRIVE')),
-    style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(54)),
+    style: FilledButton.styleFrom(
+      backgroundColor: const Color(0xFF2563EB),
+      foregroundColor: Colors.white,
+      minimumSize: const Size.fromHeight(54),
+    ),
   ),
 ),
 const SizedBox(height: 10),
