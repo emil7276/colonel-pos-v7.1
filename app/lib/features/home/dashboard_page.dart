@@ -32,6 +32,7 @@ class _DashboardPageState extends State<DashboardPage> {
   List<SaleModel> recent = [];
   List<_TrendPoint> trendPoints = [];
   int selectedTrendIndex = -1;
+  _TrendMode selectedTrendMode = _TrendMode.day;
 
   String topProductName = '-';
   int topProductQty = 0;
@@ -118,7 +119,7 @@ class _DashboardPageState extends State<DashboardPage> {
     }
 
     final trendData = widget.role == 'Administrator'
-        ? await _buildTrendPoints(summarySales, saleNetTotals)
+        ? await _buildTrendPoints()
         : <_TrendPoint>[];
 
     final rankingData = await _buildDashboardRankings(
@@ -540,7 +541,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   if (widget.role == 'Administrator')
                     _quick(AppLocalizations.t('Produk', 'Products'), Icons.restaurant_menu_rounded, 'produk'),
                   if (widget.role == 'Administrator')
-                    _quick('Printer', Icons.print_rounded, 'printer'),
+                    _quick(AppLocalizations.t('BACKUP', 'BACKUP'), Icons.backup_rounded, 'backup'),
                 ],
               );
             },
@@ -576,11 +577,13 @@ class _DashboardPageState extends State<DashboardPage> {
 
 
   String _trendModeLabel() {
-    final days = end.difference(start).inDays;
-
-    if (days <= 1) return 'Per jam';
-    if (days <= 31) return 'Per hari';
-    return 'Per bulan';
+    switch (selectedTrendMode) {
+      case _TrendMode.hour: return AppLocalizations.t('Per jam', 'Hourly');
+      case _TrendMode.day: return AppLocalizations.t('Per hari', 'Daily');
+      case _TrendMode.week: return AppLocalizations.t('Per minggu', 'Weekly');
+      case _TrendMode.month: return AppLocalizations.t('Per bulan', 'Monthly');
+      case _TrendMode.year: return AppLocalizations.t('Per tahun', 'Yearly');
+    }
   }
 
   Widget _trendChartCard() {
@@ -707,6 +710,26 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 12),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: SegmentedButton<_TrendMode>(
+                showSelectedIcon: false,
+                segments: [
+                  ButtonSegment(value: _TrendMode.hour, label: Text(AppLocalizations.t('Jam', 'Hour'))),
+                  ButtonSegment(value: _TrendMode.day, label: Text(AppLocalizations.t('Hari', 'Day'))),
+                  ButtonSegment(value: _TrendMode.week, label: Text(AppLocalizations.t('Minggu', 'Week'))),
+                  ButtonSegment(value: _TrendMode.month, label: Text(AppLocalizations.t('Bulan', 'Month'))),
+                  ButtonSegment(value: _TrendMode.year, label: Text(AppLocalizations.t('Tahun', 'Year'))),
+                ],
+                selected: <_TrendMode>{selectedTrendMode},
+                onSelectionChanged: (selection) {
+                  if (selection.isEmpty || selection.first == selectedTrendMode) return;
+                  setState(() { selectedTrendMode = selection.first; selectedTrendIndex = -1; });
+                  load();
+                },
+              ),
             ),
             const SizedBox(height: 13),
             Wrap(
@@ -868,112 +891,83 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Future<List<_TrendPoint>> _buildTrendPoints(
-    List<Map<String, dynamic>> sales,
-    Map<int, int> saleNetTotals,
-  ) async {
-    final expenses = await DB.expenses(start, end);
-    final days = end.difference(start).inDays;
-
-    final mode = days <= 1
-        ? _TrendMode.hour
-        : days <= 31
-            ? _TrendMode.day
-            : _TrendMode.month;
-
-    final buckets = <String, _TrendAccumulator>{};
-
-    DateTime cursor;
-    if (mode == _TrendMode.month) {
-      cursor = DateTime(start.year, start.month, 1);
-    } else {
-      cursor = start;
+  Future<List<_TrendPoint>> _buildTrendPoints() async {
+    final anchor = selectedDate;
+    late DateTime rangeStart;
+    late DateTime rangeEnd;
+    switch (selectedTrendMode) {
+      case _TrendMode.hour:
+        rangeStart = DateTime(anchor.year, anchor.month, anchor.day);
+        rangeEnd = rangeStart.add(const Duration(days: 1));
+        break;
+      case _TrendMode.day:
+        rangeStart = DateTime(anchor.year, anchor.month, 1);
+        rangeEnd = DateTime(anchor.year, anchor.month + 1, 1);
+        break;
+      case _TrendMode.week:
+        final monday = DateTime(anchor.year, anchor.month, anchor.day)
+            .subtract(Duration(days: DateTime(anchor.year, anchor.month, anchor.day).weekday - 1));
+        rangeStart = monday.subtract(const Duration(days: 77));
+        rangeEnd = monday.add(const Duration(days: 7));
+        break;
+      case _TrendMode.month:
+        rangeStart = DateTime(anchor.year, 1, 1);
+        rangeEnd = DateTime(anchor.year + 1, 1, 1);
+        break;
+      case _TrendMode.year:
+        rangeStart = DateTime(anchor.year - 4, 1, 1);
+        rangeEnd = DateTime(anchor.year + 1, 1, 1);
+        break;
     }
 
-    while (cursor.isBefore(end)) {
-      final key = _trendKey(cursor, mode);
-
-      buckets.putIfAbsent(
-        key,
-        () => _TrendAccumulator(
-          bucket: cursor,
-          label: _trendLabel(cursor, mode),
-        ),
-      );
-
-      if (mode == _TrendMode.hour) {
-        cursor = cursor.add(const Duration(hours: 1));
-      } else if (mode == _TrendMode.day) {
-        cursor = cursor.add(const Duration(days: 1));
-      } else {
-        cursor = DateTime(cursor.year, cursor.month + 1, 1);
-      }
-    }
-
-    for (final sale in sales) {
-      final rawDate = sale['sale_time']?.toString() ?? '';
-      final date = DateTime.tryParse(rawDate);
-
-      if (date == null) continue;
-
-      final key = _trendKey(date.toLocal(), mode);
-      final bucket = buckets[key];
-
-      if (bucket == null) continue;
-
-      final saleId = (sale['id'] as num?)?.toInt();
-      final net = saleId == null
-          ? (sale['total'] as num?)?.toInt() ?? 0
-          : saleNetTotals[saleId] ??
-              (sale['total'] as num?)?.toInt() ??
-              0;
-
-      bucket.omzet += net;
-    }
-
-    for (final expense in expenses) {
-      final status = (expense['payment_status'] ?? '')
-          .toString()
-          .trim()
-          .toLowerCase();
-
-      if (status != 'lunas' && status != 'sudah dibayar') {
-        continue;
-      }
-
-      final rawDate = expense['expense_date']?.toString() ?? '';
-      var date = DateTime.tryParse(rawDate);
-
-      if (date == null) continue;
-
-      date = date.toLocal();
-
-      // Data pengeluaran hanya menyimpan tanggal, bukan jam.
-      // Pada mode per jam ditempatkan di ujung hari agar tidak
-      // terlihat seperti biaya terjadi di awal hari.
-      if (mode == _TrendMode.hour) {
-        date = DateTime(date.year, date.month, date.day, 23);
-      }
-
-      final key = _trendKey(date, mode);
-      final bucket = buckets[key];
-
-      if (bucket == null) continue;
-
-      bucket.biaya += (expense['amount'] as num?)?.toInt() ?? 0;
-    }
-
-    return buckets.values
-        .map(
-          (bucket) => _TrendPoint(
-            bucket: bucket.bucket,
-            label: bucket.label,
-            omzet: bucket.omzet,
-            biaya: bucket.biaya,
-            bersih: bucket.omzet - bucket.biaya,
-          ),
-        )
+    final summary = await DB.rangeSummary(rangeStart, rangeEnd);
+    final sales = (summary['sales'] as List)
+        .map((e) => Map<String, dynamic>.from(e as Map))
         .toList();
+    final saleNetTotals = <int, int>{};
+    for (final sale in sales) {
+      final id = (sale['id'] as num?)?.toInt();
+      if (id == null) continue;
+      final gross = (sale['total'] as num?)?.toInt() ?? 0;
+      final returned = await DB.returnedAmount(id);
+      saleNetTotals[id] = gross - returned;
+    }
+    final expenses = await DB.expenses(rangeStart, rangeEnd);
+    final buckets = <String, _TrendAccumulator>{};
+    var cursor = rangeStart;
+    if (selectedTrendMode == _TrendMode.week) {
+      cursor = rangeStart;
+    }
+    while (cursor.isBefore(rangeEnd)) {
+      final key = _trendKey(cursor, selectedTrendMode);
+      buckets.putIfAbsent(key, () => _TrendAccumulator(bucket: cursor, label: _trendLabel(cursor, selectedTrendMode)));
+      switch (selectedTrendMode) {
+        case _TrendMode.hour: cursor = cursor.add(const Duration(hours: 1)); break;
+        case _TrendMode.day: cursor = cursor.add(const Duration(days: 1)); break;
+        case _TrendMode.week: cursor = cursor.add(const Duration(days: 7)); break;
+        case _TrendMode.month: cursor = DateTime(cursor.year, cursor.month + 1, 1); break;
+        case _TrendMode.year: cursor = DateTime(cursor.year + 1, 1, 1); break;
+      }
+    }
+    for (final sale in sales) {
+      final date = DateTime.tryParse(sale['sale_time']?.toString() ?? '')?.toLocal();
+      if (date == null) continue;
+      final bucket = buckets[_trendKey(date, selectedTrendMode)];
+      if (bucket == null) continue;
+      final id = (sale['id'] as num?)?.toInt();
+      bucket.omzet += id == null ? ((sale['total'] as num?)?.toInt() ?? 0) : (saleNetTotals[id] ?? 0);
+    }
+    for (final expense in expenses) {
+      final status = (expense['payment_status'] ?? '').toString().trim().toLowerCase();
+      if (status != 'lunas' && status != 'sudah dibayar') continue;
+      final parsed = DateTime.tryParse(expense['expense_date']?.toString() ?? '');
+      if (parsed == null) continue;
+      var date = parsed.toLocal();
+      if (selectedTrendMode == _TrendMode.hour) date = DateTime(date.year, date.month, date.day, 23);
+      final bucket = buckets[_trendKey(date, selectedTrendMode)];
+      if (bucket != null) bucket.biaya += (expense['amount'] as num?)?.toInt() ?? 0;
+    }
+    return buckets.values.map((b) => _TrendPoint(bucket: b.bucket, label: b.label, omzet: b.omzet, biaya: b.biaya, bersih: b.omzet - b.biaya)).toList();
   }
 
   String _trendKey(DateTime date, _TrendMode mode) {
@@ -989,7 +983,11 @@ class _DashboardPageState extends State<DashboardPage> {
           '${date.month.toString().padLeft(2, '0')}-'
           '${date.day.toString().padLeft(2, '0')}';
     }
-
+    if (mode == _TrendMode.week) {
+      final monday = DateTime(date.year, date.month, date.day).subtract(Duration(days: date.weekday - 1));
+      return '${monday.year.toString().padLeft(4, '0')}-${monday.month.toString().padLeft(2, '0')}-${monday.day.toString().padLeft(2, '0')}';
+    }
+    if (mode == _TrendMode.year) return date.year.toString();
     return '${date.year.toString().padLeft(4, '0')}-'
         '${date.month.toString().padLeft(2, '0')}';
   }
@@ -1003,15 +1001,24 @@ class _DashboardPageState extends State<DashboardPage> {
       return '${date.day.toString().padLeft(2, '0')}/'
           '${date.month.toString().padLeft(2, '0')}';
     }
-
+    if (mode == _TrendMode.week) {
+      final endOfWeek = date.add(const Duration(days: 6));
+      return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}-${endOfWeek.day.toString().padLeft(2, '0')}/${endOfWeek.month.toString().padLeft(2, '0')}';
+    }
+    if (mode == _TrendMode.year) return date.year.toString();
     return '${date.month.toString().padLeft(2, '0')}/'
         '${date.year.toString().substring(2)}';
   }
 
   Widget _quick(String title, IconData icon, String action) {
+    final isBackup = action == 'backup';
     return Card(
       clipBehavior: Clip.antiAlias,
+      color: isBackup ? const Color(0xFF1877D2) : null,
+      elevation: isBackup ? 3 : 1,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       child: InkWell(
+        borderRadius: BorderRadius.circular(14),
         onTap: () => widget.onQuickAccess?.call(action),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -1021,10 +1028,10 @@ class _DashboardPageState extends State<DashboardPage> {
                 width: 38,
                 height: 38,
                 decoration: BoxDecoration(
-                  color: redSoft,
+                  color: isBackup ? Colors.white.withValues(alpha: 0.18) : redSoft,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(icon, color: red, size: 20),
+                child: Icon(icon, color: isBackup ? Colors.white : red, size: 20),
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -1032,10 +1039,10 @@ class _DashboardPageState extends State<DashboardPage> {
                   title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: isBackup ? Colors.white : null),
                 ),
               ),
-              const Icon(Icons.chevron_right_rounded, size: 19, color: inkMuted),
+              Icon(Icons.chevron_right_rounded, size: 19, color: isBackup ? Colors.white70 : inkMuted),
             ],
           ),
         ),
@@ -2217,7 +2224,9 @@ class _DashboardPageState extends State<DashboardPage> {
 enum _TrendMode {
   hour,
   day,
+  week,
   month,
+  year,
 }
 
 class _TrendPoint {

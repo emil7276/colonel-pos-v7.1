@@ -13,6 +13,7 @@ import '../reports/report_page.dart';
 import '../settings/settings_page.dart';
 import '../settings/menu_page.dart';
 import '../settings/printer_page.dart';
+import '../settings/backup_page.dart';
 import '../settings/finance_page.dart';
 import 'dashboard_page.dart';
 
@@ -137,10 +138,11 @@ String _trialLabel() {
         break;
       case 'printer':
         if (widget.role != 'Administrator') return;
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const PrinterPage()),
-        );
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const PrinterPage()));
+        break;
+      case 'backup':
+        if (widget.role != 'Administrator') return;
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const BackupPage()));
         break;
     }
   }

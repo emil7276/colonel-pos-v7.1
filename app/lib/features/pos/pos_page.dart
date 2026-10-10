@@ -1,5 +1,9 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'dart:io';
+import 'dart:typed_data';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:printing/printing.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants.dart';
@@ -51,6 +55,64 @@ class PosPageState extends State<PosPage> {
   void initState() {
     super.initState();
     load();
+  }
+
+  Future<void> _shareReceipt(SaleModel sale, {required bool asImage}) async {
+    try {
+      final pdfBytes = await generateReceiptPdfBytes(sale);
+      final dir = await getTemporaryDirectory();
+      final stamp = DateTime.now().millisecondsSinceEpoch;
+      late final File file;
+      if (asImage) {
+        final raster = await Printing.raster(pdfBytes, pages: const [0]).first;
+        final png = await raster.toPng();
+        file = File('${dir.path}/struk_${sale.no}_$stamp.png');
+        await file.writeAsBytes(png, flush: true);
+      } else {
+        file = File('${dir.path}/struk_${sale.no}_$stamp.pdf');
+        await file.writeAsBytes(pdfBytes, flush: true);
+      }
+      await Share.shareXFiles(
+        [XFile(file.path, mimeType: asImage ? 'image/png' : 'application/pdf')],
+        text: 'Struk transaksi ${sale.no} - ${rp(sale.total)}',
+        subject: 'Struk transaksi ${sale.no}',
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.t('Gagal membagikan struk: $e', 'Failed to share receipt: $e'))),
+        );
+      }
+    }
+  }
+
+  Future<void> _showReceiptShareOptions(SaleModel sale) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.picture_as_pdf_rounded, color: Color(0xFFD71920)),
+                title: Text(AppLocalizations.t('Bagikan sebagai PDF', 'Share as PDF')),
+                subtitle: Text(AppLocalizations.t('Pilih WhatsApp, Telegram, email, atau aplikasi lain', 'Choose WhatsApp, Telegram, email, or another app')),
+                onTap: () { Navigator.pop(sheetContext); _shareReceipt(sale, asImage: false); },
+              ),
+              ListTile(
+                leading: const Icon(Icons.image_rounded, color: Color(0xFF1877D2)),
+                title: Text(AppLocalizations.t('Bagikan sebagai gambar', 'Share as image')),
+                subtitle: Text(AppLocalizations.t('Halaman pertama struk menjadi PNG', 'First receipt page as PNG')),
+                onTap: () { Navigator.pop(sheetContext); _shareReceipt(sale, asImage: true); },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Future<void> load() async {
@@ -734,6 +796,11 @@ class PosPageState extends State<PosPage> {
                 AppLocalizations.t('Tutup', 'Close'),
               ),
             ),
+            OutlinedButton.icon(
+              onPressed: () => _showReceiptShareOptions(sale),
+              icon: const Icon(Icons.share_rounded, size: 18),
+              label: Text(AppLocalizations.t('Bagikan', 'Share')),
+            ),
             FilledButton(
               onPressed: () async {
                 Navigator.pop(
@@ -1064,6 +1131,11 @@ class PosPageState extends State<PosPage> {
                 ),
                 child:
                     Text(AppLocalizations.t('Tutup', 'Close')),
+              ),
+              OutlinedButton.icon(
+                onPressed: () => _showReceiptShareOptions(sale),
+                icon: const Icon(Icons.share_rounded, size: 18),
+                label: Text(AppLocalizations.t('Bagikan', 'Share')),
               ),
               FilledButton(
                 onPressed: () async {
@@ -1553,14 +1625,21 @@ class PosPageState extends State<PosPage> {
                                       itemCount: items.length,
                                       itemBuilder: (context, index) {
                                         final option = items[index];
-                                        return ListTile(
-                                          dense: true,
-                                          title: Text(
-                                            option,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
+                                        return Material(
+                                          color: index.isEven
+                                              ? Colors.white
+                                              : const Color(0xFFF4F4F6),
+                                          child: ListTile(
+                                            dense: true,
+                                            minVerticalPadding: 7,
+                                            title: Text(
+                                              option,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(fontSize: 15.5, fontWeight: FontWeight.w600),
+                                            ),
+                                            onTap: () => onSelected(option),
                                           ),
-                                          onTap: () => onSelected(option),
                                         );
                                       },
                                     ),

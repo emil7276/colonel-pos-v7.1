@@ -1,5 +1,6 @@
 import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
 import 'package:pdf/pdf.dart';
+import 'dart:typed_data';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
@@ -474,6 +475,11 @@ Future<void> printExpenseReceipt(
     name: 'CP POS Hutang',
     onLayout: (_) => doc.save(),
   );
+}
+
+Future<Uint8List> generateReceiptPdfBytes(SaleModel sale) async {
+  final doc = await _buildReceipt(sale);
+  return Uint8List.fromList(await doc.save());
 }
 
 Future<void> printReceipt(SaleModel sale) async {
