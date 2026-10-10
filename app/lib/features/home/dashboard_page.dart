@@ -230,7 +230,7 @@ class _DashboardPageState extends State<DashboardPage> {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
         children: [
-          AiAssistantPanel(role: widget.role),
+          AiAssistantPanel(username: widget.username, role: widget.role),
           const SizedBox(height: 4),
 
           Row(

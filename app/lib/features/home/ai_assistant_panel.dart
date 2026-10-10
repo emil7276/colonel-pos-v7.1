@@ -6,8 +6,9 @@ import '../../core/utils.dart';
 import '../../data/database.dart';
 
 class AiAssistantPanel extends StatefulWidget {
+  final String username;
   final String role;
-  const AiAssistantPanel({super.key, required this.role});
+  const AiAssistantPanel({super.key, required this.username, required this.role});
 
   @override
   State<AiAssistantPanel> createState() => _AiAssistantPanelState();
@@ -29,6 +30,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
   List<Map<String, dynamic>> _questionBank = [];
   late final AnimationController _typingController;
   String _conversationStyle = 'aku';
+  int _fallbackReplyCount = 0;
 
   bool get _en => AppLocalizations.isEnglish;
   bool get _admin => widget.role == 'Administrator';
@@ -422,6 +424,109 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
   }
 
   String? _socialReply(String q) {
+    // COLONEL_V72_CONVERSATION_HELP_V1
+    // Normalize punctuation/spacing so casual spellings are matched consistently.
+    final normalized = q.toLowerCase()
+        .replaceAll(RegExp(r'[^a-z0-9\s]'), ' ')
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .trim();
+    final addressMatch = RegExp(r'\b(bro|sis|mas|mbak|mba|pak|bapak|bu|ibu|kang|lur|min|kak)\b')
+        .firstMatch(normalized);
+    final addressSuffix = addressMatch == null ? '' : ' ${addressMatch.group(1)}';
+    bool hasWord(List<String> words) => words.any((word) =>
+        RegExp('(?:^|\\s)' + RegExp.escape(word) + r'(?:$|\s)')
+            .hasMatch(normalized));
+
+    // Common Islamic expressions and everyday replies.
+    if (hasWord(['assalamualaikum', 'assalamu alaikum', 'salamualaikum', 'assalamuallaikum'])) {
+      return _en
+          ? 'Waalaikumussalam warahmatullahi wabarakatuh 😊 How are you today? I can help with the shop or we can chat.'
+          : 'Waalaikumsalam warahmatullahi wabarakatuh$addressSuffix 😊 Semoga sehat, lancar, dan penuh berkah. Ada yang ingin dibantu atau mau ngobrol dulu?';
+    }
+    if (hasWord(['waalaikumsalam', 'waalaikumussalam', 'waalaikum salam', 'wa alaikum salam'])) {
+      return _en ? 'Thank you 😊 What can I help you with today?' : 'Sama-sama 😊 Semoga urusannya lancar. Ada yang bisa aku bantu?';
+    }
+    if (hasWord(['alhamdulillah', 'hamdulillah'])) {
+      return _en ? 'Alhamdulillah 😊 I hope things keep going well. Is there good news, or would you like to share how your day is going?' : 'Alhamdulillah 😊 Semoga nikmat dan urusannya terus diberi kelancaran serta keberkahan. Ada kabar baik yang ingin diceritakan?';
+    }
+    if (hasWord(['bismillah', 'bis millah', 'bismilah'])) {
+      return _en ? 'Bismillah 😊 I hope it goes smoothly. What are we starting today?' : 'Bismillah 😊 Semoga dimudahkan dan dilancarkan. Mau mulai mengerjakan apa hari ini?';
+    }
+    if (hasWord(['insyaallah', 'inshaallah', 'insya allah', 'insha allah'])) {
+      return _en ? 'InshaAllah 😊 I hope it works out well. Let me know if you want help preparing for it.' : 'Insyaallah 😊 Semoga benar-benar dimudahkan. Kalau ada yang perlu disiapkan atau direncanakan, aku bantu, ya.';
+    }
+    if (hasWord(['aamiin', 'amin', 'ameen', 'aamiiin'])) {
+      return _en ? 'Ameen, may it be so 😊' : 'Aamiin ya Rabbal ‘alamin 🤲😊 Semoga doa baiknya dikabulkan.';
+    }
+    if (hasWord(['masyaallah', 'masya allah', 'mashaallah', 'masha allah'])) {
+      return _en ? 'MashaAllah 😊 That is lovely to hear. What happened?' : 'Masyaallah 😊 Semoga menjadi kebaikan dan keberkahan. Ada cerita apa nih?';
+    }
+    if (hasWord(['subhanallah', 'subhan allah'])) {
+      return _en ? 'SubhanAllah 😊 What made you say that?' : 'Subhanallah 😊 Ada hal yang membuat kamu takjub, ya? Cerita dong.';
+    }
+    if (hasWord(['astaghfirullah', 'astagfirullah', 'astagfirullahaladzim'])) {
+      return _en ? 'Astaghfirullah. I hope things get easier. Would you like to tell me what happened?' : 'Astaghfirullah. Semoga diberi ketenangan dan jalan keluar yang baik. Kalau ada yang mengganjal, boleh cerita.';
+    }
+    if (hasWord(['jazakallah', 'jazakumullah', 'barakallah', 'barakallahu', 'syukron', 'syukran'])) {
+      return _en ? 'Wa iyyakum 😊 Thank you, and may goodness return to you too.' : 'Wa iyyakum, sama-sama 😊 Semoga kebaikan dan keberkahan juga kembali untukmu.';
+    }
+    if (hasWord(['innalillahi', 'innalillahiwainnailaihirojiun'])) {
+      return _en ? 'Inna lillahi wa inna ilayhi raji’un. I’m sorry to hear that. May you and your family be given strength.' : 'Innalillahi wa inna ilaihi raji’un. Turut berduka, ya. Semoga yang ditinggalkan diberi kekuatan dan ketabahan.';
+    }
+
+    // Single-word forms of address, e.g. "Min", "Bro!", or "Kang..."
+    // Punctuation is already normalized above.
+    final singleAddress = RegExp(
+      r'^(bro|sis|mas|mbak|mba|pak|bapak|bu|ibu|kang|lur|min|kak)$',
+    ).firstMatch(normalized);
+
+    if (singleAddress != null) {
+      final address = singleAddress.group(1)!;
+      return _en
+          ? 'Yes, $address 😊 What can I help you with?'
+          : 'Iya, $address 😊 Ada yang bisa aku bantu? Mau ngobrol santai juga boleh.';
+    }
+
+    // Exact short greetings; avoid matching words that merely contain hai.
+    final greeting = RegExp(r'^(hai|halo|hello|hi)(?:\s+(bro|sis|mas|mbak|mba|pak|bapak|bu|ibu|kang|lur|min|kak))?$')
+        .firstMatch(normalized);
+    if (greeting != null) {
+      final salutation = greeting.group(1)!;
+      final address = greeting.group(2);
+      final shown = salutation[0].toUpperCase() + salutation.substring(1);
+      return address == null
+          ? (_en ? 'Hi! 😊 I am ready to help, or we can chat.' : '$shown! 😊 Aku siap membantu atau ngobrol santai. Ada yang ingin kamu bahas?')
+          : (_en ? '$shown $address! 😊 What can I help you with?' : '$shown $address! 😊 Ada yang bisa aku bantu?');
+    }
+
+    // Restore intent must be checked before backup intent.
+    final wantsRestore = hasWord([
+      'restore', 'pulihkan', 'pemulihan', 'mengembalikan',
+    ]) || normalized.contains('restore backup');
+
+    if (wantsRestore) {
+      return _en
+          ? 'To restore locally, open Settings → Backup & Restore → RESTORE and select a valid Colonel POS .json backup. For cloud restore, tap RESTORE FROM GOOGLE DRIVE and choose the backup. Restore replaces current data, so verify the file and version and make a fresh backup first.'
+          : 'Cara restore: buka Pengaturan → Backup & Restore → tekan RESTORE lalu pilih file backup Colonel POS berformat .json. Untuk cloud, tekan RESTORE DARI GOOGLE DRIVE lalu pilih file. Restore mengganti data saat ini, jadi periksa file dan kecocokan versi serta buat backup terbaru terlebih dahulu.';
+    }
+
+    final wantsBackup = hasWord([
+      'backup', 'cadangkan', 'mencadangkan', 'backupnya',
+    ]);
+
+    if (wantsBackup) {
+      return _en
+          ? 'To create a backup, open Settings → Backup & Restore → BACKUP and choose where to save the .json file. For a cloud copy, use BACKUP TO GOOGLE DRIVE. Keep a safe copy. RESTORE replaces current app data, so verify the file before restoring.'
+          : 'Cara backup data: buka Pengaturan → Backup & Restore → tekan BACKUP, lalu pilih lokasi penyimpanan file .json. Untuk salinan cloud, tekan BACKUP KE GOOGLE DRIVE. Simpan salinan di tempat aman. Ingat, RESTORE mengganti data aplikasi saat ini, jadi periksa file sebelum memulihkan.';
+    }
+
+    // Receipt sharing uses the existing PDF/JPG share sheet in POS.
+    if (RegExp(r'\b(struk|receipt|nota)\b').hasMatch(normalized) &&
+        RegExp(r'\b(wa|whatsapp|kirim|bagikan|share|send|gambar|foto|pdf|jpg|jpeg)\b').hasMatch(normalized)) {
+      return _en
+          ? 'To send a receipt, open the transaction in POS and tap its share receipt option. Choose Share as PDF or Share as image (JPG). In Android’s share sheet, select WhatsApp, choose the contact, check the attachment, then send. If WhatsApp is not listed, install/update it or use the system share menu.'
+          : 'Cara kirim struk ke WhatsApp: buka transaksi di halaman POS/riwayat transaksi, lalu pilih opsi bagikan struk. Pilih “Bagikan sebagai PDF” atau “Bagikan sebagai gambar” (JPG). Saat menu berbagi Android muncul, pilih WhatsApp, pilih kontak, periksa lampirannya, lalu tekan Kirim. Kalau WhatsApp tidak muncul, pastikan aplikasinya terpasang/terbarui dan coba menu berbagi lagi.';
+    }
     if (_hasAny(q, ['siapa yang ngajarin', 'siapa yg ngajarin', 'yang ngajarin kamu', 'siapa gurumu', 'who taught you', 'who trained you'])) {
       return _en ? 'I was trained using many examples of language and knowledge, not by just one teacher. 😊 For your shop, I should still check the saved records rather than pretend to know numbers I have not verified.'
           : 'Hehe, aku dilatih menggunakan banyak contoh bahasa dan pengetahuan, Min, jadi bukan cuma diajari satu guru. 😄 Kalau urusan toko Min, aku tetap perlu memeriksa data yang tersimpan supaya nggak asal jawab.';
@@ -704,6 +809,68 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
     }
   }
 
+
+  String _unknownReply() {
+    final id = <String>[
+      "Hmm, coba ceritain sedikit lagi maksudmu 😊 Biar aku nggak salah nangkep.",
+      "Wah, aku belum nyambung nih 😄 Maksudmu bagian yang mana?",
+      "Boleh jelasin sedikit lagi? Aku ingin jawab sesuai maksudmu.",
+      "Hehe, sepertinya aku belum menangkap maksudmu 😅 Coba dengan cara lain, yuk.",
+      "Aku simak, kok 😊 Tambahin sedikit konteks, ya.",
+      "Hmm, aku masih agak bingung. Bisa kasih contoh?",
+      "Bisa jadi aku salah paham. Ceritain lagi, ya.",
+      "Oke, kita coba dari awal 😊 Kamu ingin membahas apa?",
+      "Aku mau bantu, nih. Kasih sedikit petunjuk, dong.",
+      "Sepertinya aku perlu penjelasan tambahan. Santai aja, ceritain pelan-pelan.",
+      "Belum ketemu maksudnya, nih 😅 Coba jelasin sedikit lagi.",
+      "Daripada asal jawab, boleh aku minta sedikit penjelasan?",
+      "Hmm, bisa diperjelas? Aku nggak mau menebak-nebak.",
+      "Kasih aku gambaran sedikit lagi, ya. Kita cari tahu bareng.",
+      "Aku belum paham betul, tapi kita bisa coba lagi 😊",
+      "Kayaknya ada konteks yang belum aku tangkap. Ceritain sedikit, boleh?",
+      "Boleh banget kita bahas. Aku cuma perlu sedikit konteks.",
+      "Aku belum bisa menjawab dengan yakin. Apa yang ingin kamu capai?",
+      "Kalau aku salah menangkap, koreksi aja, ya 😄",
+      "Aku nggak mau sok tahu lalu malah menyesatkanmu.",
+      "Kamu mau mencari informasi, minta saran, atau sekadar ngobrol?",
+      "Aku belum memahami kalimat itu. Bisa dibuat lebih sederhana?",
+      "Nggak apa-apa, kita coba cara lain. Bagian mana yang ingin dibahas?",
+      "Aku di sini untuk membantu. Ceritakan sedikit lebih banyak, ya.",
+      "Sepertinya aku butuh petunjuk tambahan 😄",
+      "Kalau tentang toko, sebutkan bagian yang ingin dicek. Kalau mau ngobrol juga boleh.",
+      "Aku belum yakin dengan maksud pertanyaanmu. Coba susun ulang, ya.",
+      "Biar nggak salah paham, apa maksudmu dengan pertanyaan tadi?",
+      "Kita bisa pecah pertanyaannya jadi lebih sederhana.",
+      "Hmm, aku belum paham sepenuhnya. Lanjutkan ceritamu, yuk."
+    ];
+    final en = <String>[
+      "Hmm, could you tell me a little more? I don't want to misunderstand 😊",
+      "I haven't quite got you yet. Which part do you mean?",
+      "Could you add some context so I can help?",
+      "I might be missing something 😅 Could you phrase that another way?",
+      "I'm listening. Tell me a little more and we'll work it out.",
+      "I don't want to guess and give you the wrong answer. Could you clarify?",
+      "Could you give me an example?",
+      "Let's try again 😊 What are you hoping to find out?",
+      "I may have misunderstood. Could you explain a little more?",
+      "No worries—we can approach it another way.",
+      "I can't confidently answer that yet. A little more detail would help.",
+      "Could you share what happened before this question?",
+      "I'm not quite following yet, but I'm happy to try again.",
+      "Would you mind narrowing it down a little?",
+      "I don't have enough context to answer accurately.",
+      "Let's break it into smaller pieces. What's the main thing you want to know?",
+      "I may be taking that the wrong way. Feel free to correct me.",
+      "Could you describe what you're trying to do?",
+      "If this is about your store, tell me what you'd like to check. We can also chat.",
+      "I'm not sure what you mean yet. Try asking another way."
+    ];
+    final choices = _en ? en : id;
+    final i = _fallbackReplyCount % choices.length;
+    _fallbackReplyCount++;
+    return choices[i];
+  }
+
   Future<String> _reply(String raw) async {
     final originalQ = raw.toLowerCase().trim();
     final q = _normalizeQuestionFromBank(originalQ);
@@ -761,9 +928,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
       return _en ? 'For subscription or license details, check the official Colonel POS information or contact the application provider or your Administrator. I do not have verified current pricing or plans, so I do not want to guess. Verify payment details through an official channel before paying.'
           : 'Untuk informasi langganan atau lisensi, periksa informasi resmi Colonel POS atau hubungi penyedia aplikasi maupun Administrator. Aku belum memiliki informasi terverifikasi tentang harga atau paket, jadi aku tidak ingin menebak. Pastikan detail pembayaran melalui kanal resmi sebelum membayar.';
     }
-    return _en
-        ? 'I could not match that question to a data report or help topic yet. Try asking, for example: “How much were sales today?”, “How much QRIS today?”, “How many items are in stock?”, or “Is customer Budi Rahman recorded?” I will only report data that is actually saved and accessible.'
-        : 'Aku belum menemukan jenis laporan atau panduan yang cocok dengan pertanyaan itu. Coba tanyakan, misalnya: “Omset aku berapa, Min?”, “Total QRIS hari ini berapa?”, “Stok kopi berapa?”, atau “Ada pelanggan Budi Rahman nggak?” Aku hanya akan menyampaikan data yang benar-benar tersimpan dan bisa diakses.';
+    return _unknownReply();
   }
 
   void _scrollToBottom() {
@@ -933,7 +1098,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
                     textInputAction: TextInputAction.send,
                     onSubmitted: (_) => _ask(),
                     decoration: InputDecoration(
-                      hintText: AppLocalizations.t('Omset aku berapa, Min?', 'How much were my sales today?'),
+                      hintText: AppLocalizations.t('Assalamualaikum.. 👋', 'Assalamualaikum.. 👋'),
                       hintStyle: const TextStyle(color: Color(0xFF9CA3AF)),
                       isDense: true,
                       border: const OutlineInputBorder(),
