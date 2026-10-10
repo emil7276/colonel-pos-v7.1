@@ -416,6 +416,81 @@ class _BackupPageState extends State<BackupPage> {
     }
   }
 
+  Future<void> restoreFromGoogleDrive() async {
+    if (working) return;
+    setState(() => working = true);
+    try {
+      final backups = await GoogleDriveBackupService.listBackups();
+      if (!mounted) return;
+      if (backups.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.t('Tidak ada file backup JSON di folder Google Drive.', 'No JSON backups found in the Google Drive folder.'))),
+        );
+        return;
+      }
+      final selected = await showDialog<dynamic>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: Text(AppLocalizations.t('Pilih backup Google Drive', 'Choose Google Drive backup')),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: backups.length,
+              itemBuilder: (context, index) {
+                final item = backups[index];
+                final created = item.createdTime?.toLocal().toString().split('.').first ?? '';
+                return ListTile(
+                  leading: const Icon(Icons.cloud_download_rounded),
+                  title: Text(item.name ?? 'backup.json', maxLines: 2, overflow: TextOverflow.ellipsis),
+                  subtitle: Text(created),
+                  onTap: () => Navigator.pop(dialogContext, item),
+                );
+              },
+            ),
+          ),
+          actions: [TextButton(onPressed: () => Navigator.pop(dialogContext), child: Text(AppLocalizations.t('Batal', 'Cancel')))],
+        ),
+      );
+      if (selected == null || !mounted) return;
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: Text(AppLocalizations.t('Ganti seluruh data?', 'Replace all data?')),
+          content: Text(AppLocalizations.t(
+            'Data di perangkat akan diganti dengan backup Google Drive yang dipilih. Pastikan backup benar dan versi aplikasi sesuai.',
+            'Data on this device will be replaced with the selected Google Drive backup. Make sure it is valid and compatible.',
+          )),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(AppLocalizations.t('Batal', 'Cancel'))),
+            FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(AppLocalizations.t('Restore', 'Restore'))),
+          ],
+        ),
+      );
+      if (confirmed != true || !mounted) return;
+      final bytes = await GoogleDriveBackupService.downloadBackup(selected.id as String);
+      final decoded = jsonDecode(utf8.decode(bytes));
+      if (decoded is! Map<String, dynamic>) {
+        throw Exception(AppLocalizations.t('File backup tidak valid.', 'Invalid backup file.'));
+      }
+      await DB.restoreBackup(decoded);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.t('Restore Google Drive berhasil.', 'Google Drive restore completed.'))),
+        );
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.t('Restore Google Drive gagal: $e', 'Google Drive restore failed: $e'))),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => working = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -479,6 +554,16 @@ class _BackupPageState extends State<BackupPage> {
     onPressed: working ? null : backupToGoogleDrive,
     icon: const Icon(Icons.cloud_upload_rounded),
     label: Text(AppLocalizations.t('BACKUP KE GOOGLE DRIVE', 'BACKUP TO GOOGLE DRIVE')),
+  ),
+),
+const SizedBox(height: 10),
+SizedBox(
+  width: double.infinity,
+  child: OutlinedButton.icon(
+    onPressed: working ? null : restoreFromGoogleDrive,
+    icon: const Icon(Icons.cloud_download_rounded),
+    label: Text(AppLocalizations.t('RESTORE DARI GOOGLE DRIVE', 'RESTORE FROM GOOGLE DRIVE')),
+    style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(54)),
   ),
 ),
 const SizedBox(height: 10),

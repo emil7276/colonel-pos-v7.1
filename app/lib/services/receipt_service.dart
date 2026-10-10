@@ -57,13 +57,13 @@ PdfPageFormat _paperFormat(String paper) {
   return PdfPageFormat(widthPt, heightPt, marginAll: 8);
 }
 
-Future<pw.Document> _buildReceipt(SaleModel sale, {int copies = 1}) async {
+Future<pw.Document> _buildReceipt(SaleModel sale, {int copies = 1, String? paperOverride}) async {
   final name = await storeName();
   final address = await storeAddress();
   final phone = await storePhone();
   final items = await DB.saleItems(sale.id);
   final doc = pw.Document();
-  final format = _paperFormat(await printerPaper());
+  final format = _paperFormat(paperOverride ?? await printerPaper());
 
   for (var copy = 0; copy < copies; copy++) {
     doc.addPage(
@@ -79,6 +79,12 @@ Future<pw.Document> _buildReceipt(SaleModel sale, {int copies = 1}) async {
             pw.Text('NOTA PENJUALAN', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
             pw.Divider(),
             pw.Align(alignment: pw.Alignment.centerLeft, child: pw.Text('${sale.no}\n${sale.time}\nKasir: ${sale.cashier}')),
+            if (sale.customerName.trim().isNotEmpty &&
+                sale.customerName.trim().toLowerCase() != 'pelanggan umum')
+              pw.Align(
+                alignment: pw.Alignment.centerLeft,
+                child: pw.Text('Pelanggan: ${sale.customerName.trim()}'),
+              ),
             pw.SizedBox(height: 7),
             ...items.map((i) => pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -134,6 +140,10 @@ Future<List<int>> _escPosReceipt(SaleModel sale, {required String paper, int cop
     bytes.addAll(generator.text('NOTA PENJUALAN', styles: PosStyles(align: PosAlign.center, bold: true)));
     bytes.addAll(generator.hr());
     bytes.addAll(generator.text('${sale.no}\n${sale.time}\nKasir: ${sale.cashier}'));
+    if (sale.customerName.trim().isNotEmpty &&
+        sale.customerName.trim().toLowerCase() != 'pelanggan umum') {
+      bytes.addAll(generator.text('Pelanggan: ${sale.customerName.trim()}'));
+    }
     bytes.addAll(generator.feed(1));
 
     for (final item in items) {
@@ -477,8 +487,8 @@ Future<void> printExpenseReceipt(
   );
 }
 
-Future<Uint8List> generateReceiptPdfBytes(SaleModel sale) async {
-  final doc = await _buildReceipt(sale);
+Future<Uint8List> generateReceiptPdfBytes(SaleModel sale, {String? paperOverride}) async {
+  final doc = await _buildReceipt(sale, paperOverride: paperOverride);
   return Uint8List.fromList(await doc.save());
 }
 

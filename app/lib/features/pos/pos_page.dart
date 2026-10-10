@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:printing/printing.dart';
+import 'package:image/image.dart' as img;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants.dart';
@@ -59,21 +60,55 @@ class PosPageState extends State<PosPage> {
 
   Future<void> _shareReceipt(SaleModel sale, {required bool asImage}) async {
     try {
-      final pdfBytes = await generateReceiptPdfBytes(sale);
+      // Layout berbagi selalu 58 mm; pengaturan printer tidak diubah.
+      final pdfBytes = await generateReceiptPdfBytes(
+        sale,
+        paperOverride: '58 mm',
+      );
       final dir = await getTemporaryDirectory();
       final stamp = DateTime.now().millisecondsSinceEpoch;
       late final File file;
+
       if (asImage) {
-        final raster = await Printing.raster(pdfBytes, pages: const [0]).first;
-        final png = await raster.toPng();
-        file = File('${dir.path}/struk_${sale.no}_$stamp.png');
-        await file.writeAsBytes(png, flush: true);
+        final raster = await Printing.raster(
+          pdfBytes,
+          pages: const [0],
+          dpi: 203,
+        ).first;
+
+        final renderedPng = await raster.toPng();
+        final decoded = img.decodePng(renderedPng);
+
+        if (decoded == null) {
+          throw StateError('Hasil render struk tidak dapat dibaca.');
+        }
+
+        // Ratakan transparansi ke latar putih untuk mencegah
+        // beberapa aplikasi penerima menampilkan latar hitam.
+        final white = img.Image(
+          width: decoded.width,
+          height: decoded.height,
+          numChannels: 3,
+        );
+        img.fill(white, color: img.ColorRgb8(255, 255, 255));
+        img.compositeImage(white, decoded);
+
+        final jpegBytes = img.encodeJpg(white, quality: 92);
+        file = File('${dir.path}/struk_${sale.no}_$stamp.jpg');
+        await file.writeAsBytes(jpegBytes, flush: true);
       } else {
+        // Jalur PDF tetap menggunakan byte PDF asli.
         file = File('${dir.path}/struk_${sale.no}_$stamp.pdf');
         await file.writeAsBytes(pdfBytes, flush: true);
       }
+
       await Share.shareXFiles(
-        [XFile(file.path, mimeType: asImage ? 'image/png' : 'application/pdf')],
+        [
+          XFile(
+            file.path,
+            mimeType: asImage ? 'image/jpeg' : 'application/pdf',
+          ),
+        ],
         text: 'Struk transaksi ${sale.no} - ${rp(sale.total)}',
         subject: 'Struk transaksi ${sale.no}',
       );
@@ -105,7 +140,7 @@ class PosPageState extends State<PosPage> {
               ListTile(
                 leading: const Icon(Icons.image_rounded, color: Color(0xFF1877D2)),
                 title: Text(AppLocalizations.t('Bagikan sebagai gambar', 'Share as image')),
-                subtitle: Text(AppLocalizations.t('Halaman pertama struk menjadi PNG', 'First receipt page as PNG')),
+                subtitle: Text(AppLocalizations.t('Struk thermal 58 mm dalam gambar JPG', '58 mm thermal receipt as JPG image')),
                 onTap: () { Navigator.pop(sheetContext); _shareReceipt(sale, asImage: true); },
               ),
             ],
