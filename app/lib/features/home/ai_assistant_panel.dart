@@ -147,10 +147,25 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
   }
 
   bool _isCustomerQuestion(String q) {
+    if (_hasAny(q, [
+      'hutang usaha', 'utang usaha', 'hutang toko', 'utang toko',
+      'hutang supplier', 'utang supplier', 'hutang ke supplier',
+      'utang ke supplier', 'hutang kepada supplier',
+      'utang kepada supplier', 'hutang pada supplier',
+      'utang pada supplier', 'business debt', 'supplier debt',
+      'payable', 'payables',
+    ])) return false;
     if (_hasAny(q, ['berapa pelanggan', 'jumlah pelanggan', 'customer count'])) return false;
     if (_hasAny(q, ['pelanggan', 'customer', 'nama pelanggan', 'customer name'])) return true;
     final debt = _hasAny(q, ['utang', 'hutang', 'piutang', 'owes', 'debt']);
-    if (debt && !_hasAny(q, ['hutang usaha', 'hutang toko', 'hutang supplier', 'business debt', 'supplier debt'])) {
+    if (debt && !_hasAny(q, [
+      'hutang usaha', 'utang usaha', 'hutang toko', 'utang toko',
+      'hutang supplier', 'utang supplier', 'hutang ke supplier',
+      'utang ke supplier', 'hutang kepada supplier',
+      'utang kepada supplier', 'hutang pada supplier',
+      'utang pada supplier', 'business debt', 'supplier debt',
+      'payable', 'payables',
+    ])) {
       final words = _extractTerms(q, customer: true);
       return words.isNotEmpty;
     }
@@ -163,7 +178,11 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
   bool _adminOnlyQuestion(String q) {
     return _hasAny(q, [
       'laba', 'rugi', 'profit', 'loss', 'pengeluaran', 'expenses',
-      'hutang usaha', 'hutang toko', 'hutang supplier', 'payable',
+      'hutang usaha', 'utang usaha', 'hutang toko', 'utang toko',
+      'hutang supplier', 'utang supplier', 'hutang ke supplier',
+      'utang ke supplier', 'hutang kepada supplier',
+      'utang kepada supplier', 'hutang pada supplier',
+      'utang pada supplier', 'payable', 'payables',
       'database backup', 'backup database', 'restore database',
       'pengaturan pengguna', 'tambah pengguna', 'hapus pengguna',
       'hak akses', 'aktivasi lisensi', 'pengaturan toko',
@@ -288,8 +307,13 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
         _hasAny(q, ['berapa', 'jumlah', 'total', 'laporan', 'hari ini', 'kemarin', 'bulan ini', 'bulan lalu', 'tahun ini', 'minggu ini', 'amount', 'count', 'how much', 'how many']));
     final isProfit = _hasAny(q, ['laba', 'rugi', 'profit', 'loss']);
     final isExpense = _hasAny(q, ['pengeluaran', 'biaya operasional', 'expenses', 'expense total']);
-    final isPayable = _hasAny(q, ['hutang usaha', 'hutang toko', 'hutang supplier', 'payable', 'payables']) ||
-        (_hasAny(q, ['hutang', 'utang']) && !_isCustomerQuestion(q));
+    final isPayable = _hasAny(q, [
+      'hutang usaha', 'utang usaha', 'hutang toko', 'utang toko',
+      'hutang supplier', 'utang supplier', 'hutang ke supplier',
+      'utang ke supplier', 'hutang kepada supplier',
+      'utang kepada supplier', 'hutang pada supplier',
+      'utang pada supplier', 'payable', 'payables',
+    ]) || (_hasAny(q, ['hutang', 'utang']) && !_isCustomerQuestion(q));
     final isReceivable = _hasAny(q, ['bayar tunda', 'bayar nanti', 'piutang', 'receivable', 'unpaid customer']);
     final isReturnReport = q.contains('retur') && _hasAny(q, ['berapa', 'jumlah', 'total', 'nominal', 'laporan', 'hari ini', 'kemarin', 'bulan ini', 'bulan lalu', 'tahun ini', 'amount', 'count', 'how much', 'how many']);
     final isQris = isQrisReport;
@@ -536,6 +560,14 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
   }
 
   String? _detectBankIntent(String q) {
+    if (_hasAny(q, [
+      'hutang usaha', 'utang usaha', 'hutang toko', 'utang toko',
+      'hutang supplier', 'utang supplier', 'hutang ke supplier',
+      'utang ke supplier', 'hutang kepada supplier',
+      'utang kepada supplier', 'hutang pada supplier',
+      'utang pada supplier', 'payable', 'payables',
+    ])) return 'hutang_usaha';
+
     // Keep named-customer searches on their existing database path.
     if (_isCustomerQuestion(q) &&
         !_hasAny(q, [
@@ -605,10 +637,6 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
     if (_hasAny(q, ['laba', 'rugi', 'profit', 'loss', 'ringkasan keuangan'])) {
       return 'ringkasan_keuangan';
     }
-    if (_hasAny(q, [
-      'hutang usaha', 'utang usaha', 'hutang toko', 'utang toko',
-      'hutang supplier', 'utang supplier', 'payable', 'payables',
-    ])) return 'hutang_usaha';
 
     if (_hasAny(q, [
       'bayar tunda', 'bayar nanti', 'piutang', 'receivable',
