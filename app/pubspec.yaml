@@ -40,6 +40,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/audio/
+    - lib/features/home/assistant_question_bank_v72.json
     - assets/images/cp_logo.png
     - assets/images/cp_pos_transaction.png
     - assets/images/cart_icon.png

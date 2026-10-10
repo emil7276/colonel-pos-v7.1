@@ -1,0 +1,5002 @@
+[
+  {
+    "question": "berapa omzet penjualan hari ini?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS hari ini?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai hari ini?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer hari ini?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur hari ini?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran hari ini?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba hari ini?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha hari ini?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang hari ini?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa stok produk?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "berapa harga produk?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris hari ini?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan hari ini?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa data pelanggan?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa status QRIS?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "berapa printer?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "berapa login?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "berapa keamanan data?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "berapa cara retur?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "berapa backup data?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan kemarin?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS kemarin?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai kemarin?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer kemarin?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur kemarin?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran kemarin?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba kemarin?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha kemarin?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang kemarin?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa stok produk ya?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "berapa harga produk ya?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris kemarin?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan kemarin?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa data pelanggan ya?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa status QRIS ya?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "berapa printer ya?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "berapa login ya?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "berapa keamanan data ya?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "berapa cara retur ya?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "berapa backup data ya?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan minggu ini?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS minggu ini?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai minggu ini?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer minggu ini?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur minggu ini?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran minggu ini?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba minggu ini?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha minggu ini?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang minggu ini?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa stok produk dong?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "berapa harga produk dong?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris minggu ini?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan minggu ini?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa data pelanggan dong?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa status QRIS dong?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "berapa printer dong?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "berapa login dong?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "berapa keamanan data dong?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "berapa cara retur dong?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "berapa backup data dong?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan minggu lalu?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS minggu lalu?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai minggu lalu?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer minggu lalu?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur minggu lalu?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran minggu lalu?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba minggu lalu?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha minggu lalu?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang minggu lalu?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa stok produk min?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "berapa harga produk min?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris minggu lalu?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan minggu lalu?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa data pelanggan min?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa status QRIS min?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "berapa printer min?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "berapa login min?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "berapa keamanan data min?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "berapa cara retur min?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "berapa backup data min?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan bulan ini?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS bulan ini?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai bulan ini?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer bulan ini?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur bulan ini?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran bulan ini?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba bulan ini?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha bulan ini?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang bulan ini?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek stok produk?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "tolong cek harga produk?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris bulan ini?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan bulan ini?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "tolong cek data pelanggan?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "tolong cek status QRIS?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "tolong cek printer?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "tolong cek login?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "tolong cek keamanan data?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "tolong cek cara retur?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "tolong cek backup data?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan bulan lalu?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS bulan lalu?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai bulan lalu?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer bulan lalu?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur bulan lalu?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran bulan lalu?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba bulan lalu?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha bulan lalu?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang bulan lalu?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek stok produk ya?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "tolong cek harga produk ya?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris bulan lalu?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan bulan lalu?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "tolong cek data pelanggan ya?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "tolong cek status QRIS ya?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "tolong cek printer ya?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "tolong cek login ya?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "tolong cek keamanan data ya?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "tolong cek cara retur ya?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "tolong cek backup data ya?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan tahun ini?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS tahun ini?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai tahun ini?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer tahun ini?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur tahun ini?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran tahun ini?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba tahun ini?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha tahun ini?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang tahun ini?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek stok produk dong?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "tolong cek harga produk dong?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris tahun ini?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan tahun ini?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "tolong cek data pelanggan dong?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "tolong cek status QRIS dong?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "tolong cek printer dong?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "tolong cek login dong?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "tolong cek keamanan data dong?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "tolong cek cara retur dong?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "tolong cek backup data dong?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan tahun lalu?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS tahun lalu?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai tahun lalu?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer tahun lalu?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur tahun lalu?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran tahun lalu?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba tahun lalu?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha tahun lalu?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang tahun lalu?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek stok produk min?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "tolong cek harga produk min?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris tahun lalu?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan tahun lalu?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "tolong cek data pelanggan min?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "tolong cek status QRIS min?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "tolong cek printer min?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "tolong cek login min?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "tolong cek keamanan data min?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "tolong cek cara retur min?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "tolong cek backup data min?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan periode ini?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS periode ini?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai periode ini?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer periode ini?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur periode ini?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran periode ini?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba periode ini?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha periode ini?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang periode ini?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "bisa cek stok produk?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "bisa cek harga produk?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris periode ini?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan periode ini?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "bisa cek data pelanggan?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "bisa cek status QRIS?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "bisa cek printer?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "bisa cek login?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "bisa cek keamanan data?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "bisa cek cara retur?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "bisa cek backup data?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan periode sebelumnya?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS periode sebelumnya?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai periode sebelumnya?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer periode sebelumnya?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur periode sebelumnya?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran periode sebelumnya?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba periode sebelumnya?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha periode sebelumnya?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang periode sebelumnya?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "bisa cek stok produk ya?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "bisa cek harga produk ya?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris periode sebelumnya?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan periode sebelumnya?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "bisa cek data pelanggan ya?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "bisa cek status QRIS ya?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "bisa cek printer ya?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "bisa cek login ya?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "bisa cek keamanan data ya?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "bisa cek cara retur ya?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "bisa cek backup data ya?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan hari ini ya?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS hari ini ya?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai hari ini ya?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer hari ini ya?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur hari ini ya?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran hari ini ya?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba hari ini ya?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha hari ini ya?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang hari ini ya?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "bisa cek stok produk dong?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "bisa cek harga produk dong?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris hari ini ya?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan hari ini ya?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "bisa cek data pelanggan dong?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "bisa cek status QRIS dong?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "bisa cek printer dong?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "bisa cek login dong?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "bisa cek keamanan data dong?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "bisa cek cara retur dong?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "bisa cek backup data dong?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan kemarin ya?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS kemarin ya?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai kemarin ya?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer kemarin ya?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur kemarin ya?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran kemarin ya?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba kemarin ya?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha kemarin ya?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang kemarin ya?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "bisa cek stok produk min?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "bisa cek harga produk min?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris kemarin ya?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan kemarin ya?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "bisa cek data pelanggan min?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "bisa cek status QRIS min?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "bisa cek printer min?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "bisa cek login min?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "bisa cek keamanan data min?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "bisa cek cara retur min?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "bisa cek backup data min?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan minggu ini ya?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS minggu ini ya?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai minggu ini ya?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer minggu ini ya?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur minggu ini ya?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran minggu ini ya?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba minggu ini ya?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha minggu ini ya?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang minggu ini ya?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "minta laporan stok produk?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "minta laporan harga produk?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris minggu ini ya?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan minggu ini ya?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "minta laporan data pelanggan?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "minta laporan status QRIS?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "minta laporan printer?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "minta laporan login?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "minta laporan keamanan data?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "minta laporan cara retur?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "minta laporan backup data?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan minggu lalu ya?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS minggu lalu ya?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai minggu lalu ya?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer minggu lalu ya?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur minggu lalu ya?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran minggu lalu ya?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba minggu lalu ya?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha minggu lalu ya?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang minggu lalu ya?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "minta laporan stok produk ya?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "minta laporan harga produk ya?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris minggu lalu ya?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan minggu lalu ya?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "minta laporan data pelanggan ya?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "minta laporan status QRIS ya?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "minta laporan printer ya?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "minta laporan login ya?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "minta laporan keamanan data ya?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "minta laporan cara retur ya?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "minta laporan backup data ya?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan bulan ini ya?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS bulan ini ya?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai bulan ini ya?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer bulan ini ya?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur bulan ini ya?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran bulan ini ya?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba bulan ini ya?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha bulan ini ya?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang bulan ini ya?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "minta laporan stok produk dong?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "minta laporan harga produk dong?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris bulan ini ya?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan bulan ini ya?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "minta laporan data pelanggan dong?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "minta laporan status QRIS dong?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "minta laporan printer dong?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "minta laporan login dong?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "minta laporan keamanan data dong?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "minta laporan cara retur dong?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "minta laporan backup data dong?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan bulan lalu ya?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS bulan lalu ya?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai bulan lalu ya?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer bulan lalu ya?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur bulan lalu ya?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran bulan lalu ya?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba bulan lalu ya?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha bulan lalu ya?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang bulan lalu ya?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "minta laporan stok produk min?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "minta laporan harga produk min?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris bulan lalu ya?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan bulan lalu ya?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "minta laporan data pelanggan min?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "minta laporan status QRIS min?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "minta laporan printer min?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "minta laporan login min?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "minta laporan keamanan data min?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "minta laporan cara retur min?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "minta laporan backup data min?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan tahun ini ya?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS tahun ini ya?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai tahun ini ya?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer tahun ini ya?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur tahun ini ya?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran tahun ini ya?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba tahun ini ya?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha tahun ini ya?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang tahun ini ya?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tampilkan stok produk?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "tampilkan harga produk?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris tahun ini ya?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan tahun ini ya?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "tampilkan data pelanggan?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "tampilkan status QRIS?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "tampilkan printer?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "tampilkan login?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "tampilkan keamanan data?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "tampilkan cara retur?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "tampilkan backup data?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan tahun lalu ya?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS tahun lalu ya?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai tahun lalu ya?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer tahun lalu ya?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur tahun lalu ya?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran tahun lalu ya?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba tahun lalu ya?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha tahun lalu ya?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang tahun lalu ya?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tampilkan stok produk ya?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "tampilkan harga produk ya?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris tahun lalu ya?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan tahun lalu ya?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "tampilkan data pelanggan ya?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "tampilkan status QRIS ya?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "tampilkan printer ya?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "tampilkan login ya?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "tampilkan keamanan data ya?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "tampilkan cara retur ya?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "tampilkan backup data ya?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan periode ini ya?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS periode ini ya?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai periode ini ya?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer periode ini ya?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur periode ini ya?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran periode ini ya?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba periode ini ya?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha periode ini ya?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang periode ini ya?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tampilkan stok produk dong?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "tampilkan harga produk dong?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris periode ini ya?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan periode ini ya?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "tampilkan data pelanggan dong?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "tampilkan status QRIS dong?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "tampilkan printer dong?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "tampilkan login dong?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "tampilkan keamanan data dong?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "tampilkan cara retur dong?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "tampilkan backup data dong?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan periode sebelumnya ya?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS periode sebelumnya ya?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai periode sebelumnya ya?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer periode sebelumnya ya?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur periode sebelumnya ya?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran periode sebelumnya ya?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba periode sebelumnya ya?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha periode sebelumnya ya?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang periode sebelumnya ya?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tampilkan stok produk min?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "tampilkan harga produk min?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris periode sebelumnya ya?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan periode sebelumnya ya?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "tampilkan data pelanggan min?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "tampilkan status QRIS min?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "tampilkan printer min?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "tampilkan login min?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "tampilkan keamanan data min?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "tampilkan cara retur min?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "tampilkan backup data min?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan hari ini dong?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS hari ini dong?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai hari ini dong?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer hari ini dong?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur hari ini dong?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran hari ini dong?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba hari ini dong?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha hari ini dong?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang hari ini dong?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa total stok produk?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "berapa total harga produk?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris hari ini dong?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan hari ini dong?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa total data pelanggan?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa total status QRIS?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "berapa total printer?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "berapa total login?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "berapa total keamanan data?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "berapa total cara retur?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "berapa total backup data?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan kemarin dong?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS kemarin dong?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai kemarin dong?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer kemarin dong?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur kemarin dong?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran kemarin dong?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba kemarin dong?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha kemarin dong?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang kemarin dong?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa total stok produk ya?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "berapa total harga produk ya?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris kemarin dong?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan kemarin dong?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa total data pelanggan ya?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa total status QRIS ya?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "berapa total printer ya?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "berapa total login ya?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "berapa total keamanan data ya?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "berapa total cara retur ya?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "berapa total backup data ya?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan minggu ini dong?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS minggu ini dong?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai minggu ini dong?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer minggu ini dong?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur minggu ini dong?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran minggu ini dong?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba minggu ini dong?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha minggu ini dong?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang minggu ini dong?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa total stok produk dong?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "berapa total harga produk dong?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris minggu ini dong?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan minggu ini dong?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa total data pelanggan dong?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa total status QRIS dong?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "berapa total printer dong?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "berapa total login dong?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "berapa total keamanan data dong?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "berapa total cara retur dong?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "berapa total backup data dong?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan minggu lalu dong?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS minggu lalu dong?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai minggu lalu dong?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer minggu lalu dong?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur minggu lalu dong?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran minggu lalu dong?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba minggu lalu dong?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha minggu lalu dong?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang minggu lalu dong?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa total stok produk min?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "berapa total harga produk min?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris minggu lalu dong?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan minggu lalu dong?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa total data pelanggan min?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa total status QRIS min?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "berapa total printer min?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "berapa total login min?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "berapa total keamanan data min?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "berapa total cara retur min?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "berapa total backup data min?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan bulan ini dong?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS bulan ini dong?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai bulan ini dong?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer bulan ini dong?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur bulan ini dong?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran bulan ini dong?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba bulan ini dong?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha bulan ini dong?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang bulan ini dong?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa jumlah stok produk?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "berapa jumlah harga produk?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris bulan ini dong?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan bulan ini dong?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa jumlah data pelanggan?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa jumlah status QRIS?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "berapa jumlah printer?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "berapa jumlah login?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "berapa jumlah keamanan data?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "berapa jumlah cara retur?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "berapa jumlah backup data?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan bulan lalu dong?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS bulan lalu dong?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai bulan lalu dong?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer bulan lalu dong?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur bulan lalu dong?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran bulan lalu dong?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba bulan lalu dong?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha bulan lalu dong?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang bulan lalu dong?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa jumlah stok produk ya?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "berapa jumlah harga produk ya?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris bulan lalu dong?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan bulan lalu dong?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa jumlah data pelanggan ya?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa jumlah status QRIS ya?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "berapa jumlah printer ya?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "berapa jumlah login ya?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "berapa jumlah keamanan data ya?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "berapa jumlah cara retur ya?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "berapa jumlah backup data ya?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan tahun ini dong?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS tahun ini dong?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai tahun ini dong?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer tahun ini dong?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur tahun ini dong?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran tahun ini dong?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba tahun ini dong?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha tahun ini dong?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang tahun ini dong?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa jumlah stok produk dong?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "berapa jumlah harga produk dong?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris tahun ini dong?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan tahun ini dong?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa jumlah data pelanggan dong?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa jumlah status QRIS dong?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "berapa jumlah printer dong?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "berapa jumlah login dong?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "berapa jumlah keamanan data dong?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "berapa jumlah cara retur dong?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "berapa jumlah backup data dong?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan tahun lalu dong?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS tahun lalu dong?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai tahun lalu dong?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer tahun lalu dong?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur tahun lalu dong?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran tahun lalu dong?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba tahun lalu dong?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha tahun lalu dong?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang tahun lalu dong?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa jumlah stok produk min?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "berapa jumlah harga produk min?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris tahun lalu dong?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan tahun lalu dong?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa jumlah data pelanggan min?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "berapa jumlah status QRIS min?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "berapa jumlah printer min?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "berapa jumlah login min?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "berapa jumlah keamanan data min?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "berapa jumlah cara retur min?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "berapa jumlah backup data min?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan periode ini dong?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS periode ini dong?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai periode ini dong?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer periode ini dong?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur periode ini dong?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran periode ini dong?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba periode ini dong?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha periode ini dong?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang periode ini dong?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "aku mau tahu stok produk?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "aku mau tahu harga produk?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris periode ini dong?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan periode ini dong?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "aku mau tahu data pelanggan?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "aku mau tahu status QRIS?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "aku mau tahu printer?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "aku mau tahu login?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "aku mau tahu keamanan data?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "aku mau tahu cara retur?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "aku mau tahu backup data?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan periode sebelumnya dong?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS periode sebelumnya dong?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai periode sebelumnya dong?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer periode sebelumnya dong?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur periode sebelumnya dong?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran periode sebelumnya dong?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba periode sebelumnya dong?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha periode sebelumnya dong?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang periode sebelumnya dong?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "aku mau tahu stok produk ya?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "aku mau tahu harga produk ya?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris periode sebelumnya dong?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan periode sebelumnya dong?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "aku mau tahu data pelanggan ya?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "aku mau tahu status QRIS ya?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "aku mau tahu printer ya?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "aku mau tahu login ya?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "aku mau tahu keamanan data ya?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "aku mau tahu cara retur ya?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "aku mau tahu backup data ya?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan hari ini min?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS hari ini min?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai hari ini min?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer hari ini min?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur hari ini min?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran hari ini min?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba hari ini min?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha hari ini min?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang hari ini min?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "aku mau tahu stok produk dong?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "aku mau tahu harga produk dong?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris hari ini min?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan hari ini min?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "aku mau tahu data pelanggan dong?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "aku mau tahu status QRIS dong?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "aku mau tahu printer dong?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "aku mau tahu login dong?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "aku mau tahu keamanan data dong?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "aku mau tahu cara retur dong?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "aku mau tahu backup data dong?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan kemarin min?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS kemarin min?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai kemarin min?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer kemarin min?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur kemarin min?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran kemarin min?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba kemarin min?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha kemarin min?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang kemarin min?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "aku mau tahu stok produk min?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "aku mau tahu harga produk min?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris kemarin min?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan kemarin min?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "aku mau tahu data pelanggan min?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "aku mau tahu status QRIS min?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "aku mau tahu printer min?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "aku mau tahu login min?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "aku mau tahu keamanan data min?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "aku mau tahu cara retur min?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "aku mau tahu backup data min?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan minggu ini min?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS minggu ini min?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai minggu ini min?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer minggu ini min?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur minggu ini min?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran minggu ini min?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba minggu ini min?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha minggu ini min?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang minggu ini min?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "cek stok produk?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "cek harga produk?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris minggu ini min?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan minggu ini min?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "cek data pelanggan?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "cek status QRIS?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "cek printer?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "cek login?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "cek keamanan data?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "cek cara retur?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "cek backup data?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan minggu lalu min?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS minggu lalu min?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai minggu lalu min?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer minggu lalu min?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur minggu lalu min?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran minggu lalu min?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba minggu lalu min?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha minggu lalu min?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang minggu lalu min?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "cek stok produk ya?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "cek harga produk ya?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris minggu lalu min?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan minggu lalu min?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "cek data pelanggan ya?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "cek status QRIS ya?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "cek printer ya?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "cek login ya?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "cek keamanan data ya?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "cek cara retur ya?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "cek backup data ya?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan bulan ini min?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS bulan ini min?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai bulan ini min?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer bulan ini min?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur bulan ini min?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran bulan ini min?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba bulan ini min?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha bulan ini min?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang bulan ini min?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "cek stok produk dong?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "cek harga produk dong?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris bulan ini min?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan bulan ini min?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "cek data pelanggan dong?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "cek status QRIS dong?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "cek printer dong?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "cek login dong?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "cek keamanan data dong?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "cek cara retur dong?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "cek backup data dong?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan bulan lalu min?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS bulan lalu min?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai bulan lalu min?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer bulan lalu min?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur bulan lalu min?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran bulan lalu min?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba bulan lalu min?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha bulan lalu min?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang bulan lalu min?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "cek stok produk min?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "cek harga produk min?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris bulan lalu min?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan bulan lalu min?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "cek data pelanggan min?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "cek status QRIS min?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "cek printer min?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "cek login min?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "cek keamanan data min?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "cek cara retur min?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "cek backup data min?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan tahun ini min?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS tahun ini min?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai tahun ini min?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer tahun ini min?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur tahun ini min?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran tahun ini min?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba tahun ini min?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha tahun ini min?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang tahun ini min?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "lihat stok produk?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "lihat harga produk?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris tahun ini min?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan tahun ini min?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "lihat data pelanggan?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "lihat status QRIS?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "lihat printer?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "lihat login?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "lihat keamanan data?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "lihat cara retur?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "lihat backup data?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan tahun lalu min?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS tahun lalu min?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai tahun lalu min?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer tahun lalu min?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur tahun lalu min?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran tahun lalu min?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba tahun lalu min?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha tahun lalu min?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang tahun lalu min?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "lihat stok produk ya?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "lihat harga produk ya?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris tahun lalu min?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan tahun lalu min?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "lihat data pelanggan ya?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "lihat status QRIS ya?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "lihat printer ya?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "lihat login ya?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "lihat keamanan data ya?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "lihat cara retur ya?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "lihat backup data ya?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan periode ini min?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS periode ini min?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai periode ini min?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer periode ini min?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur periode ini min?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran periode ini min?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba periode ini min?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha periode ini min?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang periode ini min?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "lihat stok produk dong?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "lihat harga produk dong?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris periode ini min?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan periode ini min?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "lihat data pelanggan dong?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "lihat status QRIS dong?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "lihat printer dong?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "lihat login dong?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "lihat keamanan data dong?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "lihat cara retur dong?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "lihat backup data dong?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "berapa omzet penjualan periode sebelumnya min?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "berapa total QRIS periode sebelumnya min?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "berapa pembayaran tunai periode sebelumnya min?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "berapa pembayaran transfer periode sebelumnya min?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "berapa retur periode sebelumnya min?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "berapa pengeluaran periode sebelumnya min?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "berapa ringkasan laba periode sebelumnya min?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa hutang usaha periode sebelumnya min?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "berapa piutang periode sebelumnya min?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "lihat stok produk min?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "lihat harga produk min?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "berapa produk terlaris periode sebelumnya min?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "berapa jumlah pelanggan periode sebelumnya min?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "lihat data pelanggan min?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "lihat status QRIS min?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "lihat printer min?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "lihat login min?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "lihat keamanan data min?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "lihat cara retur min?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "lihat backup data min?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "tolong cek omzet penjualan hari ini?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "tolong cek total QRIS hari ini?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "tolong cek pembayaran tunai hari ini?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "tolong cek pembayaran transfer hari ini?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "tolong cek retur hari ini?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "tolong cek pengeluaran hari ini?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "tolong cek ringkasan laba hari ini?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek hutang usaha hari ini?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek piutang hari ini?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "mohon tampilkan stok produk?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "mohon tampilkan harga produk?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "tolong cek produk terlaris hari ini?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "tolong cek jumlah pelanggan hari ini?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "mohon tampilkan data pelanggan?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "mohon tampilkan status QRIS?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "mohon tampilkan printer?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "mohon tampilkan login?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "mohon tampilkan keamanan data?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "mohon tampilkan cara retur?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "mohon tampilkan backup data?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "tolong cek omzet penjualan kemarin?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "tolong cek total QRIS kemarin?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "tolong cek pembayaran tunai kemarin?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "tolong cek pembayaran transfer kemarin?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "tolong cek retur kemarin?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "tolong cek pengeluaran kemarin?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "tolong cek ringkasan laba kemarin?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek hutang usaha kemarin?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek piutang kemarin?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "mohon tampilkan stok produk ya?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "mohon tampilkan harga produk ya?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "tolong cek produk terlaris kemarin?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "tolong cek jumlah pelanggan kemarin?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "mohon tampilkan data pelanggan ya?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "mohon tampilkan status QRIS ya?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "mohon tampilkan printer ya?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "mohon tampilkan login ya?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "mohon tampilkan keamanan data ya?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "mohon tampilkan cara retur ya?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "mohon tampilkan backup data ya?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "tolong cek omzet penjualan minggu ini?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "tolong cek total QRIS minggu ini?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "tolong cek pembayaran tunai minggu ini?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "tolong cek pembayaran transfer minggu ini?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "tolong cek retur minggu ini?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "tolong cek pengeluaran minggu ini?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "tolong cek ringkasan laba minggu ini?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek hutang usaha minggu ini?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek piutang minggu ini?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "mohon tampilkan stok produk dong?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "mohon tampilkan harga produk dong?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "tolong cek produk terlaris minggu ini?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "tolong cek jumlah pelanggan minggu ini?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "mohon tampilkan data pelanggan dong?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "mohon tampilkan status QRIS dong?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "mohon tampilkan printer dong?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "mohon tampilkan login dong?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "mohon tampilkan keamanan data dong?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "mohon tampilkan cara retur dong?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "mohon tampilkan backup data dong?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "tolong cek omzet penjualan minggu lalu?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "tolong cek total QRIS minggu lalu?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "tolong cek pembayaran tunai minggu lalu?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "tolong cek pembayaran transfer minggu lalu?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "tolong cek retur minggu lalu?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "tolong cek pengeluaran minggu lalu?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "tolong cek ringkasan laba minggu lalu?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek hutang usaha minggu lalu?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek piutang minggu lalu?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "mohon tampilkan stok produk min?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "mohon tampilkan harga produk min?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "tolong cek produk terlaris minggu lalu?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "tolong cek jumlah pelanggan minggu lalu?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "mohon tampilkan data pelanggan min?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "mohon tampilkan status QRIS min?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "mohon tampilkan printer min?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "mohon tampilkan login min?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "mohon tampilkan keamanan data min?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "mohon tampilkan cara retur min?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "mohon tampilkan backup data min?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "tolong cek omzet penjualan bulan ini?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "tolong cek total QRIS bulan ini?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "tolong cek pembayaran tunai bulan ini?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "tolong cek pembayaran transfer bulan ini?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "tolong cek retur bulan ini?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "tolong cek pengeluaran bulan ini?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "tolong cek ringkasan laba bulan ini?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek hutang usaha bulan ini?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek piutang bulan ini?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "bantu cek stok produk?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "bantu cek harga produk?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "tolong cek produk terlaris bulan ini?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "tolong cek jumlah pelanggan bulan ini?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "bantu cek data pelanggan?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "bantu cek status QRIS?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "bantu cek printer?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "bantu cek login?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "bantu cek keamanan data?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "bantu cek cara retur?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "bantu cek backup data?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "tolong cek omzet penjualan bulan lalu?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "tolong cek total QRIS bulan lalu?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "tolong cek pembayaran tunai bulan lalu?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "tolong cek pembayaran transfer bulan lalu?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "tolong cek retur bulan lalu?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "tolong cek pengeluaran bulan lalu?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "tolong cek ringkasan laba bulan lalu?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek hutang usaha bulan lalu?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek piutang bulan lalu?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "bantu cek stok produk ya?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "bantu cek harga produk ya?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "tolong cek produk terlaris bulan lalu?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "tolong cek jumlah pelanggan bulan lalu?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "bantu cek data pelanggan ya?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "bantu cek status QRIS ya?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "bantu cek printer ya?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "bantu cek login ya?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "bantu cek keamanan data ya?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "bantu cek cara retur ya?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "bantu cek backup data ya?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "tolong cek omzet penjualan tahun ini?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "tolong cek total QRIS tahun ini?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "tolong cek pembayaran tunai tahun ini?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "tolong cek pembayaran transfer tahun ini?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "tolong cek retur tahun ini?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "tolong cek pengeluaran tahun ini?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "tolong cek ringkasan laba tahun ini?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek hutang usaha tahun ini?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek piutang tahun ini?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "bantu cek stok produk dong?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "bantu cek harga produk dong?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "tolong cek produk terlaris tahun ini?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "tolong cek jumlah pelanggan tahun ini?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "bantu cek data pelanggan dong?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "bantu cek status QRIS dong?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "bantu cek printer dong?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "bantu cek login dong?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "bantu cek keamanan data dong?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "bantu cek cara retur dong?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "bantu cek backup data dong?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "tolong cek omzet penjualan tahun lalu?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "tolong cek total QRIS tahun lalu?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "tolong cek pembayaran tunai tahun lalu?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "tolong cek pembayaran transfer tahun lalu?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "tolong cek retur tahun lalu?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "tolong cek pengeluaran tahun lalu?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "tolong cek ringkasan laba tahun lalu?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek hutang usaha tahun lalu?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek piutang tahun lalu?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "bantu cek stok produk min?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "bantu cek harga produk min?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "tolong cek produk terlaris tahun lalu?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "tolong cek jumlah pelanggan tahun lalu?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "bantu cek data pelanggan min?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "bantu cek status QRIS min?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "bantu cek printer min?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "bantu cek login min?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "bantu cek keamanan data min?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "bantu cek cara retur min?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "bantu cek backup data min?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "tolong cek omzet penjualan periode ini?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "tolong cek total QRIS periode ini?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "tolong cek pembayaran tunai periode ini?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "tolong cek pembayaran transfer periode ini?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "tolong cek retur periode ini?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "tolong cek pengeluaran periode ini?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "tolong cek ringkasan laba periode ini?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek hutang usaha periode ini?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek piutang periode ini?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "boleh tahu stok produk?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "boleh tahu harga produk?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "tolong cek produk terlaris periode ini?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "tolong cek jumlah pelanggan periode ini?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "boleh tahu data pelanggan?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "boleh tahu status QRIS?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "boleh tahu printer?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "boleh tahu login?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "boleh tahu keamanan data?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "boleh tahu cara retur?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "boleh tahu backup data?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  },
+  {
+    "question": "tolong cek omzet penjualan periode sebelumnya?",
+    "intent": "laporan_penjualan",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung penjualan dari database."
+  },
+  {
+    "question": "tolong cek total QRIS periode sebelumnya?",
+    "intent": "laporan_qris",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung transaksi QRIS dari database."
+  },
+  {
+    "question": "tolong cek pembayaran tunai periode sebelumnya?",
+    "intent": "laporan_tunai",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran tunai dari database."
+  },
+  {
+    "question": "tolong cek pembayaran transfer periode sebelumnya?",
+    "intent": "laporan_transfer",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk menghitung pembayaran transfer dari database."
+  },
+  {
+    "question": "tolong cek retur periode sebelumnya?",
+    "intent": "laporan_retur",
+    "answerStrategy": "Gunakan _answerDataQuestion untuk membaca nilai retur dari database."
+  },
+  {
+    "question": "tolong cek pengeluaran periode sebelumnya?",
+    "intent": "laporan_pengeluaran",
+    "answerStrategy": "Gunakan _answerDataQuestion; total pengeluaran harus berasal dari database."
+  },
+  {
+    "question": "tolong cek ringkasan laba periode sebelumnya?",
+    "intent": "ringkasan_keuangan",
+    "answerStrategy": "Gunakan ringkasan keuangan yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek hutang usaha periode sebelumnya?",
+    "intent": "hutang_usaha",
+    "answerStrategy": "Gunakan laporan hutang usaha yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "tolong cek piutang periode sebelumnya?",
+    "intent": "piutang",
+    "answerStrategy": "Gunakan laporan piutang yang sudah ada dan pertahankan batasan hak akses."
+  },
+  {
+    "question": "boleh tahu stok produk ya?",
+    "intent": "stok_produk",
+    "answerStrategy": "Gunakan daftar produk aktif dan jumlah stok yang tersimpan."
+  },
+  {
+    "question": "boleh tahu harga produk ya?",
+    "intent": "harga_produk",
+    "answerStrategy": "Gunakan harga produk yang tersimpan di database."
+  },
+  {
+    "question": "tolong cek produk terlaris periode sebelumnya?",
+    "intent": "produk_terlaris",
+    "answerStrategy": "Gunakan hasil DB.bestSelling untuk periode yang diminta."
+  },
+  {
+    "question": "tolong cek jumlah pelanggan periode sebelumnya?",
+    "intent": "jumlah_pelanggan",
+    "answerStrategy": "Hitung pelanggan berbeda dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "boleh tahu data pelanggan ya?",
+    "intent": "cari_pelanggan",
+    "answerStrategy": "Cari nama pelanggan hanya dari catatan penjualan yang tersimpan."
+  },
+  {
+    "question": "boleh tahu status QRIS ya?",
+    "intent": "status_pembayaran",
+    "answerStrategy": "Jangan menebak status pembayaran; arahkan pengguna memeriksa penyedia pembayaran."
+  },
+  {
+    "question": "boleh tahu printer ya?",
+    "intent": "bantuan_printer",
+    "answerStrategy": "Berikan panduan pemeriksaan koneksi dan konfigurasi printer."
+  },
+  {
+    "question": "boleh tahu login ya?",
+    "intent": "bantuan_login",
+    "answerStrategy": "Berikan panduan login yang aman; jangan meminta kata sandi."
+  },
+  {
+    "question": "boleh tahu keamanan data ya?",
+    "intent": "keamanan",
+    "answerStrategy": "Berikan panduan keamanan umum tanpa klaim perlindungan yang belum diverifikasi."
+  },
+  {
+    "question": "boleh tahu cara retur ya?",
+    "intent": "panduan_retur",
+    "answerStrategy": "Jelaskan pemeriksaan transaksi asal dan jumlah barang retur."
+  },
+  {
+    "question": "boleh tahu backup data ya?",
+    "intent": "panduan_backup",
+    "answerStrategy": "Arahkan ke fitur backup yang tersedia dan jangan mengklaim backup berhasil tanpa verifikasi."
+  }
+]

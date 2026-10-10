@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../core/app_localizations.dart';
 import '../../core/utils.dart';
 import '../../data/database.dart';
@@ -24,6 +26,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
   final _input = TextEditingController();
   final _scroll = ScrollController();
   final List<_AssistantTurn> _turns = [];
+  List<Map<String, dynamic>> _questionBank = [];
   late final AnimationController _typingController;
   String _conversationStyle = 'aku';
 
@@ -37,6 +40,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
       vsync: this,
       duration: const Duration(milliseconds: 650),
     );
+    _loadQuestionBank();
   }
 
   @override
@@ -498,11 +502,186 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
 
   int _consecutiveDataQuestionCount = 0;
 
+
+  Future<void> _loadQuestionBank() async {
+    try {
+      final source = await rootBundle.loadString(
+        'lib/features/home/assistant_question_bank_v72.json',
+      );
+      final decoded = jsonDecode(source);
+      if (!mounted || decoded is! List) return;
+      final entries = decoded
+          .whereType<Map>()
+          .map((entry) => Map<String, dynamic>.from(entry))
+          .where((entry) =>
+              entry['question'] is String && entry['intent'] is String)
+          .toList();
+      if (!mounted) return;
+      setState(() => _questionBank = entries);
+    } catch (_) {
+      // Keep the existing assistant working if the optional bank cannot load.
+    }
+  }
+
+  String _bankPeriodPhrase(String q) {
+    for (final phrase in [
+      'kemarin', 'yesterday', 'minggu lalu', 'last week',
+      'minggu ini', 'this week', 'bulan lalu', 'last month',
+      'bulan ini', 'this month', 'tahun lalu', 'last year',
+      'tahun ini', 'this year',
+    ]) {
+      if (q.contains(phrase)) return phrase;
+    }
+    return _en ? 'today' : 'hari ini';
+  }
+
+  String? _detectBankIntent(String q) {
+    // Keep named-customer searches on their existing database path.
+    if (_isCustomerQuestion(q) &&
+        !_hasAny(q, [
+          'berapa pelanggan', 'jumlah pelanggan',
+          'total pelanggan', 'customer count',
+        ])) {
+      return null;
+    }
+
+    if (_hasAny(q, [
+      'qris pending', 'qris gagal', 'qris belum masuk', 'status qris',
+      'transfer belum masuk', 'pembayaran pending',
+      'pembayaran belum terkonfirmasi',
+    ])) return 'status_pembayaran';
+
+    if (_hasAny(q, [
+      'cara retur', 'prosedur retur', 'bagaimana retur',
+      'how to return', 'return procedure',
+    ])) return 'panduan_retur';
+
+    if (_hasAny(q, ['printer', 'struk', 'cetak', 'print'])) {
+      return 'bantuan_printer';
+    }
+    if (_hasAny(q, [
+      'lupa password', 'lupa sandi', 'kata sandi', 'akun terkunci',
+      'tidak bisa masuk', 'login', 'password',
+    ])) return 'bantuan_login';
+    if (_hasAny(q, [
+      'keamanan', 'privasi', 'data pribadi', 'security', 'privacy',
+    ])) return 'keamanan';
+    if (_hasAny(q, [
+      'backup', 'cadangkan database', 'ekspor backup',
+      'pemulihan database', 'restore database',
+    ])) return 'panduan_backup';
+
+    if (_hasAny(q, [
+      'berapa pelanggan', 'jumlah pelanggan', 'total pelanggan',
+      'customer count',
+    ])) return 'jumlah_pelanggan';
+
+    if (_hasAny(q, ['retur', 'return barang', 'pengembalian barang'])) {
+      return 'laporan_retur';
+    }
+    if (_hasAny(q, ['qris']) &&
+        _hasAny(q, [
+          'berapa', 'jumlah', 'total', 'omzet', 'omset', 'transaksi',
+          'laporan', 'amount', 'count', 'how much', 'how many',
+        ])) return 'laporan_qris';
+
+    if (_hasAny(q, ['transfer']) &&
+        _hasAny(q, [
+          'berapa', 'jumlah', 'total', 'transaksi', 'laporan',
+          'amount', 'count', 'how much', 'how many',
+        ])) return 'laporan_transfer';
+
+    if (_hasAny(q, ['tunai', 'cash']) &&
+        _hasAny(q, [
+          'berapa', 'jumlah', 'total', 'transaksi', 'laporan',
+          'amount', 'count', 'how much', 'how many',
+        ])) return 'laporan_tunai';
+
+    if (_hasAny(q, [
+      'pengeluaran', 'biaya', 'biaya operasional', 'expense',
+      'expenses', 'expense total',
+    ])) return 'laporan_pengeluaran';
+
+    if (_hasAny(q, ['laba', 'rugi', 'profit', 'loss', 'ringkasan keuangan'])) {
+      return 'ringkasan_keuangan';
+    }
+    if (_hasAny(q, [
+      'hutang usaha', 'utang usaha', 'hutang toko', 'utang toko',
+      'hutang supplier', 'utang supplier', 'payable', 'payables',
+    ])) return 'hutang_usaha';
+
+    if (_hasAny(q, [
+      'bayar tunda', 'bayar nanti', 'piutang', 'receivable',
+      'unpaid customer',
+    ])) return 'piutang';
+
+    if (_hasAny(q, [
+      'produk terlaris', 'barang terlaris', 'best selling', 'best seller',
+      'produk paling laku',
+    ])) return 'produk_terlaris';
+
+    if (_hasAny(q, ['stok', 'stock', 'persediaan'])) {
+      return 'stok_produk';
+    }
+    if (_hasAny(q, ['harga produk', 'harga barang', 'harga jual', 'product price'])) {
+      return 'harga_produk';
+    }
+
+    if (_hasAny(q, ['omzet', 'omset', 'revenue']) ||
+        (_hasAny(q, ['penjualan', 'jualan', 'sales', 'transaksi']) &&
+         _hasAny(q, [
+           'berapa', 'jumlah', 'total', 'laporan', 'hari ini', 'kemarin',
+           'bulan ini', 'bulan lalu', 'tahun ini', 'minggu ini',
+           'amount', 'count', 'how much', 'how many',
+         ]))) {
+      return 'laporan_penjualan';
+    }
+    return null;
+  }
+
+  String _normalizeQuestionFromBank(String q) {
+    if (_questionBank.isEmpty) return q;
+    final intent = _detectBankIntent(q);
+    if (intent == null ||
+        !_questionBank.any((entry) => entry['intent'] == intent)) {
+      return q;
+    }
+
+    final period = _bankPeriodPhrase(q);
+    switch (intent) {
+      case 'laporan_penjualan':
+        return 'omzet $period';
+      case 'laporan_qris':
+        return 'berapa total qris $period';
+      case 'laporan_tunai':
+        return 'berapa total tunai $period';
+      case 'laporan_transfer':
+        return 'berapa total transfer $period';
+      case 'laporan_retur':
+        return 'berapa total retur $period';
+      case 'laporan_pengeluaran':
+        return 'total pengeluaran $period';
+      case 'ringkasan_keuangan':
+        return 'laba $period';
+      case 'hutang_usaha':
+        return 'hutang usaha $period';
+      case 'piutang':
+        return 'piutang $period';
+      case 'produk_terlaris':
+        return 'produk terlaris $period';
+      case 'jumlah_pelanggan':
+        return 'jumlah pelanggan $period';
+      default:
+        return q;
+    }
+  }
+
   Future<String> _reply(String raw) async {
-    final q = raw.toLowerCase().trim();
+    final originalQ = raw.toLowerCase().trim();
+    final q = _normalizeQuestionFromBank(originalQ);
     if (q.isEmpty) return _en ? 'Please type a question first.' : 'Tulis pertanyaanmu dulu, ya.';
 
-    if (!_admin && (_adminOnlyQuestion(q) || (_isCustomerDebtQuestion(q)))) {
+    if (!_admin && (_adminOnlyQuestion(q) || (_isCustomerDebtQuestion(originalQ)))) {
       return _en ? 'Sorry 😊 This information requires Administrator permission. Please ask your Admin to check it. Your access remains limited to the functions allowed for your cashier role.'
           : 'Maaf ya 😊 Informasi ini memerlukan izin Administrator. Minta Admin memeriksanya, ya. Aksesmu tetap dibatasi sesuai fungsi yang diizinkan untuk Kasir.';
     }
@@ -522,7 +701,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
 
     // A non-data answer breaks the sequence, so reminders only follow every third consecutive data answer.
     _consecutiveDataQuestionCount = 0;
-    final social = _socialReply(q);
+    final social = _socialReply(originalQ);
     if (social != null) return social;
 
     if (_hasAny(q, ['laci', 'uang fisik', 'selisih uang', 'cash drawer', 'cash mismatch'])) {
