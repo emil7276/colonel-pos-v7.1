@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/constants.dart';
+import '../../core/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'dart:io';
@@ -96,7 +97,10 @@ class _QrisPageState
           .showSnackBar(
         SnackBar(
           content: Text(
-            'Gagal upload QRIS: $e',
+            AppLocalizations.t(
+              'Gagal upload QRIS: $e',
+              'Failed to upload QRIS: $e',
+            ),
           ),
         ),
       );
@@ -118,9 +122,12 @@ class _QrisPageState
 
       ScaffoldMessenger.of(context)
           .showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'Data QRIS disimpan.',
+            AppLocalizations.t(
+              'Data QRIS disimpan.',
+              'QRIS data saved.',
+            ),
           ),
         ),
       );
@@ -131,8 +138,10 @@ class _QrisPageState
           .showSnackBar(
         SnackBar(
           content: Text(
-            'Gagal menyimpan QRIS: '
-            '$e',
+            AppLocalizations.t(
+              'Gagal menyimpan QRIS: $e',
+              'Failed to save QRIS: $e',
+            ),
           ),
         ),
       );
@@ -160,11 +169,14 @@ class _QrisPageState
           TextField(
             controller: merchant,
             decoration:
-                const InputDecoration(
+                InputDecoration(
               labelText:
-                  'Nama Merchant',
+                  AppLocalizations.t(
+                'Nama Merchant',
+                'Merchant Name',
+              ),
               border:
-                  OutlineInputBorder(),
+                  const OutlineInputBorder(),
             ),
           ),
           const SizedBox(
@@ -181,14 +193,16 @@ class _QrisPageState
                   Image.file(file),
             )
           else
-            const Card(
+            Card(
               child: Padding(
                 padding:
-                    EdgeInsets.all(30),
+                    const EdgeInsets.all(30),
                 child: Center(
                   child: Text(
-                    'Belum ada '
-                    'gambar QRIS.',
+                    AppLocalizations.t(
+                      'Belum ada gambar QRIS.',
+                      'No QRIS image yet.',
+                    ),
                   ),
                 ),
               ),
@@ -201,8 +215,11 @@ class _QrisPageState
             icon: const Icon(
               Icons.upload,
             ),
-            label: const Text(
-              'UPLOAD / GANTI QRIS',
+            label: Text(
+              AppLocalizations.t(
+                'UPLOAD / GANTI QRIS',
+                'UPLOAD / CHANGE QRIS',
+              ),
             ),
           ),
           const SizedBox(
@@ -215,7 +232,12 @@ class _QrisPageState
               backgroundColor: red,
             ),
             child:
-                const Text('SIMPAN'),
+                Text(
+              AppLocalizations.t(
+                'SIMPAN',
+                'SAVE',
+              ),
+            ),
           ),
         ],
       ),
