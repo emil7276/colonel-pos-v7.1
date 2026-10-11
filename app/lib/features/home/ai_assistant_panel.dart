@@ -376,6 +376,10 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
       'stock to zero', 'set stock to zero', 'zero out stock',
       'stok jadi nol', 'stok ke nol', 'stok sampai nol',
       'stock jadi nol', 'stock ke nol', 'stok kosong',
+      'ubah stok', 'merubah stok', 'mengubah stok',
+      'cara ubah stok', 'cara merubah stok',
+      'cara mengubah stok', 'edit stok', 'cara edit stok',
+      'rubah stok', 'cara rubah stok', 'perubahan stok',
     ]);
     if (_hasAny(q, [
       'stok', 'stock', 'persediaan', 'harga produk', 'product price',
