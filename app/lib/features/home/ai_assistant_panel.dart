@@ -305,23 +305,81 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
     if (asksCustomer && !asksCustomerRanking) return _answerCustomerQuestion(q);
 
 
+    final asksMenuDelete = _hasAny(q, [
+      'hapus menu', 'menghapus menu', 'delete menu', 'remove menu',
+      'hapus produk', 'menghapus produk', 'delete product', 'remove product',
+    ]);
+    final asksMenuActive = _hasAny(q, [
+      'nonaktifkan menu', 'menonaktifkan menu', 'aktifkan menu',
+      'mengaktifkan menu', 'menu nonaktif', 'menu aktif', 'status menu',
+      'deactivate menu', 'activate menu', 'inactive menu', 'active menu',
+    ]);
+    final asksMenuEdit = _hasAny(q, [
+      'edit menu', 'ubah menu', 'mengubah menu', 'update menu',
+      'edit product', 'ubah produk', 'mengubah produk', 'perbarui menu',
+    ]);
+    final asksMenuAdd = _hasAny(q, [
+      'tambah menu', 'menambah menu', 'buat menu', 'membuat menu',
+      'add menu', 'new menu', 'tambah produk', 'menambah produk',
+      'add product',
+    ]);
+    final asksMenuManagement = asksMenuDelete ||
+        asksMenuActive ||
+        asksMenuEdit ||
+        asksMenuAdd ||
+        _hasAny(q, [
+          'kelola menu', 'pengaturan menu', 'menu dan harga',
+          'menu management', 'manage menu',
+        ]);
+    if (asksMenuManagement) {
+      if (!_admin) {
+        return _en
+            ? 'Menu management is available to Admin. Please ask your Admin to open Settings → Menu & Prices.'
+            : 'Pengelolaan menu dilakukan oleh Admin. Minta Admin membuka Pengaturan → Menu & Harga.';
+      }
+      if (asksMenuDelete) {
+        return _en
+            ? 'The Menu & Prices page provides add, edit, and Active/Inactive controls. I could not find a permanent menu deletion action in the current interface. To hide a product, open Settings → Menu & Prices and turn off Active.'
+            : 'Halaman Menu & Harga menyediakan fitur tambah, edit, dan sakelar Aktif/Nonaktif. Saya belum menemukan fitur hapus menu permanen pada antarmuka saat ini. Untuk menyembunyikan produk, buka Pengaturan → Menu & Harga lalu matikan sakelar Aktif.';
+      }
+      if (asksMenuActive) {
+        return _en
+            ? 'Open Settings → Menu & Prices, then use the Active switch on the product. Turn it on to activate the product or off to deactivate it.'
+            : 'Buka Pengaturan → Menu & Harga, lalu gunakan sakelar Aktif pada produk. Aktifkan sakelar untuk mengaktifkan produk atau matikan untuk menonaktifkannya.';
+      }
+      if (asksMenuEdit) {
+        return _en
+            ? 'Open Settings → Menu & Prices, select the product using its Edit icon, change the needed fields, then tap Save.'
+            : 'Buka Pengaturan → Menu & Harga, pilih produk melalui ikon Edit, ubah bagian yang diperlukan, lalu tekan Simpan.';
+      }
+      if (asksMenuAdd) {
+        return _en
+            ? 'Open Settings → Menu & Prices, tap Add menu (+), fill in the product details, then tap Save.'
+            : 'Buka Pengaturan → Menu & Harga, tekan Tambah menu (+), isi detail produk, lalu tekan Simpan.';
+      }
+      return _en
+          ? 'To manage products, open Settings → Menu & Prices. You can add products, edit their details, or use the Active switch to activate or deactivate them.'
+          : 'Untuk mengelola produk, buka Pengaturan → Menu & Harga. Anda dapat menambah produk, mengedit detailnya, atau menggunakan sakelar Aktif untuk mengaktifkan maupun menonaktifkan produk.';
+    }
+
+    final asksStockReduction = _hasAny(q, [
+      'kurangi stok', 'mengurangi stok', 'pengurangan stok',
+      'kurangin stok', 'ngurangin stok', 'hapus stok',
+      'menghapus stok', 'hilangkan stok', 'menghilangkan stok',
+      'kosongkan stok', 'nolkan stok', 'kurangi stock',
+      'mengurangi stock', 'hapus stock', 'remove stock',
+      'reduce stock', 'decrease stock', 'delete stock',
+      'cara mengurangi stok', 'cara kurangi stok',
+      'cara kurangin stok', 'cara mengurangi persediaan',
+      'kurangi jumlah barang', 'mengurangi jumlah barang',
+      'stock reduction', 'stock out', 'stok keluar',
+      'stock to zero', 'set stock to zero', 'zero out stock',
+      'stok jadi nol', 'stok ke nol', 'stok sampai nol',
+      'stock jadi nol', 'stock ke nol', 'stok kosong',
+    ]);
     if (_hasAny(q, [
       'stok', 'stock', 'persediaan', 'harga produk', 'product price',
-    ])) {
-      final asksStockReduction = _hasAny(q, [
-        'kurangi stok', 'mengurangi stok', 'pengurangan stok',
-        'kurangin stok', 'ngurangin stok', 'hapus stok',
-        'menghapus stok', 'hilangkan stok', 'menghilangkan stok',
-        'kosongkan stok', 'nolkan stok', 'kurangi stock',
-        'mengurangi stock', 'hapus stock', 'remove stock',
-        'reduce stock', 'decrease stock', 'delete stock',
-        'cara mengurangi', 'cara kurangi', 'cara kurangin',
-        'cara hapus', 'cara menghapus', 'cara menghilangkan',
-        'stock out', 'stok keluar', 'stock to zero', 'zero out stock',
-        'stok jadi nol', 'stok ke nol', 'stok sampai nol',
-        'stock jadi nol', 'stock ke nol', 'stok kosong',
-      ]);
-
+    ]) || asksStockReduction) {
       if (asksStockReduction) {
         if (!_admin) {
           return _en

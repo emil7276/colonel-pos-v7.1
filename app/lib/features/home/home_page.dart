@@ -264,6 +264,8 @@ String _trialLabel() {
                           ? AppLocalizations.t('Laporan', 'Reports')
                           : titles[index] == 'Pengaturan'
                               ? AppLocalizations.t('Pengaturan', 'Settings')
+                          : titles[index] == 'Smart Assistant'
+                              ? 'COLONEL SMART ASSISTANT'
                               : AppLocalizations.t('Keuangan', 'Finance'),
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
             ),
