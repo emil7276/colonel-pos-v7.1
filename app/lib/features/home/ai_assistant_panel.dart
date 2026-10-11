@@ -190,7 +190,8 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
       'hak akses', 'aktivasi lisensi', 'pengaturan toko',
       'user management', 'add user', 'delete user', 'access rights',
       'license activation', 'business settings',
-    ]) || (_hasAny(q, ['hutang', 'utang', 'payables']) && !_isCustomerQuestion(q)) ||
+    ]) || (_hasAny(q, ['hutang', 'utang', 'payables']) &&
+            !_hasAny(q, ['piutang', 'receivable']) && !_isCustomerQuestion(q)) ||
         (_hasAny(q, ['piutang', 'receivable']) && !_isCustomerQuestion(q));
   }
 
@@ -295,18 +296,33 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
   }
 
   Future<String?> _answerDataQuestion(String q) async {
+    final asksCustomerRanking = _hasAny(q, [
+      'pelanggan teratas', 'pelanggan terunggul', 'pelanggan paling royal',
+      'pelanggan paling loyal', 'paling royal', 'paling loyal',
+      'top customers', 'best customer', 'most loyal customer',
+    ]);
     final asksCustomer = _isCustomerQuestion(q);
-    if (asksCustomer) return _answerCustomerQuestion(q);
+    if (asksCustomer && !asksCustomerRanking) return _answerCustomerQuestion(q);
 
     if (_hasAny(q, ['stok', 'stock', 'persediaan', 'harga produk', 'product price'])) {
       return _answerProductQuestion(q);
     }
 
-    final isQrisReport = q.contains('qris') && _hasAny(q, ['berapa', 'jumlah', 'total', 'omzet', 'omset', 'transaksi', 'laporan', 'amount', 'count', 'how much', 'how many']);
-    final isPaymentReport = _hasAny(q, ['transfer', 'tunai', 'cash', 'bayar tunda', 'bayar nanti']) && _hasAny(q, ['berapa', 'jumlah', 'total', 'transaksi', 'laporan', 'amount', 'count', 'how much', 'how many']);
+    final reportCue = _hasAny(q, [
+      'berapa', 'jumlah', 'total', 'nominal', 'nilai', 'laporan',
+      'hari ini', 'kemarin', 'minggu ini', 'minggu lalu', 'bulan ini',
+      'bulan lalu', 'tahun ini', 'tahun lalu', 'amount', 'count', 'how much', 'how many',
+    ]);
+    final isQrisReport = q.contains('qris') && reportCue;
+    final isPaymentReport = _hasAny(q, [
+      'transfer', 'tunai', 'cash', 'bayar tunda', 'bayar nanti', 'qris',
+    ]) && reportCue;
+    final asksDefinition = _hasAny(q, [
+      'apa itu', 'apa arti', 'pengertian', 'jelaskan', 'maksud', 'what is', 'explain',
+    ]);
     final isSalesReport = _hasAny(q, ['omzet', 'omset', 'revenue']) ||
-        (_hasAny(q, ['penjualan', 'jualan', 'sales', 'transaksi']) &&
-        _hasAny(q, ['berapa', 'jumlah', 'total', 'laporan', 'hari ini', 'kemarin', 'bulan ini', 'bulan lalu', 'tahun ini', 'minggu ini', 'amount', 'count', 'how much', 'how many']));
+        (!asksDefinition && _hasAny(q, ['penjualan', 'jualan', 'sales']) &&
+        (reportCue || _hasAny(q, ['penjualan', 'jualan', 'sales'])));
     final isProfit = _hasAny(q, ['laba', 'rugi', 'profit', 'loss']);
     final isExpense = _hasAny(q, ['pengeluaran', 'biaya operasional', 'expenses', 'expense total']);
     final isPayable = _hasAny(q, [
@@ -315,12 +331,110 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
       'utang ke supplier', 'hutang kepada supplier',
       'utang kepada supplier', 'hutang pada supplier',
       'utang pada supplier', 'payable', 'payables',
-    ]) || (_hasAny(q, ['hutang', 'utang']) && !_isCustomerQuestion(q));
+    ]) || (_hasAny(q, ['hutang', 'utang']) &&
+        !_hasAny(q, ['piutang', 'receivable']) && !_isCustomerQuestion(q));
     final isReceivable = _hasAny(q, ['bayar tunda', 'bayar nanti', 'piutang', 'receivable', 'unpaid customer']);
+    final asksUnsoldProducts = _hasAny(q, [
+      'produk tidak laku', 'produk gak laku', 'produk nggak laku',
+      'barang tidak laku', 'barang gak laku', 'barang nggak laku',
+      'produk belum laku', 'barang belum laku', 'slow moving', 'unsold products',
+    ]);
+    final asksBestProducts = !asksUnsoldProducts && _hasAny(q, [
+      'produk terlaris', 'barang terlaris', 'produk paling laku',
+      'barang paling laku', 'produk paling laris', 'barang paling laris',
+      'produk terjual terbanyak', 'best selling', 'best seller',
+    ]);
+    final asksItemCount = !asksUnsoldProducts && !asksBestProducts &&
+        _hasAny(q, ['item terjual', 'barang terjual', 'produk terjual',
+          'jumlah item', 'jumlah produk terjual', 'berapa item', 'berapa produk',
+          'unit terjual', 'item laku', 'jumlah barang laku']);
+    final asksTopCustomers = asksCustomerRanking;
+    final asksLatestTransactions = _hasAny(q, [
+      'transaksi terbaru', 'transaksi terakhir', 'penjualan terbaru',
+      'latest transactions', 'most recent transactions', 'recent transactions',
+    ]);
     final isReturnReport = q.contains('retur') && _hasAny(q, ['berapa', 'jumlah', 'total', 'nominal', 'laporan', 'hari ini', 'kemarin', 'bulan ini', 'bulan lalu', 'tahun ini', 'amount', 'count', 'how much', 'how many']);
     final isQris = isQrisReport;
     final period = _period(q);
     final label = _periodLabel(q);
+
+    if (asksUnsoldProducts || asksBestProducts) {
+      final db = await DB.database;
+      final rows = await db.rawQuery(
+        'SELECT p.name AS product_name, '
+        'COALESCE(SUM(CASE WHEN s.id IS NOT NULL THEN si.qty - si.returned_qty ELSE 0 END), 0) AS units_sold '
+        'FROM products p LEFT JOIN sale_items si ON si.product_id = p.id '
+        'LEFT JOIN sales s ON s.id = si.sale_id AND s.sale_time >= ? AND s.sale_time < ? '
+        'WHERE p.active = 1 GROUP BY p.id, p.name '
+        'ORDER BY units_sold ${asksUnsoldProducts ? 'ASC' : 'DESC'}, p.name COLLATE NOCASE',
+        [_stamp(period[0]), _stamp(period[1])],
+      );
+      final selected = asksUnsoldProducts
+          ? rows.where((r) => _n(r['units_sold']) <= 0).take(8).toList()
+          : rows.where((r) => _n(r['units_sold']) > 0).take(8).toList();
+      if (selected.isEmpty) {
+        return asksUnsoldProducts
+            ? (_en ? 'No active products with zero net units sold were found for $label.' : 'Tidak ada produk aktif dengan unit terjual bersih nol yang ditemukan untuk $label.')
+            : (_en ? 'No product sales were found for $label.' : 'Belum ada penjualan produk yang tercatat untuk $label.');
+      }
+      final lines = selected.map((r) => '• ${(r['product_name'] ?? '').toString()} — ${_n(r['units_sold'])} ${_en ? 'units' : 'unit'}').join('\n');
+      return asksUnsoldProducts
+          ? (_en ? 'Products with no net units sold for $label:\n$lines' : 'Produk yang belum laku (unit terjual bersih 0) $label:\n$lines')
+          : (_en ? 'Best-selling products for $label, ranked by net units sold:\n$lines' : 'Produk paling laku $label, berdasarkan unit bersih setelah retur:\n$lines');
+    }
+
+    if (asksItemCount) {
+      final db = await DB.database;
+      final rows = await db.rawQuery(
+        'SELECT COALESCE(SUM(si.qty - si.returned_qty), 0) AS qty '
+        'FROM sale_items si INNER JOIN sales s ON s.id = si.sale_id '
+        'WHERE s.sale_time >= ? AND s.sale_time < ?',
+        [_stamp(period[0]), _stamp(period[1])],
+      );
+      return _en
+          ? 'Net units sold for $label: ${_n(rows.first['qty'])} (recorded returned quantities deducted).'
+          : 'Jumlah item/produk terjual bersih $label: ${_n(rows.first['qty'])} unit (sudah dikurangi kuantitas retur yang tercatat).';
+    }
+
+    if (asksTopCustomers) {
+      if (!_admin) return _en ? 'Top-customer rankings require Administrator permission.' : 'Peringkat pelanggan teratas memerlukan izin Administrator.';
+      final sales = await _salesForPeriod(period[0], period[1]);
+      final grouped = <String, Map<String, int>>{};
+      for (final sale in sales) {
+        final name = (sale['customer_name'] ?? '').toString().trim();
+        if (name.isEmpty || name.toLowerCase() == 'pelanggan umum') continue;
+        final metric = grouped.putIfAbsent(name, () => {'sales': 0, 'transactions': 0});
+        metric['sales'] = metric['sales']! + _n(sale['net_total']);
+        metric['transactions'] = metric['transactions']! + 1;
+      }
+      final rankByLoyalty = _hasAny(q, ['loyal', 'loyalitas', 'sering beli', 'repeat', 'paling sering']);
+      final ranked = grouped.entries.toList()
+        ..sort((a, b) => (rankByLoyalty ? b.value['transactions']! : b.value['sales']!)
+            .compareTo(rankByLoyalty ? a.value['transactions']! : a.value['sales']!));
+      if (ranked.isEmpty) return _en ? 'No named customer sales were recorded for $label.' : 'Belum ada penjualan dengan nama pelanggan tercatat untuk $label.';
+      final lines = ranked.take(5).map((e) => rankByLoyalty
+          ? '• ${e.key} — ${e.value['transactions']} ${_en ? 'transactions' : 'transaksi'}; ${rp(e.value['sales'])}'
+          : '• ${e.key} — ${rp(e.value['sales'])}; ${e.value['transactions']} ${_en ? 'transactions' : 'transaksi'}').join('\n');
+      return rankByLoyalty
+          ? (_en ? 'Most frequent customers for $label (purchase frequency is only a loyalty indicator):\n$lines' : 'Pelanggan paling sering bertransaksi $label (frekuensi adalah indikator loyalitas, bukan bukti pasti):\n$lines')
+          : (_en ? 'Top customers for $label, ranked by recorded net sales:\n$lines' : 'Pelanggan teratas/terroyal $label berdasarkan penjualan bersih tercatat:\n$lines');
+    }
+
+    if (asksLatestTransactions) {
+      final db = await DB.database;
+      final recent = await db.rawQuery(
+        'SELECT s.sale_no, s.sale_time, s.customer_name, s.total, '
+        '(s.total - COALESCE((SELECT SUM(si.returned_qty * si.price) FROM sale_items si WHERE si.sale_id = s.id), 0)) AS net_total '
+        'FROM sales s ORDER BY s.sale_time DESC, s.id DESC LIMIT 5',
+      );
+      if (recent.isEmpty) return _en ? 'No saved transactions were found.' : 'Belum ada transaksi tersimpan.';
+      final wantsCount = _hasAny(q, ['jumlah', 'berapa', 'total', 'count', 'how many']);
+      final todaySales = wantsCount ? await _salesForPeriod(period[0], period[1]) : <Map<String, dynamic>>[];
+      final lines = recent.map((r) => '• ${(r['sale_time'] ?? '').toString()} — ${(r['sale_no'] ?? '').toString()} — ${(r['customer_name'] ?? '').toString()} — ${rp(_n(r['net_total']))}').join('\n');
+      return wantsCount
+          ? (_en ? 'Transactions recorded for $label: ${todaySales.length}. Latest saved transactions (up to 5):\n$lines' : 'Jumlah transaksi tercatat $label: ${todaySales.length}. Transaksi tersimpan terbaru (maksimal 5):\n$lines')
+          : (_en ? 'Latest saved transactions (up to 5):\n$lines' : 'Transaksi tersimpan terbaru (maksimal 5):\n$lines');
+    }
 
     if (isProfit || isExpense || isPayable) {
       if (!_admin) {
@@ -666,6 +780,10 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
 
   String? _detectBankIntent(String q) {
     if (_hasAny(q, [
+      'transaksi terbaru', 'transaksi terakhir', 'penjualan terbaru',
+      'latest transactions', 'most recent transactions', 'recent transactions',
+    ])) return null;
+    if (_hasAny(q, [
       'hutang usaha', 'utang usaha', 'hutang toko', 'utang toko',
       'hutang supplier', 'utang supplier', 'hutang ke supplier',
       'utang ke supplier', 'hutang kepada supplier',
@@ -881,6 +999,11 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
 
     final asksForTips = hasAny([
       'tips usaha', 'kiat usaha', 'trik usaha', 'strategi usaha',
+      'spill tips', 'spill kiat', 'spill jurus', 'jurus', 'kiat', 'tips',
+      'sepi', 'ramai', 'rame', 'laris', 'laku', 'duh sepi', 'yah sepi',
+      'kok sepi', 'supaya ramai', 'supaya laris', 'supaya rame',
+      'biar laris', 'biar laku', 'agar laris', 'agar ramai',
+      'jualan rame', 'jualan ramai', 'jualan laku', 'toko rame',
       'cara meningkatkan omzet', 'cara menaikkan omzet',
       'cara meningkatkan omset', 'cara menaikkan omset',
       'tips meningkatkan penjualan', 'tips agar toko ramai',
@@ -983,8 +1106,10 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
     }
 
     if (hasAny([
-      'toko sepi', 'jualan sepi', 'lebih ramai', 'biar ramai',
-      'biar rame', 'toko ramai', 'banyak pembeli', 'menarik pembeli',
+      'toko sepi', 'jualan sepi', 'sepi', 'lebih ramai', 'biar ramai',
+      'biar rame', 'toko ramai', 'toko rame', 'supaya ramai', 'supaya laris',
+      'biar laris', 'biar laku', 'jualan laris', 'jualan rame', 'jualan ramai',
+      'banyak pembeli', 'menarik pembeli',
       'menambah pelanggan', 'pengunjung', 'kurang laku',
       'penjualan turun', 'get more customers', 'slow sales',
     ])) {
@@ -1202,7 +1327,10 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
 
   Future<String> _reply(String raw) async {
     final originalQ = raw.toLowerCase().trim();
-    final q = _normalizeQuestionFromBank(originalQ).replaceAll(RegExp(r'\bhutang\b', caseSensitive: false), 'utang');
+    final q = _normalizeQuestionFromBank(originalQ)
+        .replaceAll(RegExp(r'\bhutang\b', caseSensitive: false), 'utang')
+        .replaceAll(RegExp(r'\bbrp\b', caseSensitive: false), 'berapa')
+        .replaceAll(RegExp(r'\bbrapa\b', caseSensitive: false), 'berapa');
     if (q.isEmpty) return _en ? 'Please type a question first.' : 'Tulis pertanyaanmu dulu, ya.';
 
     if (!_admin && (_adminOnlyQuestion(q) || (_isCustomerDebtQuestion(originalQ)))) {
