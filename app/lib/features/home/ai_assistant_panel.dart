@@ -304,7 +304,36 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
     final asksCustomer = _isCustomerQuestion(q);
     if (asksCustomer && !asksCustomerRanking) return _answerCustomerQuestion(q);
 
-    if (_hasAny(q, ['stok', 'stock', 'persediaan', 'harga produk', 'product price'])) {
+
+    if (_hasAny(q, [
+      'stok', 'stock', 'persediaan', 'harga produk', 'product price',
+    ])) {
+      final asksStockReduction = _hasAny(q, [
+        'kurangi stok', 'mengurangi stok', 'pengurangan stok',
+        'kurangin stok', 'ngurangin stok', 'hapus stok',
+        'menghapus stok', 'hilangkan stok', 'menghilangkan stok',
+        'kosongkan stok', 'nolkan stok', 'kurangi stock',
+        'mengurangi stock', 'hapus stock', 'remove stock',
+        'reduce stock', 'decrease stock', 'delete stock',
+        'cara mengurangi', 'cara kurangi', 'cara kurangin',
+        'cara hapus', 'cara menghapus', 'cara menghilangkan',
+        'stock out', 'stok keluar', 'stock to zero', 'zero out stock',
+        'stok jadi nol', 'stok ke nol', 'stok sampai nol',
+        'stock jadi nol', 'stock ke nol', 'stok kosong',
+      ]);
+
+      if (asksStockReduction) {
+        if (!_admin) {
+          return _en
+              ? 'Stock adjustment is available to Admin. Please ask your Admin to open Settings → Stock, select the product, and choose Stock Out.'
+              : 'Pengurangan stok dilakukan oleh Admin. Minta Admin membuka Pengaturan → Stok, memilih produk, lalu menekan Kurangi Stok.';
+        }
+
+        return _en
+            ? 'To reduce stock: open Settings → Stock, find the product, tap the Stock Out icon, enter a quantity, then confirm. The quantity must be greater than zero and cannot exceed the available stock. Stock can reach zero; the product remains in the menu.'
+            : 'Cara mengurangi stok: buka Pengaturan → Stok, cari produk, tekan ikon Kurangi Stok, masukkan jumlah, lalu konfirmasi. Jumlah harus lebih dari nol dan tidak boleh melebihi stok tersedia. Stok boleh menjadi nol; produknya tetap ada di daftar menu.';
+      }
+
       return _answerProductQuestion(q);
     }
 
@@ -1454,10 +1483,9 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    return Card(
-      margin: const EdgeInsets.only(bottom: 14),
-      child: SizedBox(
-        height: 370,
+    return SizedBox.expand(
+      child: Card(
+        margin: const EdgeInsets.only(bottom: 4),
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(
@@ -1467,8 +1495,8 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
                 const Icon(Icons.support_agent_rounded, color: Colors.green),
                 const SizedBox(width: 8),
                 Expanded(child: Text(
-                  AppLocalizations.t('Colonel Smart Assistent', 'Colonel Smart Assistent'),
-                  style: const TextStyle(fontFamily: 'sans-serif-condensed', fontSize: 16, fontWeight: FontWeight.w800, color: Colors.red),
+                  AppLocalizations.t('Colonel Smart Assistant', 'Colonel Smart Assistant'),
+                  style: const TextStyle(fontFamily: 'sans-serif-condensed', fontSize: 18, fontWeight: FontWeight.w800, color: Colors.red),
                 )),
                 Container(
                   width: 9,
@@ -1514,7 +1542,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
                               constraints: const BoxConstraints(maxWidth: 290),
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                               decoration: BoxDecoration(color: colors.primaryContainer, borderRadius: BorderRadius.circular(12)),
-                              child: Text(turn.question, style: const TextStyle(fontSize: 12.5, height: 1.3)),
+                              child: Text(turn.question, style: const TextStyle(fontSize: 14, height: 1.4)),
                             ),
                           ),
                           const SizedBox(height: 6),
@@ -1540,7 +1568,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
                                               answer,
                                               maxLines: canCollapse && !turn.expanded ? 4 : null,
                                               overflow: canCollapse && !turn.expanded ? TextOverflow.ellipsis : TextOverflow.visible,
-                                              style: const TextStyle(fontSize: 12.5, height: 1.35),
+                                              style: const TextStyle(fontSize: 14, height: 1.45),
                                             ),
                                           ),
                                           if (canCollapse)
@@ -1578,7 +1606,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
                       hintStyle: const TextStyle(color: Color(0xFF9CA3AF)),
                       isDense: true,
                       border: const OutlineInputBorder(),
-                      contentPadding: const EdgeInsets.all(10),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                     ),
                   ),
                 ),
@@ -1592,7 +1620,6 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
               ]),
             ],
           ),
-        ),
       ),
     );
   }

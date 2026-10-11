@@ -221,6 +221,95 @@ class _StockPageState
     await load();
   }
 
+
+  Future<void> reduce(Product p) async {
+    if (p.stock <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.t('Stok sudah nol.', 'Stock is already zero.'),
+          ),
+        ),
+      );
+      return;
+    }
+
+    final q = TextEditingController(text: '1');
+    final qty = await showDialog<int>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(
+          AppLocalizations.t('Kurangi Stok • ', 'Stock Out • ') + p.name,
+        ),
+        content: TextField(
+          controller: q,
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            labelText: AppLocalizations.t(
+              'Jumlah (maks. ${p.stock})',
+              'Quantity (max. ${p.stock})',
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(AppLocalizations.t('Batal', 'Cancel')),
+          ),
+          FilledButton(
+            onPressed: () {
+              final parsed = int.tryParse(q.text.trim());
+              if (parsed == null || parsed <= 0 || parsed > p.stock) {
+                ScaffoldMessenger.of(dialogContext).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      AppLocalizations.t(
+                        'Masukkan jumlah 1 sampai ${p.stock}.',
+                        'Enter a quantity from 1 to ${p.stock}.',
+                      ),
+                    ),
+                  ),
+                );
+                return;
+              }
+              Navigator.pop(dialogContext, parsed);
+            },
+            child: Text(AppLocalizations.t('Kurangi', 'Reduce')),
+          ),
+        ],
+      ),
+    );
+    q.dispose();
+
+    if (qty == null) return;
+
+    try {
+      await DB.reduceStock(p.id, qty);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.t(
+              'Stok berhasil dikurangi.',
+              'Stock reduced successfully.',
+            ),
+          ),
+        ),
+      );
+      await load();
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.t('Gagal mengurangi stok: ', 'Failed to reduce stock: ') +
+                e.toString(),
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(
     BuildContext context,
@@ -269,6 +358,11 @@ class _StockPageState
                     ),
                     tooltip:
                         AppLocalizations.t('Stok masuk', 'Stock in'),
+                  ),
+                  IconButton(
+                    onPressed: p.stock > 0 ? () => reduce(p) : null,
+                    icon: const Icon(Icons.remove_circle_outline),
+                    tooltip: AppLocalizations.t('Kurangi stok', 'Stock out'),
                   ),
                 ],
               ),

@@ -320,6 +320,56 @@ class DB {
     });
   }
 
+
+  static Future<void> reduceStock(
+    int productId,
+    int qty,
+  ) async {
+    if (qty <= 0) {
+      throw Exception('Jumlah pengurangan harus lebih dari 0.');
+    }
+
+    final db = await database;
+
+    await db.transaction((txn) async {
+      final product = await txn.query(
+        'products',
+        columns: ['id', 'stock'],
+        where: 'id=?',
+        whereArgs: [productId],
+        limit: 1,
+      );
+
+      if (product.isEmpty) {
+        throw Exception('Produk tidak ditemukan.');
+      }
+
+      final currentStock =
+          ((product.first['stock'] as num?) ?? 0).toInt();
+
+      if (qty > currentStock) {
+        throw Exception('Jumlah pengurangan melebihi stok tersedia.');
+      }
+
+      final updated = await txn.rawUpdate(
+        'UPDATE products SET stock=stock-? WHERE id=? AND stock>=?',
+        [qty, productId, qty],
+      );
+
+      if (updated != 1) {
+        throw Exception('Stok berubah. Muat ulang lalu coba lagi.');
+      }
+
+      await txn.insert('stock_logs', {
+        'product_id': productId,
+        'time': stamp(),
+        'type': 'KELUAR',
+        'qty': qty,
+        'note': '',
+      });
+    });
+  }
+
   static Future<String> nextSaleNo(
     Transaction txn,
   ) async {

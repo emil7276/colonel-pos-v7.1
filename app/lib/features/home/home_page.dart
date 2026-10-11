@@ -483,9 +483,9 @@ String _trialLabel() {
               label: AppLocalizations.t('Keuangan', 'Finance'),
             ),
           NavigationDestination(
-            icon: const Icon(Icons.smart_toy_outlined),
-            selectedIcon: Icon(Icons.smart_toy_rounded),
-            label: AppLocalizations.t('Asisten Pintar', 'Smart Assistant'),
+            icon: const Icon(Icons.support_agent_rounded),
+            selectedIcon: Icon(Icons.support_agent_rounded),
+            label: AppLocalizations.t('CS Assistant', 'CS Assistant'),
           ),
         ],
       ),

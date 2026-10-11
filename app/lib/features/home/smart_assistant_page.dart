@@ -16,7 +16,7 @@ class SmartAssistantPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 12, 12, 16),
+        padding: const EdgeInsets.fromLTRB(12, 8, 12, 4),
         child: AiAssistantPanel(
           username: username,
           role: role,
