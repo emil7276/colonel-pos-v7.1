@@ -33,12 +33,15 @@ jobs:
           cache: true
 
       - name: Install dependencies
+        working-directory: app
         run: flutter pub get
 
       - name: Analyze Dart code
+        working-directory: app
         run: flutter analyze
 
       - name: Run tests if available
+        working-directory: app
         shell: bash
         run: |
           if find test -type f -name '*_test.dart' -print -quit 2>/dev/null | grep -q .; then
@@ -48,4 +51,5 @@ jobs:
           fi
 
       - name: Build debug APK
+        working-directory: app
         run: flutter build apk --debug
