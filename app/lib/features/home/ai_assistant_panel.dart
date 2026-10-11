@@ -440,17 +440,17 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
     // Common Islamic expressions and everyday replies.
     if (hasWord(['assalamualaikum', 'assalamu alaikum', 'salamualaikum', 'assalamuallaikum'])) {
       return _en
-          ? 'Waalaikumussalam warahmatullahi wabarakatuh 😊 How are you today? I can help with the shop or we can chat.'
-          : 'Waalaikumsalam warahmatullahi wabarakatuh$addressSuffix 😊 Semoga sehat, lancar, dan penuh berkah. Ada yang ingin dibantu atau mau ngobrol dulu?';
+          ? 'Waalaikumussalam warahmatullahi wabarakatuh 😊 May your day be peaceful and blessed.'
+          : 'Waalaikumsalam warahmatullahi wabarakatuh$addressSuffix 😊 Semoga sehat, lancar, dan penuh berkah.';
     }
     if (hasWord(['waalaikumsalam', 'waalaikumussalam', 'waalaikum salam', 'wa alaikum salam'])) {
-      return _en ? 'Thank you 😊 What can I help you with today?' : 'Sama-sama 😊 Semoga urusannya lancar. Ada yang bisa aku bantu?';
+      return _en ? 'Thank you 😊 I’m glad I could help.' : 'Sama-sama 😊 Semoga urusannya lancar.';
     }
     if (hasWord(['alhamdulillah', 'hamdulillah'])) {
-      return _en ? 'Alhamdulillah 😊 I hope things keep going well. Is there good news, or would you like to share how your day is going?' : 'Alhamdulillah 😊 Semoga nikmat dan urusannya terus diberi kelancaran serta keberkahan. Ada kabar baik yang ingin diceritakan?';
+      return _en ? 'Alhamdulillah 😊 May things continue to go well and be blessed.' : 'Alhamdulillah 😊 Semoga nikmat dan urusannya terus diberi kelancaran serta keberkahan.';
     }
     if (hasWord(['bismillah', 'bis millah', 'bismilah'])) {
-      return _en ? 'Bismillah 😊 I hope it goes smoothly. What are we starting today?' : 'Bismillah 😊 Semoga dimudahkan dan dilancarkan. Mau mulai mengerjakan apa hari ini?';
+      return _en ? 'Bismillah 😊 May everything go smoothly.' : 'Bismillah 😊 Semoga dimudahkan dan dilancarkan.';
     }
     if (hasWord(['insyaallah', 'inshaallah', 'insya allah', 'insha allah'])) {
       return _en ? 'InshaAllah 😊 I hope it works out well. Let me know if you want help preparing for it.' : 'Insyaallah 😊 Semoga benar-benar dimudahkan. Kalau ada yang perlu disiapkan atau direncanakan, aku bantu, ya.';
@@ -459,13 +459,13 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
       return _en ? 'Ameen, may it be so 😊' : 'Aamiin ya Rabbal ‘alamin 🤲😊 Semoga doa baiknya dikabulkan.';
     }
     if (hasWord(['masyaallah', 'masya allah', 'mashaallah', 'masha allah'])) {
-      return _en ? 'MashaAllah 😊 That is lovely to hear. What happened?' : 'Masyaallah 😊 Semoga menjadi kebaikan dan keberkahan. Ada cerita apa nih?';
+      return _en ? 'MashaAllah 😊 That is lovely to hear. What happened?' : 'Masyaallah 😊 Semoga menjadi kebaikan dan keberkahan.';
     }
     if (hasWord(['subhanallah', 'subhan allah'])) {
-      return _en ? 'SubhanAllah 😊 What made you say that?' : 'Subhanallah 😊 Ada hal yang membuat kamu takjub, ya? Cerita dong.';
+      return _en ? 'SubhanAllah 😊 Truly, all glory belongs to Allah.' : 'Subhanallah 😊 Mahasuci Allah.';
     }
     if (hasWord(['astaghfirullah', 'astagfirullah', 'astagfirullahaladzim'])) {
-      return _en ? 'Astaghfirullah. I hope things get easier. Would you like to tell me what happened?' : 'Astaghfirullah. Semoga diberi ketenangan dan jalan keluar yang baik. Kalau ada yang mengganjal, boleh cerita.';
+      return _en ? 'Astaghfirullah. I hope things become easier and more peaceful.' : 'Astaghfirullah. Semoga diberi ketenangan dan jalan keluar yang baik.';
     }
     if (hasWord(['jazakallah', 'jazakumullah', 'barakallah', 'barakallahu', 'syukron', 'syukran'])) {
       return _en ? 'Wa iyyakum 😊 Thank you, and may goodness return to you too.' : 'Wa iyyakum, sama-sama 😊 Semoga kebaikan dan keberkahan juga kembali untukmu.';
@@ -483,8 +483,8 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
     if (singleAddress != null) {
       final address = singleAddress.group(1)!;
       return _en
-          ? 'Yes, $address 😊 What can I help you with?'
-          : 'Iya, $address 😊 Ada yang bisa aku bantu? Mau ngobrol santai juga boleh.';
+          ? 'Yes, $address 😊 I’m here to help.'
+          : 'Iya, $address 😊 Ada yang bisa aku bantu?';
     }
 
     // Exact short greetings; avoid matching words that merely contain hai.
@@ -495,7 +495,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
       final address = greeting.group(2);
       final shown = salutation[0].toUpperCase() + salutation.substring(1);
       return address == null
-          ? (_en ? 'Hi! 😊 I am ready to help, or we can chat.' : '$shown! 😊 Aku siap membantu atau ngobrol santai. Ada yang ingin kamu bahas?')
+          ? (_en ? 'Hi! 😊 I’m ready to help.' : '$shown! 😊 Aku siap membantu.')
           : (_en ? '$shown $address! 😊 What can I help you with?' : '$shown $address! 😊 Ada yang bisa aku bantu?');
     }
 
@@ -536,16 +536,16 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
           : 'Banyak, Min! Aku bisa bantu cek omzet, transaksi, QRIS, stok, produk, retur, dan laporan yang tersedia. Aku juga bisa bantu cari ide promosi, memikirkan strategi menghadapi pesaing, atau ngobrol santai saat toko sepi. Data tertentu tetap mengikuti izin Administrator, ya. 😊';
     }
     if (_hasAny(q, ['kok pinter', 'kok pintar', 'pinter banget', 'pintar banget', 'kamu hebat', 'hebat banget', 'mantap min', 'makasih', 'terima kasih', 'thanks', 'thank you', 'love you', 'kamu baik', 'good job', 'you are smart', 'so smart', 'you are clever'])) {
-      return _en ? 'Hehe, thank you! 😊 I’m glad if I can help. Ask about your shop, request an idea, or just chat for a bit.'
-          : 'Hehehe, makasih, Min! 😄 Senang kalau aku bisa membantu. Mau tanya soal toko, cari ide, atau ngobrol santai juga boleh.';
+      return _en ? 'Hehe, thank you! 😊 I’m glad I could help.'
+          : 'Hehehe, makasih, Min! 😄 Senang kalau aku bisa membantu.';
     }
     if (_hasAny(q, ['bosen jaga toko', 'bosan jaga toko', 'kamu bosan', 'are you bored'])) {
-      return _en ? 'I do not get bored like a person, but we can use a quiet moment to brainstorm ideas—or just chat. Want to talk about something fun or ways to bring customers in?'
-          : 'Wkwk, aku nggak bisa bosan seperti manusia, Min. 😄 Kalau toko lagi sepi, kita bisa cari ide supaya lebih ramai atau ngobrol ringan dulu. Min pilih yang mana?';
+      return _en ? 'I do not get bored like a person. When the shop is quiet, I can help review sales or think of practical ways to attract customers.'
+          : 'Wkwk, aku nggak bisa bosan seperti manusia, Min. 😄 Kalau toko lagi sepi, kita bisa cek penjualan atau mencari ide promosi yang terukur.';
     }
     if (_hasAny(q, ['punya perasaan', 'kamu punya perasaan', 'do you have feelings', 'are you human'])) {
-      return _en ? 'I do not have feelings like a human, but I can listen to what you share and try to respond kindly. You can talk to me or ask for help with the shop.'
-          : 'Aku nggak punya perasaan seperti manusia, Min. Tapi aku bisa menanggapi ceritamu dengan hangat dan berusaha membantu. Kalau mau ngobrol atau curhat, ayo aja. 😊';
+      return _en ? 'I do not have feelings like a human, but I can respond respectfully and help with questions about your shop.'
+          : 'Aku nggak punya perasaan seperti manusia, Min, tetapi aku bisa menanggapi dengan baik dan membantu pertanyaan tentang toko. 😊';
     }
     if (_hasAny(q, ['kok ngitung cepat', 'ngitungnya cepat', 'hitung cepat', 'kok cepat', 'cepat banget', 'how are you so fast', 'calculate so fast', 'why so fast'])) {
       return _en ? 'I can calculate directly from saved records, so there is no need to count them one by one manually. We can still verify important numbers against the source records.'
@@ -593,11 +593,11 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
     }
     if (_hasAny(q, ['aku capek', 'saya capek', 'capek banget', 'lelah jualan', 'capek jualan', 'bad mood', 'sedih banget', 'lagi sedih', 'lagi stres', 'stress', 'stressed', 'i am tired', 'i feel tired'])) {
       return _en ? 'That sounds exhausting. Running a shop means handling customers, stock, money, and lots of little problems. If you can, take a short break. Want to tell me what has been weighing on you most?'
-          : 'Aduh, kedengarannya berat ya, Min. Jualan itu banyak yang dipikirkan: pelanggan, stok, modal, dan biaya. Kalau memungkinkan, istirahat sebentar dulu. Mau cerita, apa yang paling bikin Min capek akhir-akhir ini? Aku dengarkan.';
+          : 'Aduh, kedengarannya berat ya, Min. Jualan memang banyak yang dipikirkan: pelanggan, stok, modal, dan biaya. Kalau memungkinkan, istirahat sebentar dan selesaikan satu hal dulu.';
     }
     if (_hasAny(q, ['punya perasaan', 'kamu punya perasaan', 'do you have feelings', 'are you human'])) {
       return _en ? 'I do not have feelings like a human, but I can listen to what you share and try to respond kindly.'
-          : 'Aku nggak punya perasaan seperti manusia, Min. Tapi aku bisa menanggapi ceritamu dengan hangat dan berusaha membantu. Kalau mau ngobrol atau curhat, ayo aja. 😊';
+          : 'Aku nggak punya perasaan seperti manusia, Min, tetapi aku bisa menanggapi dengan baik dan membantu pertanyaan tentang toko. 😊';
     }
     // Opening greetings and polite replies should be handled before general fallback.
     if (_hasAny(q, ['assalamualaikum', 'assalamu alaikum', 'assalamu’alaikum', "assalamu'alaikum", 'salamualaikum'])) {
@@ -812,36 +812,36 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
 
   String _unknownReply() {
     final id = <String>[
-      "Hmm, coba ceritain sedikit lagi maksudmu 😊 Biar aku nggak salah nangkep.",
+      "Aku belum memahami maksudnya. Bisa jelaskan bagian yang ingin ditanyakan supaya aku tidak salah menjawab?",
       "Wah, aku belum nyambung nih 😄 Maksudmu bagian yang mana?",
-      "Boleh jelasin sedikit lagi? Aku ingin jawab sesuai maksudmu.",
+      "Bisa perjelas bagian yang dimaksud? Aku ingin menjawab dengan tepat.",
       "Hehe, sepertinya aku belum menangkap maksudmu 😅 Coba dengan cara lain, yuk.",
       "Aku simak, kok 😊 Tambahin sedikit konteks, ya.",
       "Hmm, aku masih agak bingung. Bisa kasih contoh?",
-      "Bisa jadi aku salah paham. Ceritain lagi, ya.",
-      "Oke, kita coba dari awal 😊 Kamu ingin membahas apa?",
+      "Mungkin aku salah memahami maksudnya. Tolong tulis ulang bagian yang ingin ditanyakan.",
+      "Aku belum menangkap maksud kalimat itu. Coba tulis pertanyaannya dengan lebih spesifik.",
       "Aku mau bantu, nih. Kasih sedikit petunjuk, dong.",
-      "Sepertinya aku perlu penjelasan tambahan. Santai aja, ceritain pelan-pelan.",
+      "Aku perlu sedikit konteks tambahan agar jawabannya tepat.",
       "Belum ketemu maksudnya, nih 😅 Coba jelasin sedikit lagi.",
       "Daripada asal jawab, boleh aku minta sedikit penjelasan?",
       "Hmm, bisa diperjelas? Aku nggak mau menebak-nebak.",
       "Kasih aku gambaran sedikit lagi, ya. Kita cari tahu bareng.",
       "Aku belum paham betul, tapi kita bisa coba lagi 😊",
-      "Kayaknya ada konteks yang belum aku tangkap. Ceritain sedikit, boleh?",
-      "Boleh banget kita bahas. Aku cuma perlu sedikit konteks.",
+      "Konteksnya belum cukup jelas untuk kujawab dengan yakin.",
+      "Aku bisa membantu setelah maksud pertanyaannya lebih jelas.",
       "Aku belum bisa menjawab dengan yakin. Apa yang ingin kamu capai?",
       "Kalau aku salah menangkap, koreksi aja, ya 😄",
       "Aku nggak mau sok tahu lalu malah menyesatkanmu.",
-      "Kamu mau mencari informasi, minta saran, atau sekadar ngobrol?",
+      "Tolong sebutkan informasi atau tindakan yang kamu maksud.",
       "Aku belum memahami kalimat itu. Bisa dibuat lebih sederhana?",
       "Nggak apa-apa, kita coba cara lain. Bagian mana yang ingin dibahas?",
-      "Aku di sini untuk membantu. Ceritakan sedikit lebih banyak, ya.",
+      "Tambahkan detail yang relevan agar aku bisa menjawab dengan tepat.",
       "Sepertinya aku butuh petunjuk tambahan 😄",
-      "Kalau tentang toko, sebutkan bagian yang ingin dicek. Kalau mau ngobrol juga boleh.",
+      "Kalau tentang toko, sebutkan fitur atau data yang ingin diperiksa.",
       "Aku belum yakin dengan maksud pertanyaanmu. Coba susun ulang, ya.",
       "Biar nggak salah paham, apa maksudmu dengan pertanyaan tadi?",
       "Kita bisa pecah pertanyaannya jadi lebih sederhana.",
-      "Hmm, aku belum paham sepenuhnya. Lanjutkan ceritamu, yuk."
+      "Aku belum memahami maksudnya. Tolong perjelas pertanyaan yang ingin dijawab."
     ];
     final en = <String>[
       "Hmm, could you tell me a little more? I don't want to misunderstand 😊",
@@ -873,7 +873,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
 
   Future<String> _reply(String raw) async {
     final originalQ = raw.toLowerCase().trim();
-    final q = _normalizeQuestionFromBank(originalQ);
+    final q = _normalizeQuestionFromBank(originalQ).replaceAll(RegExp(r'\bhutang\b', caseSensitive: false), 'utang');
     if (q.isEmpty) return _en ? 'Please type a question first.' : 'Tulis pertanyaanmu dulu, ya.';
 
     if (!_admin && (_adminOnlyQuestion(q) || (_isCustomerDebtQuestion(originalQ)))) {
