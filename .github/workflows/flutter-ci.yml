@@ -1,14 +1,7 @@
 name: Colonel POS v7.2 CI
 
 on:
-  push:
-    branches:
-      - v7.2-retur-partial
-  pull_request:
-    branches:
-      - v7.2-retur-partial
   workflow_dispatch:
-
 permissions:
   contents: read
 
