@@ -9,7 +9,6 @@ import '../../core/widgets.dart';
 import '../../data/database.dart';
 import '../../models/models.dart';
 import '../settings/finance_page.dart';
-import 'ai_assistant_panel.dart';
 
 class DashboardPage extends StatefulWidget {
   final String username;
@@ -230,8 +229,6 @@ class _DashboardPageState extends State<DashboardPage> {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
         children: [
-          AiAssistantPanel(username: widget.username, role: widget.role),
-          const SizedBox(height: 4),
 
           Row(
             children: [

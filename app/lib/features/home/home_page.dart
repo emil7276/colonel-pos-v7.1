@@ -16,6 +16,7 @@ import '../settings/printer_page.dart';
 import '../settings/backup_page.dart';
 import '../settings/finance_page.dart';
 import 'dashboard_page.dart';
+import 'smart_assistant_page.dart';
 
 class HomePage extends StatefulWidget {
   final String username;
@@ -168,6 +169,7 @@ String _trialLabel() {
       ReportPage(role: widget.role),
       if (widget.role == 'Administrator') SettingsPage(username: widget.username),
       if (widget.role == 'Administrator') const FinancePage(),
+      SmartAssistantPage(username: widget.username, role: widget.role),
     ];
     final titles = [
       'Dashboard',
@@ -175,6 +177,7 @@ String _trialLabel() {
       'Laporan',
       if (widget.role == 'Administrator') 'Pengaturan',
       if (widget.role == 'Administrator') 'Keuangan',
+      'Smart Assistant',
     ];
 
     return Scaffold(
@@ -479,6 +482,11 @@ String _trialLabel() {
               selectedIcon: Icon(Icons.account_balance_wallet_rounded),
               label: AppLocalizations.t('Keuangan', 'Finance'),
             ),
+          NavigationDestination(
+            icon: const Icon(Icons.smart_toy_outlined),
+            selectedIcon: Icon(Icons.smart_toy_rounded),
+            label: AppLocalizations.t('Asisten Pintar', 'Smart Assistant'),
+          ),
         ],
       ),
     );
