@@ -301,8 +301,399 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
       'pelanggan paling loyal', 'paling royal', 'paling loyal',
       'top customers', 'best customer', 'most loyal customer',
     ]);
+
     final asksCustomer = _isCustomerQuestion(q);
+
+    final asksTopCustomersExpanded = asksCustomerRanking || _hasAny(q, [
+      'top customer', 'top customers', 'customer teratas',
+      'pelanggan paling atas', 'pembeli teratas',
+      'pelanggan paling royal', 'pelanggan paling loyal',
+      'pelanggan belanja terbanyak', 'pelanggan paling banyak belanja',
+      'pembeli paling banyak belanja', 'most valuable customer',
+      'highest spending customer', 'most frequent customer',
+    ]);
+
+    final hasExplicitPeriod = _hasAny(q, [
+      'hari ini', 'today', 'kemarin', 'yesterday',
+      'minggu ini', 'minggu lalu', 'this week', 'last week',
+      'bulan ini', 'bulan lalu', 'this month', 'last month',
+      'tahun ini', 'tahun lalu', 'this year', 'last year',
+    ]);
+
+    final reportRange = hasExplicitPeriod
+        ? _period(q)
+        : <DateTime>[
+            DateTime(1970, 1, 1),
+            DateTime.now().add(const Duration(days: 1)),
+          ];
+
+    final reportLabel = hasExplicitPeriod
+        ? _periodLabel(q)
+        : (_en ? 'all recorded history' : 'seluruh riwayat tersimpan');
+
+    // KAS AKTUAL: samakan rumus dengan kartu Kas Aktual di FinancePage.
+    final asksCashActual = _hasAny(q, [
+      'kas aktual', 'saldo kas aktual', 'jumlah kas aktual',
+      'kas saat ini', 'saldo kas saat ini', 'uang kas aktual',
+      'actual cash', 'actual cash balance', 'cash balance',
+      'kas bersih aktual',
+    ]);
+
+    if (asksCashActual) {
+      if (!_admin) {
+        return _en
+            ? 'The actual-cash balance is restricted to Administrator access. Please ask your Admin to check Finance.'
+            : 'Informasi kas aktual hanya tersedia untuk Administrator. Minta Admin memeriksanya di halaman Keuangan, ya.';
+      }
+
+      final db = await DB.database;
+
+      final salesRows = await db.rawQuery('''
+        SELECT COALESCE(
+          SUM(
+            s.total - COALESCE(
+              (
+                SELECT SUM(si.returned_qty * si.price)
+                FROM sale_items si
+                WHERE si.sale_id = s.id
+              ), 0
+            )
+          ), 0
+        ) AS total
+        FROM sales s
+        WHERE (
+          UPPER(TRIM(COALESCE(s.payment, ''))) NOT IN
+            ('BAYAR TUNDA', 'BAYAR NANTI')
+          OR (
+            UPPER(TRIM(COALESCE(s.payment, ''))) IN
+              ('BAYAR TUNDA', 'BAYAR NANTI')
+            AND UPPER(TRIM(COALESCE(s.receivable_status, ''))) = 'LUNAS'
+          )
+        )
+      ''');
+
+      final expenseRows = await db.rawQuery('''
+        SELECT COALESCE(SUM(amount), 0) AS total
+        FROM expenses
+        WHERE UPPER(TRIM(COALESCE(payment_status, ''))) = 'LUNAS'
+      ''');
+
+      final collected = _n(salesRows.first['total']);
+      final paidExpenses = _n(expenseRows.first['total']);
+      final actualCash = collected - paidExpenses;
+
+      return _en
+          ? 'Recorded actual-cash balance: ${rp(actualCash)}. '
+            'Calculation: collected sales after recorded returns '
+            'and settled pay-later transactions (${rp(collected)}) '
+            'minus expenses marked paid (${rp(paidExpenses)}). '
+            'This is the app-recorded balance, not a physical count '
+            'of money in the cash drawer.'
+          : 'Kas aktual tercatat saat ini: ${rp(actualCash)}. '
+            'Perhitungan: pemasukan penjualan setelah retur tercatat '
+            'termasuk transaksi bayar tunda yang sudah lunas (${rp(collected)}) '
+            'dikurangi pengeluaran berstatus lunas (${rp(paidExpenses)}). '
+            'Ini saldo menurut catatan aplikasi, bukan hasil menghitung '
+            'uang fisik di laci kasir.';
+    }
+
+    // JAM / HARI / MINGGU / BULAN TERSIBUK.
+    // Peringkat menggunakan jumlah transaksi, bukan nilai omzet.
+    final busyHour = _hasAny(q, [
+      'jam paling sibuk', 'jam tersibuk', 'jam paling ramai',
+      'jam teramai', 'waktu paling sibuk', 'waktu paling ramai',
+      'peak hour', 'busiest hour', 'busiest time',
+    ]);
+
+    final busyWeekday = !busyHour && _hasAny(q, [
+      'hari paling sibuk', 'hari tersibuk', 'hari paling ramai',
+      'hari teramai', 'hari apa paling ramai', 'hari apa paling sibuk',
+      'busiest day', 'busiest weekday',
+    ]);
+
+    final busyWeek = !busyHour && !busyWeekday && _hasAny(q, [
+      'minggu paling sibuk', 'minggu tersibuk',
+      'pekan paling sibuk', 'pekan tersibuk',
+      'minggu paling ramai', 'busiest week',
+    ]);
+
+    final busyMonth = !busyHour && !busyWeekday && !busyWeek &&
+        _hasAny(q, [
+          'bulan paling sibuk', 'bulan tersibuk',
+          'bulan paling ramai', 'bulan teramai',
+          'busiest month', 'peak month',
+        ]);
+
+    if (busyHour || busyWeekday || busyWeek || busyMonth) {
+      if (!_admin) {
+        return _en
+            ? 'Busy-period analysis requires Administrator access.'
+            : 'Analisis waktu tersibuk memerlukan akses Administrator.';
+      }
+
+      final String bucketExpr;
+      if (busyHour) {
+        bucketExpr = "substr(sale_time,12,2)";
+      } else if (busyWeekday) {
+        bucketExpr = "strftime('%w', substr(sale_time,1,10))";
+      } else if (busyWeek) {
+        bucketExpr = "strftime('%Y-%W', sale_time)";
+      } else {
+        bucketExpr = "substr(sale_time,1,7)";
+      }
+
+      final db = await DB.database;
+      final rows = await db.rawQuery(
+        'SELECT $bucketExpr AS bucket, COUNT(*) AS transactions '
+        'FROM sales WHERE sale_time >= ? AND sale_time < ? '
+        'GROUP BY bucket '
+        'ORDER BY transactions DESC, bucket ASC LIMIT 5',
+        [_stamp(reportRange[0]), _stamp(reportRange[1])],
+      );
+
+      if (rows.isEmpty) {
+        return _en
+            ? 'No transactions were recorded for $reportLabel, so the busiest period cannot be determined yet.'
+            : 'Belum ada transaksi tercatat untuk $reportLabel, jadi waktu tersibuk belum bisa ditentukan.';
+      }
+
+      const weekdaysId = [
+        'Minggu', 'Senin', 'Selasa', 'Rabu',
+        'Kamis', 'Jumat', 'Sabtu',
+      ];
+      const weekdaysEn = [
+        'Sunday', 'Monday', 'Tuesday', 'Wednesday',
+        'Thursday', 'Friday', 'Saturday',
+      ];
+
+      final lines = rows.map((row) {
+        final bucket = (row['bucket'] ?? '-').toString();
+        String label = bucket;
+
+        if (busyHour) {
+          label = '$bucket:00–$bucket:59';
+        } else if (busyWeekday) {
+          final index = int.tryParse(bucket);
+          if (index != null && index >= 0 && index < 7) {
+            label = _en ? weekdaysEn[index] : weekdaysId[index];
+          }
+        } else if (busyWeek) {
+          label = '${_en ? 'Week' : 'Minggu'} $bucket';
+        }
+
+        return '• $label — ${_n(row['transactions'])} '
+            '${_en ? 'transactions' : 'transaksi'}';
+      }).join('\n');
+
+      final type = busyHour
+          ? (_en ? 'busiest hours' : 'jam tersibuk')
+          : busyWeekday
+              ? (_en ? 'busiest weekdays' : 'hari tersibuk')
+              : busyWeek
+                  ? (_en ? 'busiest weeks' : 'minggu tersibuk')
+                  : (_en ? 'busiest months' : 'bulan tersibuk');
+
+      return _en
+          ? 'Here are the $type by transaction count for $reportLabel:\n$lines'
+          : 'Berikut $type berdasarkan jumlah transaksi untuk $reportLabel:\n$lines';
+    }
+
+    // RANKING PRODUK: gunakan unit bersih setelah retur.
+    final asksLeastProduct = _hasAny(q, [
+      'produk paling tidak laku', 'produk paling gak laku',
+      'produk paling nggak laku', 'produk paling enggak laku',
+      'item paling tidak laku', 'item paling gak laku',
+      'item paling nggak laku', 'item paling enggak laku',
+      'barang paling tidak laku', 'barang paling gak laku',
+      'barang paling nggak laku', 'paling tidak laku',
+      'paling gak laku', 'paling nggak laku', 'paling enggak laku',
+      'produk kurang laku', 'barang kurang laku', 'item kurang laku',
+      'produk tidak laku', 'barang tidak laku', 'item tidak laku',
+      'produk gak laku', 'barang gak laku', 'item gak laku',
+      'produk nggak laku', 'barang nggak laku', 'item nggak laku',
+      'produk belum laku', 'barang belum laku', 'item belum laku',
+      'least selling', 'least sold', 'worst selling', 'slow moving',
+      'unsold products', 'unsold items',
+    ]);
+
+    final asksBestProduct = !asksLeastProduct && _hasAny(q, [
+      'produk paling laku', 'item paling laku', 'barang paling laku',
+      'produk paling laris', 'item paling laris', 'barang paling laris',
+      'produk terlaris', 'item terlaris', 'barang terlaris',
+      'produk terjual terbanyak', 'item terjual terbanyak',
+      'barang terjual terbanyak', 'paling banyak terjual',
+      'best selling', 'best seller', 'top selling', 'most sold',
+    ]);
+
+    if (asksLeastProduct || asksBestProduct) {
+      final db = await DB.database;
+      final List<Map<String, dynamic>> rows;
+
+      if (asksBestProduct) {
+        rows = await db.rawQuery('''
+          SELECT si.name AS product_name,
+            SUM(CASE WHEN si.qty > si.returned_qty
+              THEN si.qty - si.returned_qty ELSE 0 END) AS units_sold
+          FROM sale_items si
+          INNER JOIN sales s ON s.id = si.sale_id
+          WHERE s.sale_time >= ? AND s.sale_time < ?
+          GROUP BY si.name
+          HAVING SUM(CASE WHEN si.qty > si.returned_qty
+            THEN si.qty - si.returned_qty ELSE 0 END) > 0
+          ORDER BY units_sold DESC, si.name COLLATE NOCASE ASC
+          LIMIT 8
+        ''', [_stamp(reportRange[0]), _stamp(reportRange[1])]);
+      } else {
+        rows = await db.rawQuery('''
+          SELECT p.name AS product_name,
+            COALESCE((
+              SELECT SUM(CASE WHEN si.qty > si.returned_qty
+                THEN si.qty - si.returned_qty ELSE 0 END)
+              FROM sale_items si
+              INNER JOIN sales s ON s.id = si.sale_id
+              WHERE (
+                si.product_id = p.id OR (
+                  si.product_id IS NULL AND
+                  LOWER(TRIM(si.name)) = LOWER(TRIM(p.name))
+                )
+              )
+              AND s.sale_time >= ? AND s.sale_time < ?
+            ), 0) AS units_sold
+          FROM products p
+          WHERE p.active = 1
+          ORDER BY units_sold ASC, p.name COLLATE NOCASE ASC
+          LIMIT 8
+        ''', [_stamp(reportRange[0]), _stamp(reportRange[1])]);
+      }
+
+      if (rows.isEmpty) {
+        return _en
+            ? 'No matching product records were found for $reportLabel.'
+            : 'Tidak ditemukan catatan produk yang sesuai untuk $reportLabel.';
+      }
+
+      final lines = rows.map((row) =>
+        '• ${(row['product_name'] ?? '-').toString()} — '
+        '${_n(row['units_sold'])} ${_en ? 'net units sold' : 'unit bersih terjual'}'
+      ).join('\n');
+
+      return asksBestProduct
+          ? (_en
+              ? 'Best-selling products for $reportLabel, ranked by net units sold after recorded returns:\n$lines'
+              : 'Produk/item paling laku untuk $reportLabel, diurutkan berdasarkan jumlah unit terjual bersih setelah retur:\n$lines')
+          : (_en
+              ? 'Products with the lowest net sales quantities for $reportLabel:\n$lines'
+              : 'Produk/item dengan penjualan unit bersih terendah untuk $reportLabel:\n$lines');
+    }
+
+    // DAFTAR PRODUK: tidak memerlukan kata "stok" atau "harga".
+    final asksProductList = _hasAny(q, [
+      'daftar produk', 'daftar item', 'daftar barang',
+      'daftar semua produk', 'daftar semua item',
+      'semua produk', 'semua item', 'semua barang',
+      'list products', 'list items', 'product list', 'item list',
+      'daftar menu', 'semua menu', 'produk apa saja',
+      'produk apa aja', 'item apa saja', 'item apa aja',
+      'barang apa saja', 'barang apa aja',
+    ]);
+
+    if (asksProductList) {
+      final db = await DB.database;
+      final products = await db.query(
+        'products',
+        where: 'active = ?',
+        whereArgs: [1],
+        orderBy: 'name COLLATE NOCASE',
+      );
+
+      if (products.isEmpty) {
+        return _en
+            ? 'There are no active products in the saved product list.'
+            : 'Belum ada produk aktif dalam daftar produk tersimpan.';
+      }
+
+      final lines = products.take(20).map((p) =>
+        '• ${(p['name'] ?? '-').toString()} — '
+        '${_en ? 'stock' : 'stok'}: ${_n(p['stock'])}; '
+        '${_en ? 'price' : 'harga'}: ${rp(_n(p['price']))}'
+      ).join('\n');
+
+      final suffix = products.length > 20
+          ? (_en
+              ? '\nShowing 20 of ${products.length} active products.'
+              : '\nDitampilkan 20 dari ${products.length} produk aktif.')
+          : '';
+
+      return _en
+          ? 'Active products saved in Colonel POS:\n$lines$suffix'
+          : 'Ini daftar produk aktif yang tersimpan di Colonel POS:\n$lines$suffix';
+    }
+
+    // PELANGGAN TERATAS: default seluruh riwayat; periode eksplisit tetap dihormati.
+    if (asksTopCustomersExpanded) {
+      if (!_admin) {
+        return _en
+            ? 'Top-customer rankings require Administrator permission.'
+            : 'Peringkat pelanggan teratas memerlukan izin Administrator.';
+      }
+
+      final sales = await _salesForPeriod(
+        reportRange[0], reportRange[1],
+      );
+      final grouped = <String, Map<String, int>>{};
+
+      for (final sale in sales) {
+        final name = (sale['customer_name'] ?? '').toString().trim();
+        if (name.isEmpty || name.toLowerCase() == 'pelanggan umum') {
+          continue;
+        }
+
+        final metric = grouped.putIfAbsent(
+          name, () => {'sales': 0, 'transactions': 0},
+        );
+        metric['sales'] = metric['sales']! + _n(sale['net_total']);
+        metric['transactions'] = metric['transactions']! + 1;
+      }
+
+      final rankByFrequency = _hasAny(q, [
+        'loyal', 'loyalitas', 'sering beli', 'repeat',
+        'paling sering', 'frekuensi', 'sering transaksi',
+      ]);
+
+      final ranked = grouped.entries.toList()
+        ..sort((a, b) => (rankByFrequency
+                ? b.value['transactions']!
+                : b.value['sales']!)
+            .compareTo(rankByFrequency
+                ? a.value['transactions']!
+                : a.value['sales']!));
+
+      if (ranked.isEmpty) {
+        return _en
+            ? 'No named-customer sales were recorded for $reportLabel.'
+            : 'Belum ada penjualan dengan nama pelanggan tercatat untuk $reportLabel.';
+      }
+
+      final lines = ranked.take(5).map((entry) => rankByFrequency
+          ? '• ${entry.key} — ${entry.value['transactions']} '
+            '${_en ? 'transactions' : 'transaksi'}; '
+            '${rp(entry.value['sales'] ?? 0)}'
+          : '• ${entry.key} — ${rp(entry.value['sales'] ?? 0)}; '
+            '${entry.value['transactions']} '
+            '${_en ? 'transactions' : 'transaksi'}'
+      ).join('\n');
+
+      return rankByFrequency
+          ? (_en
+              ? 'Most frequent named customers for $reportLabel (frequency is an indicator, not proof of loyalty):\n$lines'
+              : 'Pelanggan yang paling sering bertransaksi untuk $reportLabel (frekuensi bukan bukti pasti loyalitas):\n$lines')
+          : (_en
+              ? 'Top customers for $reportLabel, ranked by net sales after recorded returns:\n$lines'
+              : 'Pelanggan teratas untuk $reportLabel, diurutkan berdasarkan penjualan bersih setelah retur tercatat:\n$lines');
+    }
+
     if (asksCustomer && !asksCustomerRanking) return _answerCustomerQuestion(q);
+
 
 
     final asksMenuDelete = _hasAny(q, [
@@ -1010,7 +1401,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
       case 'piutang':
         return 'piutang $period';
       case 'produk_terlaris':
-        return 'produk terlaris $period';
+        return q;
       case 'jumlah_pelanggan':
         return 'jumlah pelanggan $period';
       default:
@@ -1434,7 +1825,15 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
     final q = _normalizeQuestionFromBank(originalQ)
         .replaceAll(RegExp(r'\bhutang\b', caseSensitive: false), 'utang')
         .replaceAll(RegExp(r'\bbrp\b', caseSensitive: false), 'berapa')
-        .replaceAll(RegExp(r'\bbrapa\b', caseSensitive: false), 'berapa');
+        .replaceAll(RegExp(r'\bbrapa\b', caseSensitive: false), 'berapa')
+        .replaceAll(RegExp(r'\bpalinh\b'), 'paling')
+        .replaceAll(RegExp(r'\bpalingg\b'), 'paling')
+        .replaceAll(RegExp(r'\bterlariss\b'), 'terlaris')
+        .replaceAll(RegExp(r'\blakuu\b'), 'laku')
+        .replaceAll(RegExp(r'\bsibukk\b'), 'sibuk')
+        .replaceAll(RegExp(r'\bpelangaan\b'), 'pelanggan')
+        .replaceAll(RegExp(r'\bpelanggann\b'), 'pelanggan')
+        .replaceAll(RegExp(r'\bblm\b'), 'belum');
     if (q.isEmpty) return _en ? 'Please type a question first.' : 'Tulis pertanyaanmu dulu, ya.';
 
     if (!_admin && (_adminOnlyQuestion(q) || (_isCustomerDebtQuestion(originalQ)))) {
