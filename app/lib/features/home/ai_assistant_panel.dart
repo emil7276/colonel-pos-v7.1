@@ -532,8 +532,8 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
           : 'Hehe, aku dilatih menggunakan banyak contoh bahasa dan pengetahuan, Min, jadi bukan cuma diajari satu guru. 😄 Kalau urusan toko Min, aku tetap perlu memeriksa data yang tersimpan supaya nggak asal jawab.';
     }
     if (_hasAny(q, ['bisa bantu apa', 'bisa bantu apa aja', 'bisa ngapain', 'kamu bisa apa', 'what can you help', 'what can you do'])) {
-      return _en ? 'I can help check sales, transactions, QRIS, stock, products, returns, and available reports. I can also brainstorm promotions, think through competition, or chat when the shop is quiet. Some financial details require Administrator access.'
-          : 'Banyak, Min! Aku bisa bantu cek omzet, transaksi, QRIS, stok, produk, retur, dan laporan yang tersedia. Aku juga bisa bantu cari ide promosi, memikirkan strategi menghadapi pesaing, atau ngobrol santai saat toko sepi. Data tertentu tetap mengikuti izin Administrator, ya. 😊';
+      return _en ? 'I can help check sales, transactions, QRIS, stock, products, returns, and available reports. I can also brainstorm promotions, think through competition, and suggest practical steps for quiet business hours. Some financial details require Administrator access.'
+          : 'Banyak, Min! Aku bisa bantu cek omzet, transaksi, QRIS, stok, produk, retur, dan laporan yang tersedia. Aku juga bisa bantu cari ide promosi, memikirkan strategi menghadapi pesaing, serta menyusun langkah praktis saat toko sepi. Data tertentu tetap mengikuti izin Administrator, ya. 😊';
     }
     if (_hasAny(q, ['kok pinter', 'kok pintar', 'pinter banget', 'pintar banget', 'kamu hebat', 'hebat banget', 'mantap min', 'makasih', 'terima kasih', 'thanks', 'thank you', 'love you', 'kamu baik', 'good job', 'you are smart', 'so smart', 'you are clever'])) {
       return _en ? 'Hehe, thank you! 😊 I’m glad I could help.'
@@ -602,29 +602,29 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
     // Opening greetings and polite replies should be handled before general fallback.
     if (_hasAny(q, ['assalamualaikum', 'assalamu alaikum', 'assalamu’alaikum', "assalamu'alaikum", 'salamualaikum'])) {
       return _en
-          ? 'Waalaikumussalam! 😊 Welcome, how can I help you today? We can check your shop records, think about business ideas, or just chat.'
-          : 'Waalaikumsalam warahmatullahi wabarakatuh, Min. 😊 Semoga hari ini lancar dan penuh berkah. Ada yang mau ditanyakan, cek data toko, cari ide usaha, atau ngobrol santai dulu?';
+          ? 'Waalaikumussalam! 😊 Welcome, how can I help you today? I can help review shop records or develop practical business ideas.'
+          : 'Waalaikumsalam warahmatullahi wabarakatuh, Min. 😊 Semoga hari ini lancar dan penuh berkah. Aku siap membantu mengecek data toko. Kalau sedang ingin mengembangkan usaha, aku juga punya kiat praktis untuk membuat toko lebih ramai atau meningkatkan omzet.';
     }
     if (_hasAny(q, ['waalaikumsalam', 'wa alaikum salam', 'waalaikum salam', 'waalaikumussalam'])) {
       return _en ? 'Thank you! 😊 What can I help you with today?' : 'Sama-sama, Min. 😊 Semoga urusannya lancar. Ada yang bisa aku bantu?';
     }
     if (_hasAny(q, ['selamat pagi', 'pagi min', 'pagi, min', 'good morning', 'morning'])) {
-      return _en ? 'Good morning! ☀️ Hope your day goes smoothly. Want to check the shop numbers, plan a promotion, or just chat?' : 'Selamat pagi, Min! ☀️ Semoga dagangannya lancar, pembelinya ramai, dan rezekinya berkah. Mau cek data toko, cari ide promosi, atau ngobrol santai dulu?';
+      return _en ? 'Good morning! ☀️ Hope your day goes smoothly. I can help check shop numbers or plan a promotion.' : 'Selamat pagi, Min! ☀️ Semoga dagangannya lancar, pembelinya ramai, dan rezekinya berkah. Kita bisa cek data toko atau menyusun ide promosi yang praktis.';
     }
     if (_hasAny(q, ['selamat siang', 'siang min', 'siang, min', 'good afternoon'])) {
-      return _en ? 'Good afternoon! 😊 Hope everything is going well. What can I help you with?' : 'Selamat siang, Min! 😊 Semoga jualannya lancar, ya. Ada yang mau dicek atau mau ngobrol sebentar sambil menunggu pembeli?';
+      return _en ? 'Good afternoon! 😊 Hope everything is going well. What can I help you with?' : 'Selamat siang, Min! 😊 Semoga jualannya lancar, ya. Kita bisa mengecek data toko atau mencari ide promosi yang praktis.';
     }
     if (_hasAny(q, ['selamat sore', 'sore min', 'sore, min', 'good evening'])) {
-      return _en ? 'Good evening! 😊 How is the shop going? I can help check the numbers or brainstorm ways to bring customers in.' : 'Selamat sore, Min! 😊 Gimana kabar toko hari ini? Mau cek hasil penjualan sementara, cari ide supaya lebih ramai, atau ngobrol santai?';
+      return _en ? 'Good evening! 😊 How is the shop going? I can help check the numbers or brainstorm ways to bring customers in.' : 'Selamat sore, Min! 😊 Gimana kabar toko hari ini? Kita bisa cek penjualan sementara atau mencari cara agar toko lebih ramai.';
     }
     if (_hasAny(q, ['selamat malam', 'malam min', 'malam, min', 'good night'])) {
-      return _en ? 'Good evening! 🌙 Hope your day went well. Would you like to review today’s sales or wind down with a chat?' : 'Selamat malam, Min! 🌙 Semoga hari ini tetap membawa rezeki. Kalau mau, kita bisa cek penjualan hari ini atau ngobrol santai dulu. Kalau sudah lelah, jangan lupa istirahat juga, ya.';
+      return _en ? 'Good evening! 🌙 Hope your day went well. We can review today’s sales or consider ways to improve the shop.' : 'Selamat malam, Min! 🌙 Semoga hari ini tetap membawa rezeki. Kita bisa mengecek penjualan hari ini atau merencanakan langkah usaha berikutnya. Kalau sudah lelah, jangan lupa istirahat juga, ya.';
     }
     if (_hasAny(q, ['apa kabar', 'gimana kabar', 'kabarmu', 'how are you'])) {
       return _en ? 'I’m here and ready to help! 😊 How are you and how is the shop today?' : 'Aku siap menemani dan membantu, Min! 😊 Kalau Min sendiri gimana kabarnya? Toko hari ini ramai atau lagi agak sepi?';
     }
     if (_hasAny(q, ['halo', 'hai', 'hello', 'hi', 'permisi min', 'tes min', 'test min'])) {
-      return _en ? 'Hi! 👋 Ask me about sales, QRIS, products, stock, customers, returns, and reports. We can also brainstorm business ideas or just chat.' : 'Halo, Min! 👋 Aku siap bantu. Bisa tanya soal omzet, QRIS, stok, produk, pelanggan, retur, dan laporan. Mau cari ide usaha atau ngobrol santai juga boleh.';
+      return _en ? 'Hi! 👋 Ask me about sales, QRIS, products, stock, customers, returns, and reports. I can also help with practical business ideas and promotions.' : 'Halo, Min! 👋 Aku siap bantu. Bisa tanya soal omzet, QRIS, stok, produk, pelanggan, retur, dan laporan. Aku juga bisa bantu menyusun ide promosi dan strategi usaha yang praktis.';
     }
     return null;
   }
@@ -871,6 +871,335 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
     return choices[i];
   }
 
+  // Definitions follow the current Dashboard/Finance/Reports implementation.
+
+  String? _growthTipsAnswer(String rawQuestion) {
+    final q = rawQuestion.toLowerCase().trim();
+
+    bool hasAny(List<String> words) =>
+        words.any((word) => q.contains(word));
+
+    final asksForTips = hasAny([
+      'tips usaha', 'kiat usaha', 'trik usaha', 'strategi usaha',
+      'cara meningkatkan omzet', 'cara menaikkan omzet',
+      'cara meningkatkan omset', 'cara menaikkan omset',
+      'tips meningkatkan penjualan', 'tips agar toko ramai',
+      'cara agar toko ramai', 'cara biar ramai', 'biar toko ramai',
+      'toko sepi', 'jualan sepi', 'penjualan turun',
+      'menarik lebih banyak pelanggan', 'menambah pelanggan',
+      'meningkatkan penjualan', 'menaikkan penjualan',
+      'meningkatkan omzet', 'menaikkan omzet',
+      'meningkatkan omset', 'menaikkan omset',
+      'promosi apa', 'ide promosi', 'strategi promosi',
+      'paket bundling', 'repeat order', 'pelanggan kembali',
+      'business tips', 'increase sales', 'boost revenue',
+      'get more customers', 'more customers', 'slow sales',
+      'marketing ideas', 'business is not growing',
+      'not getting rich',
+    ]);
+
+    if (!asksForTips) return null;
+
+    if (hasAny([
+      'lebih detail', 'lebih jauh', 'secara mendalam',
+      'strategi khusus', 'strategi tingkat lanjut',
+      'jamin berhasil', 'pasti berhasil', 'guaranteed results',
+      'in depth', 'advanced strategy', 'specific competitor analysis',
+      'latest market forecast',
+    ])) {
+      return _en
+          ? 'For deeper or highly specialized research, you can continue '
+              'with ChatGPT or Gemini, or search the web. Include your '
+              'business type, general location, target customers, budget, '
+              'and relevant sales figures. Verify important claims and test '
+              'ideas on a small scale before investing. No strategy can '
+              'guarantee results without evidence from your own business.'
+          : 'Untuk riset yang lebih mendalam atau sangat khusus, kamu bisa '
+              'melanjutkannya di ChatGPT atau Gemini, atau mencari referensi '
+              'melalui web. Sertakan jenis usaha, lokasi umum, target '
+              'pelanggan, anggaran, dan angka penjualan yang relevan. '
+              'Periksa klaim penting dan uji ide dalam skala kecil sebelum '
+              'berinvestasi. Tidak ada strategi yang bisa menjamin hasil '
+              'tanpa bukti dari usaha kamu sendiri.';
+    }
+
+    if (hasAny([
+      'promosi', 'promo', 'diskon', 'iklan', 'instagram',
+      'tiktok', 'konten', 'status wa', 'whatsapp', 'marketing',
+    ])) {
+      return _en
+          ? 'Try a measurable promotion: choose one goal, such as attracting '
+              'new customers or moving specific stock. Pick relevant products, '
+              'show clear prices and promotion dates, and use channels your '
+              'customers already follow. Set a budget limit. Afterwards, '
+              'compare transactions, sales after returns, and promotion costs '
+              'against a comparable period. Higher revenue alone does not '
+              'prove higher profit because discounts can reduce margins.'
+          : 'Coba promosi yang hasilnya bisa diukur: tentukan satu tujuan, '
+              'misalnya menarik pelanggan baru atau menghabiskan stok '
+              'tertentu. Pilih produk yang relevan, tampilkan harga dan '
+              'masa promo dengan jelas, lalu gunakan kanal yang biasa '
+              'dilihat pelanggan. Batasi anggaran. Setelahnya, bandingkan '
+              'transaksi, penjualan setelah retur, dan biaya promosi dengan '
+              'periode yang sebanding. Omzet yang naik belum tentu berarti '
+              'laba naik karena diskon bisa mengurangi margin.';
+    }
+
+    if (hasAny([
+      'bundling', 'paket hemat', 'paket produk', 'upsell',
+      'cross sell', 'produk pelengkap', 'tambah item',
+    ])) {
+      return _en
+          ? 'Test a small bundle of two or three products customers commonly '
+              'buy together, or offer a relevant complementary item. Make '
+              'sure the price covers product cost and related expenses. '
+              'Track bundle sales, average transaction value, and margin '
+              'against regular sales. Avoid pressuring customers to buy '
+              'things they do not need.'
+          : 'Uji paket kecil berisi dua atau tiga produk yang sering dibeli '
+              'bersama, atau tawarkan produk pelengkap yang memang relevan. '
+              'Pastikan harganya menutup modal barang dan biaya terkait. '
+              'Catat jumlah paket terjual, nilai rata-rata transaksi, dan '
+              'margin dibandingkan penjualan biasa. Jangan memaksa pelanggan '
+              'membeli barang yang tidak mereka butuhkan.';
+    }
+
+    if (hasAny([
+      'pelanggan kembali', 'repeat order', 'pelanggan loyal',
+      'langganan', 'retensi pelanggan', 'pelanggan lama',
+    ])) {
+      return _en
+          ? 'Encourage repeat visits with reliable stock, consistent service, '
+              'clear prices, and a simple loyalty offer with understandable '
+              'rules. If sending promotional messages, respect customer '
+              'consent and privacy. Measure repeat purchases and program cost, '
+              'not just the number of messages sent.'
+          : 'Dorong pelanggan kembali dengan menjaga stok yang mereka cari, '
+              'memberikan pelayanan konsisten, memasang harga yang jelas, '
+              'dan menawarkan program loyalitas sederhana dengan aturan '
+              'yang mudah dipahami. Jika mengirim pesan promosi, hormati '
+              'persetujuan dan privasi pelanggan. Ukur pembelian ulang '
+              'serta biaya program, bukan sekadar jumlah pesan terkirim.';
+    }
+
+    if (hasAny([
+      'toko sepi', 'jualan sepi', 'lebih ramai', 'biar ramai',
+      'biar rame', 'toko ramai', 'banyak pembeli', 'menarik pembeli',
+      'menambah pelanggan', 'pengunjung', 'kurang laku',
+      'penjualan turun', 'get more customers', 'slow sales',
+    ])) {
+      return _en
+          ? 'If business is slow, start with low-cost steps: improve the '
+              'display of key products, make prices easy to see, check stock '
+              'for items customers often seek, and feature one clear offer. '
+              'Review transaction times to identify busy periods. Test one '
+              'change for a defined period and compare transactions and '
+              'margin with a similar period. Avoid large spending until '
+              'the results justify it.'
+          : 'Jika toko sedang sepi, mulai dari langkah berbiaya rendah: '
+              'rapikan tampilan produk utama, pastikan harga mudah terlihat, '
+              'periksa stok barang yang sering dicari, dan tampilkan satu '
+              'penawaran yang jelas. Periksa jam transaksi untuk menemukan '
+              'waktu ramai. Uji satu perubahan selama periode tertentu, lalu '
+              'bandingkan transaksi dan margin dengan periode yang sebanding. '
+              'Hindari pengeluaran besar sebelum hasilnya mendukung.';
+    }
+
+    return _en
+        ? 'To improve sales, look at three factors: number of transactions, '
+            'conversion to purchases, and average transaction value. Choose '
+            'one area to improve, test a small change, and track the results. '
+            'Also account for returns, discounts, product costs, and operating '
+            'expenses; higher revenue does not automatically mean higher profit. '
+            'For specialized market research, you can consult ChatGPT, Gemini, '
+            'or web search and verify suggestions before acting.'
+        : 'Untuk meningkatkan omzet, periksa tiga hal: jumlah transaksi, '
+            'berapa banyak calon pembeli yang jadi membeli, dan nilai '
+            'rata-rata transaksi. Pilih satu bagian untuk diperbaiki, uji '
+            'perubahan kecil, lalu catat hasilnya. Perhitungkan juga retur, '
+            'diskon, modal barang, dan biaya operasional; omzet yang naik '
+            'tidak otomatis berarti laba naik. Untuk riset pasar khusus, '
+            'kamu bisa menggunakan ChatGPT, Gemini, atau pencarian web, '
+            'lalu verifikasi sarannya sebelum diterapkan.';
+  }
+
+  String? _explainPosConcept(String rawQuestion) {
+    final q = rawQuestion.toLowerCase()
+        .replaceAll(RegExp(r'[^a-z0-9\s]'), ' ')
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .trim();
+    final asksMeaning = _hasAny(q, [
+      'apa itu', 'apa arti', 'artinya', 'pengertian', 'maksud', 'jelaskan',
+      'jelasin', 'fungsi kartu', 'arti kartu', 'kenapa beda', 'mengapa beda',
+      'apa bedanya', 'perbedaan', 'what is', 'what does', 'explain',
+      'meaning of', 'difference between',
+    ]) || (_hasAny(q, ['dashboard', 'halaman keuangan', 'halaman laporan', 'kartu', 'metrik']) &&
+        _hasAny(q, ['arti', 'jelaskan', 'apa itu', 'pengertian', 'maksud', 'fungsi']));
+    final bareMetric = q.split(' ').length <= 4 && _hasAny(q, [
+      'omzet', 'omset', 'transaksi', 'retur', 'item terjual', 'pengeluaran',
+      'piutang', 'hutang', 'utang', 'laba bersih', 'hasil bersih',
+      'kas aktual', 'pendapatan', 'bayar tunda', 'produk paling laku',
+      'produk terlaris', 'pelanggan teratas', 'waktu paling laku',
+      'grafik keuangan', 'grafik penjualan', 'ringkasan pembayaran',
+      'modal', 'modal barang', 'harga pokok', 'hpp', 'laba kotor',
+      'laba rugi', 'arus kas', 'cash flow', 'margin', 'saldo',
+    ]) && !_hasAny(q, [
+      'hari ini', 'kemarin', 'minggu ini', 'minggu lalu', 'bulan ini',
+      'bulan lalu', 'tahun ini', 'tahun lalu', 'today', 'yesterday',
+      'this week', 'last week', 'this month', 'last month', 'this year',
+      'last year', 'berapa', 'jumlah', 'total', 'cek', 'tampilkan',
+      'lihat', 'laporan', 'how much', 'how many',
+    ]);
+    if (!asksMeaning && !bareMetric) return null;
+    String a(String id, String en) => _en ? en : id;
+
+    if (_hasAny(q, ['kas aktual', 'actual cash', 'uang kas aktual'])) {
+      return a(
+        'Kas Aktual saat ini dihitung dari penjualan yang dianggap sudah menjadi kas (setelah dikurangi retur dan mengecualikan bayar tunda yang belum lunas), lalu dikurangi seluruh pengeluaran berstatus lunas. Rumus saat ini memakai data keseluruhan, bukan rentang tanggal yang dipilih, dan belum memperhitungkan saldo awal, setoran/penarikan kas, atau pergerakan kas lain yang tidak dicatat sebagai penjualan/pengeluaran. Jadi ini estimasi catatan aplikasi, bukan jaminan uang fisik di laci.',
+        'Actual Cash is calculated from sales treated as collected (after returns and excluding unpaid pay-later sales), minus all expenses marked paid. The current formula uses all-time records, not the selected date range, and omits opening cash, deposits/withdrawals, and other unrecorded cash movements. It is an app-record estimate, not a guarantee of physical cash in the drawer.'
+      );
+    }
+    if (_hasAny(q, ['laba bersih', 'hasil bersih', 'net profit', 'net result', 'laba rugi', 'rugi laba', 'profit', 'loss'])) {
+      return a(
+        'Di aplikasi saat ini, kartu Dashboard “Laba Bersih” = omzet bersih setelah retur − pengeluaran tercatat yang sudah dibayar. Kartu Keuangan “Hasil Bersih” memakai rumus Pendapatan − (Pengeluaran − total Hutang aktif). Angka ini belum tentu laba/rugi akuntansi sebenarnya karena HPP barang terjual dan biaya lain mungkin belum dihitung; rumus Hasil Bersih juga menambahkan kembali total hutang aktif. Anggap sebagai ringkasan sesuai rumus aplikasi, bukan laba bersih final.',
+        'The Dashboard “Net Profit” card currently equals net revenue after returns minus recorded paid expenses. Finance “Net Result” uses Revenue − (Expenses − total active Payables). Neither is necessarily accounting profit/loss because COGS and other costs may be missing; the Net Result formula also adds back active payables. Treat these as app-defined summaries, not final net profit.'
+      );
+    }
+    if (_hasAny(q, ['omzet', 'omset', 'revenue', 'penjualan bersih', 'net sales'])) {
+      return a(
+        'Omzet adalah nilai penjualan, bukan uang tunai yang pasti diterima dan bukan laba. Dashboard/Laporan menghitung total transaksi pada periode terpilih dikurangi nilai barang retur yang tercatat. Penjualan bayar tunda tetap dapat masuk omzet meski piutang belum lunas. Omzet belum dikurangi HPP dan seluruh biaya usaha.',
+        'Revenue is sales value, not necessarily cash collected and not profit. Dashboard/Reports calculate sales in the selected period minus recorded returned-item value. Pay-later sales can count while unpaid. Revenue has not been reduced by COGS and all business expenses.'
+      );
+    }
+    if (_hasAny(q, ['transaksi', 'transactions', 'jumlah transaksi'])) {
+      return a(
+        'Kartu Transaksi menghitung catatan penjualan pada rentang tanggal terpilih. Ini bukan jumlah pelanggan unik atau jumlah transaksi yang pasti lunas. Transaksi bayar tunda dan transaksi yang memiliki retur tetap dapat terhitung.',
+        'The Transactions card counts saved sales records in the selected date range. It is not unique customers or necessarily fully paid transactions. Pay-later sales and sales with returns can still count.'
+      );
+    }
+    if (_hasAny(q, ['retur', 'returns', 'pengembalian'])) {
+      return a(
+        'Kartu Retur menghitung transaksi yang memiliki barang retur pada periode penjualan tersebut. Jumlah transaksi retur berbeda dari nominal uang retur. Nilai retur yang tercatat mengurangi omzet bersih.',
+        'The Returns card counts sales records with returned items in the selected sales period. Return transaction count differs from monetary return value. Recorded returns reduce net revenue.'
+      );
+    }
+    if (_hasAny(q, ['item terjual', 'barang terjual', 'items sold', 'jumlah item'])) {
+      return a(
+        'Item Terjual adalah jumlah unit barang terjual dikurangi kuantitas retur yang tercatat. Ini menghitung unit, bukan jumlah transaksi atau nominal omzet.',
+        'Items Sold is units sold minus recorded returned quantities. It counts units, not transactions or revenue value.'
+      );
+    }
+    if (_hasAny(q, ['pengeluaran', 'expenses', 'biaya operasional'])) {
+      return a(
+        'Total Pengeluaran periode menghitung catatan pengeluaran bertanggal dalam periode terpilih dengan status Lunas/Sudah Dibayar. Pengeluaran berstatus Hutang/Jatuh Tempo tidak masuk total pengeluaran yang sudah dibayar; catatan itu muncul sebagai kewajiban di daftar Hutang.',
+        'Period Expenses counts records dated in the selected period and marked Paid. Expenses marked Debt/Due are excluded from paid expenses and appear as liabilities in Payables.'
+      );
+    }
+    if (_hasAny(q, ['piutang', 'receivable', 'bayar tunda', 'bayar nanti'])) {
+      return a(
+        'Piutang adalah saldo penjualan yang belum dibayar pelanggan. Bayar Tunda/Bayar Nanti menjadi piutang sampai ditandai lunas; retur tercatat dapat memengaruhi saldo. Kartu Dashboard mengikuti periode tanggal penjualan, sedangkan daftar Piutang Keuangan menampilkan piutang aktif.',
+        'Receivables are sales balances customers have not paid. Pay Later transactions remain receivables until settled; recorded returns can affect the balance. Dashboard follows the selected sale-date period, while Finance lists active receivables.'
+      );
+    }
+    if (_hasAny(q, ['hutang', 'utang', 'payable', 'payables', 'kewajiban'])) {
+      return a(
+        'Hutang adalah kewajiban usaha yang belum lunas. Di Colonel POS, daftar Hutang aktif berasal dari pengeluaran berstatus Hutang/Jatuh Tempo. Total Hutang aktif bukan omzet dan bukan uang yang sudah dibayar pada periode terpilih.',
+        'Payables are unpaid business obligations. In Colonel POS, active Payables come from expenses marked Debt/Due. Active Payables are neither revenue nor cash paid during the selected period.'
+      );
+    }
+    if (_hasAny(q, ['pendapatan', 'income'])) {
+      return a(
+        'Pendapatan pada halaman Keuangan menghitung penjualan dalam rentang tanggal terpilih setelah retur, dengan Bayar Tunda/Bayar Nanti dikecualikan sampai piutangnya berstatus Lunas. Karena itu nilainya bisa berbeda dari omzet Dashboard/Laporan yang dapat memasukkan penjualan tempo.',
+        'Finance Revenue counts sales in the selected date range after returns, excluding Pay Later sales until the receivable is marked settled. It can differ from Dashboard/Reports revenue, which can include pay-later sales.'
+      );
+    }
+    if (_hasAny(q, ['bayar tunda', 'pay later'])) {
+      return a(
+        'Bayar Tunda adalah penjualan ketika pelanggan belum membayar saat transaksi dibuat. Nilainya dapat masuk omzet, tetapi belum dianggap kas aktual selama piutangnya belum lunas. Pantau saldo tersisa di Piutang.',
+        'Pay Later is a sale where the customer has not paid at transaction time. It can count toward revenue, but is not treated as collected cash while unpaid. Track the balance under Receivables.'
+      );
+    }
+    if (_hasAny(q, ['produk paling laku', 'produk terlaris', 'best selling', 'best seller'])) {
+      return a(
+        'Produk Paling Laku menampilkan produk dengan unit terjual terbanyak pada periode terpilih setelah kuantitas retur dikurangi. Produk dengan unit terbanyak belum tentu memiliki omzet terbesar.',
+        'Best-Selling Products ranks products by units sold in the selected period after returned quantities are deducted. The most units sold does not necessarily mean highest revenue.'
+      );
+    }
+    if (_hasAny(q, ['pelanggan teratas', 'top customers'])) {
+      return a(
+        'Pelanggan Teratas merangkum pelanggan berdasarkan nilai penjualan bersih yang tercatat pada periode itu. Ini bukan otomatis peringkat pelanggan paling menguntungkan karena biaya, margin, dan piutang belum tentu diperhitungkan.',
+        'Top Customers summarizes customers by recorded net sales for the period. It is not necessarily a profitability ranking because costs, margins, and receivables may not be accounted for.'
+      );
+    }
+    if (_hasAny(q, ['waktu paling laku', 'jam ramai', 'peak hours'])) {
+      return a(
+        'Waktu Paling Laku menunjukkan jam dengan nilai penjualan tertinggi pada periode terpilih. Gunakan sebagai petunjuk pola ramai, bukan jaminan bahwa jam itu selalu paling ramai.',
+        'Peak Hours shows the hour with the highest sales value in the selected period. Use it as a pattern indicator, not a guarantee that the same hour is always busiest.'
+      );
+    }
+    if (_hasAny(q, ['ringkasan pembayaran', 'metode pembayaran', 'payment summary'])) {
+      return a(
+        'Ringkasan Pembayaran pada halaman Laporan menampilkan jumlah transaksi per metode pembayaran, bukan nominal rupiah per metode. Untuk nominal, tanyakan total QRIS, tunai, transfer, atau bayar tunda pada periode tertentu.',
+        'The Reports Payment Summary shows transaction counts by payment method, not rupiah amounts per method. Ask for QRIS, cash, transfer, or pay-later totals for a specific period to get amounts.'
+      );
+    }
+    if (_hasAny(q, ['grafik keuangan', 'grafik penjualan', 'financial chart', 'sales chart'])) {
+      return a(
+        'Grafik Keuangan Dashboard membandingkan omzet, pengeluaran tercatat, dan hasil bersih menurut Jam/Hari/Minggu/Bulan/Tahun. Grafik Penjualan Laporan menunjukkan tren omzet menurut Hari/Bulan/Tahun. Hasil bersih mengikuti rumus aplikasi, bukan otomatis laba akuntansi final.',
+        'The Dashboard Financial Chart compares revenue, recorded expenses, and net result by Hour/Day/Week/Month/Year. The Reports Sales Chart shows revenue trends by Day/Month/Year. Net result follows the app formula, not automatically final accounting profit.'
+      );
+    }
+    if (_hasAny(q, ['penjualan bulan ini', 'sales this month'])) {
+      return a(
+        'Penjualan Bulan Ini adalah omzet bulan kalender berjalan dari tanggal 1 sampai hari ini. Angka ini dapat berbeda dari kartu laporan yang mengikuti rentang tanggal pilihan.',
+        'Sales This Month is revenue for the current calendar month from day 1 through today. It can differ from cards that follow the selected date range.'
+      );
+    }
+    if (_hasAny(q, ['modal barang', 'harga pokok', 'hpp', 'cost of goods sold', 'cogs'])) {
+      return a(
+        'HPP (Harga Pokok Penjualan) adalah biaya perolehan barang yang benar-benar terjual. Secara sederhana, laba kotor = penjualan bersih − HPP. HPP berbeda dari total pembelian stok dan biaya operasional; laba/rugi akurat memerlukan data biaya produk yang memadai.',
+        'COGS is the cost of acquiring the goods actually sold. Gross profit = net sales − COGS. COGS differs from total stock purchases and operating expenses; accurate profit/loss requires reliable product-cost data.'
+      );
+    }
+    if (_hasAny(q, ['laba kotor', 'gross profit'])) {
+      return a(
+        'Laba Kotor = penjualan bersih − HPP barang terjual. Angka ini belum dikurangi biaya operasional seperti listrik, sewa, atau gaji, dan bukan saldo kas.',
+        'Gross Profit = net sales − COGS of goods sold. It has not deducted operating expenses such as electricity, rent, or wages, and is not the cash balance.'
+      );
+    }
+    if (_hasAny(q, ['margin', 'marjin'])) {
+      return a(
+        'Margin laba kotor biasanya dihitung (penjualan bersih − HPP) ÷ penjualan bersih × 100%. Diskon dapat menaikkan volume penjualan tetapi menurunkan margin jika terlalu besar.',
+        'Gross margin is commonly calculated as (net sales − COGS) ÷ net sales × 100%. Discounts can increase volume but reduce margin if too large.'
+      );
+    }
+    if (_hasAny(q, ['arus kas', 'cash flow'])) {
+      return a(
+        'Arus kas adalah pergerakan uang masuk dan keluar dalam periode tertentu. Penjualan tempo bisa menambah omzet tanpa uang diterima saat itu; pembayaran hutang bisa mengurangi kas tanpa menjadi penjualan baru.',
+        'Cash flow is money moving in and out during a period. A pay-later sale can increase revenue before cash is received; paying an existing debt reduces cash without being a new sale.'
+      );
+    }
+    if (_hasAny(q, ['modal', 'capital'])) {
+      return a(
+        'Modal adalah dana atau nilai yang ditanamkan pemilik dalam usaha. Modal berbeda dari omzet, saldo kas, dan laba. Untuk menilai keuntungan, HPP dan biaya operasional perlu dihitung.',
+        'Capital is funding or value invested by the owner. It differs from revenue, cash balance, and profit. Assessing profit requires COGS and operating expenses.'
+      );
+    }
+    if (_hasAny(q, ['saldo', 'balance'])) {
+      return a(
+        'Saldo adalah nilai yang tersisa pada akun/catatan pada waktu tertentu. Pastikan saldo apa yang dimaksud—kas, piutang, hutang, atau stok—beserta tanggal dan sumber datanya.',
+        'A balance is the remaining value in an account or record at a given time. Confirm whether it means cash, receivables, payables, or stock, and check its date and source.'
+      );
+    }
+    if (_hasAny(q, ['laporan', 'reports', 'dashboard', 'kartu'])) {
+      return a(
+        'Dashboard merangkum omzet, transaksi, retur, serta—untuk Admin—pengeluaran, piutang, hutang, hasil bersih, item terjual, produk paling laku, waktu paling laku, pelanggan teratas, ringkasan pembayaran, dan grafik keuangan. Laporan memuat omzet, transaksi, item terjual, retur, penjualan bulan ini, grafik penjualan, pelanggan, metode pembayaran, item, jam transaksi, dan transaksi tercatat. Sebut nama kartu tertentu agar penjelasannya lebih tepat.',
+        'Dashboard summarizes revenue, transactions, returns, and—for Admin—expenses, receivables, payables, net result, items sold, best-selling products, peak hours, top customers, payment summary, and financial chart. Reports contains revenue, transactions, items sold, returns, sales this month, sales chart, customers, payment methods, items, transaction hours, and saved transactions. Name a specific card for a more precise explanation.'
+      );
+    }
+    return null;
+  }
+
   Future<String> _reply(String raw) async {
     final originalQ = raw.toLowerCase().trim();
     final q = _normalizeQuestionFromBank(originalQ).replaceAll(RegExp(r'\bhutang\b', caseSensitive: false), 'utang');
@@ -880,6 +1209,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
       return _en ? 'Sorry 😊 This information requires Administrator permission. Please ask your Admin to check it. Your access remains limited to the functions allowed for your cashier role.'
           : 'Maaf ya 😊 Informasi ini memerlukan izin Administrator. Minta Admin memeriksanya, ya. Aksesmu tetap dibatasi sesuai fungsi yang diizinkan untuk Kasir.';
     }
+
 
     // Prioritize explicit POS data questions even when they include a greeting or thanks.
     final dataAnswer = await _answerDataQuestion(q);
@@ -894,6 +1224,11 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
       return dataAnswer;
     }
 
+    final growthTips = _growthTipsAnswer(originalQ);
+    if (growthTips != null) return growthTips;
+
+    final explanation = _explainPosConcept(originalQ);
+    if (explanation != null) return explanation;
     // A non-data answer breaks the sequence, so reminders only follow every third consecutive data answer.
     _consecutiveDataQuestionCount = 0;
     final social = _socialReply(originalQ);
