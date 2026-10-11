@@ -1019,9 +1019,23 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
       'get more customers', 'more customers', 'slow sales',
       'marketing ideas', 'business is not growing',
       'not getting rich',
+    'lanjut', 'lanjutin', 'terus', 'trus', 'apalagi',
+    'tips lain', 'kiat lain', 'tips berikutnya', 'lanjutkan',
+    'another tip', 'more tips', 'next tip', 'go on',
     ]);
 
     if (!asksForTips) return null;
+    // COLONEL_V72_ABDURRAHMAN_MARKET_TIP_V1
+    if (hasAny([
+      'lanjut', 'lanjutin', 'terus', 'trus', 'apalagi',
+      'tips lain', 'kiat lain', 'tips berikutnya', 'lanjutkan',
+      'another tip', 'more tips', 'next tip', 'go on',
+    ])) {
+      return _en
+          ? 'A useful lesson comes from Abdur-Rahman ibn Awf, a Companion of the Prophet. After arriving in Madinah, he asked to be shown the marketplace and began trading. The lesson is not that success is guaranteed, but to learn what people need, understand prices and competition, trade honestly, and build trust patiently. Try one practical step today: check your best-selling items and stock in Colonel POS, then make sure the products customers need are available. Grow steadily rather than chasing quick riches. This account is reported in Sahih al-Bukhari; numbering can vary by edition.'
+          : 'Ada pelajaran usaha dari Abdurrahman bin Auf r.a., sahabat Nabi. Setelah tiba di Madinah, beliau meminta ditunjukkan pasar lalu mulai berdagang. Pelajarannya bukan bahwa sukses pasti datang, melainkan pentingnya mengenali kebutuhan pembeli, memahami harga dan persaingan, berdagang dengan jujur, serta membangun kepercayaan dengan sabar. Coba satu langkah hari ini: periksa produk terlaris dan stok di Colonel POS, lalu pastikan barang yang dicari pelanggan tersedia. Bangun usaha secara bertahap, bukan mengejar kaya secara instan. Kisah ini diriwayatkan dalam Sahih al-Bukhari; nomor hadis dapat berbeda menurut edisi.';
+    }
+
 
     if (hasAny([
       'lebih detail', 'lebih jauh', 'secara mendalam',
