@@ -1620,6 +1620,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
               ]),
             ],
           ),
+        ),
       ),
     );
   }
