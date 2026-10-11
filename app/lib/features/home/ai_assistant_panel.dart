@@ -413,8 +413,8 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
             .compareTo(rankByLoyalty ? a.value['transactions']! : a.value['sales']!));
       if (ranked.isEmpty) return _en ? 'No named customer sales were recorded for $label.' : 'Belum ada penjualan dengan nama pelanggan tercatat untuk $label.';
       final lines = ranked.take(5).map((e) => rankByLoyalty
-          ? '• ${e.key} — ${e.value['transactions']} ${_en ? 'transactions' : 'transaksi'}; ${rp(e.value['sales'])}'
-          : '• ${e.key} — ${rp(e.value['sales'])}; ${e.value['transactions']} ${_en ? 'transactions' : 'transaksi'}').join('\n');
+          ? '• ${e.key} — ${e.value['transactions']} ${_en ? 'transactions' : 'transaksi'}; ${rp(e.value['sales'] ?? 0)}'
+          : '• ${e.key} — ${rp(e.value['sales'] ?? 0)}; ${e.value['transactions']} ${_en ? 'transactions' : 'transaksi'}').join('\n');
       return rankByLoyalty
           ? (_en ? 'Most frequent customers for $label (purchase frequency is only a loyalty indicator):\n$lines' : 'Pelanggan paling sering bertransaksi $label (frekuensi adalah indikator loyalitas, bukan bukti pasti):\n$lines')
           : (_en ? 'Top customers for $label, ranked by recorded net sales:\n$lines' : 'Pelanggan teratas/terroyal $label berdasarkan penjualan bersih tercatat:\n$lines');
