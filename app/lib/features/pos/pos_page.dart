@@ -43,6 +43,7 @@ class PosPageState extends State<PosPage> {
 
   String searchQuery = '';
   bool saveCustomer = false;
+  bool _cartExpanded = false;
 
   @override
   void dispose() {
@@ -1964,7 +1965,102 @@ class PosPageState extends State<PosPage> {
           child: Column(
             children: [
               Expanded(flex: 7, child: productGrid),
-              SizedBox(height: cart.isEmpty ? 250 : 305, child: cartPanel),
+              GestureDetector(
+                onVerticalDragUpdate: (details) {
+                  if (details.delta.dy < -4 && !_cartExpanded) {
+                    setState(() => _cartExpanded = true);
+                  } else if (details.delta.dy > 4 && _cartExpanded) {
+                    setState(() => _cartExpanded = false);
+                  }
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 220),
+                  curve: Curves.easeInOut,
+                  height: _cartExpanded
+                      ? (cart.isEmpty ? 250 : 305)
+                      : 78,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: red, width: 2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.12),
+                        blurRadius: 8,
+                        offset: const Offset(0, -2),
+                      ),
+                    ],
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: _cartExpanded
+                      ? cartPanel
+                      : Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () => setState(
+                              () => _cartExpanded = true,
+                            ),
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 8),
+                                Container(
+                                  width: 42,
+                                  height: 5,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade400,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 14,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.shopping_cart_rounded,
+                                          color: red,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Text(
+                                            '${AppLocalizations.t('Keranjang', 'Cart')} ($totalItems)',
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w800,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Flexible(
+                                          child: Text(
+                                            rp(total),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w900,
+                                              color: red,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Icon(
+                                          Icons.keyboard_arrow_up_rounded,
+                                          color: red,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                ),
+              ),
             ],
           ),
         );
