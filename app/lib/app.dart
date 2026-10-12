@@ -19,7 +19,7 @@ class ColonelApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'CP POS 6.5 GOLD',
+      title: 'CP COLONEL POS V.7.2',
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: scheme,

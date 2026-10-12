@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../core/license/license_service.dart';
+import '../../core/widgets.dart';
 
-class TrialExpiredPage extends StatefulWidget {
-  final DateTime expiresAt;
-
-  const TrialExpiredPage({
-    super.key,
-    required this.expiresAt,
-  });
+class ActivationPage extends StatefulWidget {
+  const ActivationPage({super.key});
 
   @override
-  State<TrialExpiredPage> createState() => _TrialExpiredPageState();
+  State<ActivationPage> createState() => _ActivationPageState();
 }
 
-class _TrialExpiredPageState extends State<TrialExpiredPage> {
+class _ActivationPageState extends State<ActivationPage> {
   final _codeController = TextEditingController();
 
   bool _loading = false;
   String? _error;
   String? _success;
+
+  static const String _message =
+      'Saya ingin aktivasi CP Colonel P.O.S\n\n'
+      'Nama :\n'
+      'Nama Usaha :\n'
+      'Kota :';
 
   @override
   void dispose() {
@@ -31,7 +34,10 @@ class _TrialExpiredPageState extends State<TrialExpiredPage> {
     final code = _codeController.text.trim();
 
     if (code.isEmpty) {
-      setState(() => _error = 'Masukkan kode aktivasi.');
+      setState(() {
+        _error = 'Masukkan kode aktivasi.';
+        _success = null;
+      });
       return;
     }
 
@@ -49,151 +55,175 @@ class _TrialExpiredPageState extends State<TrialExpiredPage> {
       _loading = false;
       if (ok) {
         _success =
-            'Aktivasi berhasil. Silakan tutup dan buka kembali aplikasi.';
+            'Aktivasi berhasil. Tutup lalu buka kembali aplikasi.';
         _codeController.clear();
       } else {
-        _error = 'Gagal: ${LicenseService.lastError}';
+        _error = LicenseService.lastError.isEmpty
+            ? 'Kode aktivasi tidak valid.'
+            : LicenseService.lastError;
       }
     });
   }
 
+  Future<void> _openContact(Uri uri) async {
+    try {
+      final launched = await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+      if (!launched && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Aplikasi kontak tidak dapat dibuka.'),
+          ),
+        );
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Aplikasi kontak tidak dapat dibuka.'),
+          ),
+        );
+      }
+    }
+  }
+
+  Uri get _whatsappUri => Uri.parse(
+        'https://wa.me/62895368910401'
+        '?text=${Uri.encodeComponent(_message)}',
+      );
+
+  Uri get _emailUri => Uri(
+        scheme: 'mailto',
+        path: 'cp.colonel.pos@gmail.com',
+        queryParameters: {
+          'subject': 'Aktivasi CP Colonel P.O.S',
+          'body': _message,
+        },
+      );
+
   @override
   Widget build(BuildContext context) {
-    final expiryText =
-        '${widget.expiresAt.day.toString().padLeft(2, '0')}/'
-        '${widget.expiresAt.month.toString().padLeft(2, '0')}/'
-        '${widget.expiresAt.year}';
+    final theme = Theme.of(context);
 
     return Scaffold(
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.lock_clock_outlined,
-                      size: 72,
-                    ),
-                    const SizedBox(height: 24),
-                    const Text(
-                      'Masa Trial Berakhir',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Trial aplikasi ini telah berakhir pada $expiryText.',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(height: 24),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Masukkan Kode Aktivasi',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: _codeController,
-                      decoration: const InputDecoration(
-                        hintText: 'Masukkan kode aktivasi',
-                        border: OutlineInputBorder(),
-                      ),
-                      textInputAction: TextInputAction.done,
-                      onSubmitted: (_) => _activate(),
-                    ),
-                    const SizedBox(height: 14),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: _loading ? null : _activate,
-                        icon: _loading
-                            ? const SizedBox(
-                                width: 18,
-                                height: 18,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : const Icon(Icons.key),
-                        label: Text(
-                          _loading ? 'Memeriksa...' : 'AKTIVASI',
-                        ),
-                      ),
-                    ),
-                    if (_error != null) ...[
-                      const SizedBox(height: 12),
+            padding: const EdgeInsets.all(20),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 460),
+              child: Card(
+                elevation: 3,
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const CpLogo(size: 92),
+                      const SizedBox(height: 20),
                       Text(
-                        _error!,
+                        'Aktivasi Diperlukan',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.w800,
                         ),
+                      ),
+                      const SizedBox(height: 10),
+                      const Text(
+                        'Aktifkan CP Colonel P.O.S untuk melanjutkan '
+                        'ke aplikasi.',
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 22),
+                      TextField(
+                        controller: _codeController,
+                        enabled: !_loading,
+                        decoration: const InputDecoration(
+                          labelText: 'Kode Aktivasi',
+                          hintText: 'Masukkan kode dari Admin',
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.key_outlined),
+                        ),
+                        autocorrect: false,
+                        textInputAction: TextInputAction.done,
+                        onSubmitted: (_) => _activate(),
+                      ),
+                      const SizedBox(height: 14),
+                      SizedBox(
+                        width: double.infinity,
+                        child: FilledButton(
+                          onPressed: _loading ? null : _activate,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 12,
+                            ),
+                            child: _loading
+                                ? const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : const Text('AKTIVASI'),
+                          ),
+                        ),
+                      ),
+                      if (_error != null) ...[
+                        const SizedBox(height: 12),
+                        Text(
+                          _error!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                      if (_success != null) ...[
+                        const SizedBox(height: 12),
+                        Text(
+                          _success!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                      const SizedBox(height: 22),
+                      const Text(
+                        'Belum punya kode aktivasi? Hubungi Admin:',
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        width: double.infinity,
+                        child: FilledButton.icon(
+                          onPressed: () => _openContact(_whatsappUri),
+                          icon: const Icon(Icons.chat_outlined),
+                          label: const Text('WhatsApp Admin'),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton.icon(
+                          onPressed: () => _openContact(_emailUri),
+                          icon: const Icon(Icons.email_outlined),
+                          label: const Text('cp.colonel.pos@gmail.com'),
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      const Text(
+                        'Satu lisensi hanya berlaku untuk satu perangkat.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 12),
                       ),
                     ],
-                    if (_success != null) ...[
-                      const SizedBox(height: 12),
-                      Text(
-                        _success!,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                    const SizedBox(height: 24),
-                    const SizedBox(height: 6),
-                    const Text(
-                      'Ingin melanjutkan dan menambah layanan?',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    OutlinedButton.icon(
-                      onPressed: () async {
-                        final uri = Uri(
-                          scheme: 'mailto',
-                          path: 'cp.colonel.pos@gmail.com',
-                          queryParameters: {
-                            'subject': 'Saya ingin menambah layanan',
-                          },
-                        );
-                        await launchUrl(uri);
-                      },
-                      icon: const Icon(Icons.email_outlined),
-                      label: const Text('cp.colonel.pos@gmail.com'),
-                    ),
-                    const SizedBox(height: 6),
-                    const Text(
-                      'Klik email untuk mengirim: Saya ingin menambah layanan',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 13, height: 1.4),
-                    ),
-                    const SizedBox(height: 18),
-                    const Text(
-                      'Data aplikasi tidak dihapus.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),

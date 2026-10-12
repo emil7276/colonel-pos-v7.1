@@ -19,5 +19,5 @@ const line = Color(0xFFE7E7EA);
 const copyright1 = 'Copyright © CP Colonel Pos';
 const copyright2 = 'Hak cipta dilindungi Undang-Undang';
 const appName = 'CP POS';
-const appVersion = '6.5.0';
+const appVersion = '7.2.0';
 const logoAsset = 'assets/images/cp_logo.png';

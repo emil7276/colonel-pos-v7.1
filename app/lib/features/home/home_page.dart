@@ -4,7 +4,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../core/constants.dart';
 import '../../core/app_localizations.dart';
 import '../../core/language_service.dart';
-import '../../core/trial_service.dart';
 import '../../core/license/license_service.dart';
 import '../../core/widgets.dart';
 import '../auth/login_page.dart';
@@ -34,7 +33,6 @@ class _HomePageState extends State<HomePage> {
 
   String? _quote;
   Timer? _quoteTimer;
-  TrialStatus? _trialStatus;
   LicenseInfo? _licenseInfo;
 
   void showQuote(String quote) {
@@ -58,46 +56,42 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  @override
   void initState() {
     super.initState();
-    _loadTrialStatus();
+    _loadLicenseInfo();
   }
 
-  Future<void> _loadTrialStatus() async {
-    final status = await TrialService.status();
+  Future<void> _loadLicenseInfo() async {
     final license = await LicenseService.getLicense();
     if (mounted) {
-      setState(() { _trialStatus = status; _licenseInfo = license; });
+      setState(() {
+        _licenseInfo = license;
+      });
     }
   }
 
-String _trialLabel() {
-  final license = _licenseInfo;
-  if (license != null && license.isActive) {
+  String _licenseLabel() {
+    final license = _licenseInfo;
+    if (license == null || !license.isActive) return '';
+
     final remaining = license.expiresAt.difference(DateTime.now());
-    final days = (remaining.inHours / 24).ceil().clamp(1, 9999);
+    final days = (remaining.inHours / 24).ceil().clamp(0, 9999);
+
     String planLabel;
     switch (license.plan) {
-      case "7D": planLabel = "7 HARI"; break;
-      case "1M": planLabel = "1 BULAN"; break;
-      case "3M": planLabel = "3 BULAN"; break;
-      case "1Y": planLabel = "1 TAHUN"; break;
+      case '7D': planLabel = '7 HARI'; break;
+      case '1M': planLabel = '1 BULAN'; break;
+      case '3M': planLabel = '3 BULAN'; break;
+      case '1Y': planLabel = '1 TAHUN'; break;
       default: planLabel = license.plan;
     }
+
     return AppLocalizations.t(
-      "AKTIF • $planLabel • Sisa $days hari",
-      "ACTIVE • $planLabel • $days days left",
+      'AKTIF • $planLabel • Sisa $days hari',
+      'ACTIVE • $planLabel • $days days left',
     );
   }
-  final status = _trialStatus;
-  if (status == null) return "TRIAL";
-  final remaining = status.expiresAt.difference(DateTime.now());
-  final days = (remaining.inHours / 24).ceil().clamp(1, 7);
-  return AppLocalizations.t(
-    "TRIAL • Sisa $days hari",
-    "TRIAL • $days days left",
-  );
-}
 
   @override
   void dispose() {
@@ -270,9 +264,9 @@ String _trialLabel() {
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
             ),
             Text('${widget.username} • ${widget.role}', style: const TextStyle(fontSize: 11, color: Colors.white70, fontWeight: FontWeight.w600)),
-            if (_trialStatus != null || _licenseInfo != null)
+            if (_licenseInfo != null && _licenseInfo!.isActive)
               Text(
-                _trialLabel(),
+                _licenseLabel(),
                 style: const TextStyle(
                   fontSize: 10,
                   color: Colors.white,

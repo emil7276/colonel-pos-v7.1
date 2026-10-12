@@ -1,7 +1,7 @@
 name: colonel_pos_65
-description: CP Colonel POS 6.5 — aplikasi point of sale restoran.
+description: CP COLONEL POS V.7.2 — aplikasi point of sale restoran.
 publish_to: "none"
-version: 6.5.0+2
+version: 7.2.0+2
 
 environment:
   sdk: ">=3.7.0 <4.0.0"

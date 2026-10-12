@@ -138,11 +138,11 @@ jobs:
 
       - name: Rename APK
         working-directory: app
-        run: mv "build/app/outputs/flutter-apk/app-release.apk" "build/app/outputs/flutter-apk/colonel-pos-v7.2.apk"
+        run: mv "build/app/outputs/flutter-apk/app-release.apk" "build/app/outputs/flutter-apk/CP COLONEL P.O.S.apk"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: colonel-pos-v7.2
-          path: 'app/build/app/outputs/flutter-apk/colonel-pos-v7.2.apk'
+          name: CP COLONEL P.O.S
+          path: 'app/build/app/outputs/flutter-apk/CP COLONEL P.O.S.apk'
           if-no-files-found: error

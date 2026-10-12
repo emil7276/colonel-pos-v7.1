@@ -1,51 +1,32 @@
 import 'package:flutter/material.dart';
 import 'app.dart';
 import 'data/database.dart';
-import 'core/trial_service.dart';
 import 'core/license/license_service.dart';
 import 'features/auth/trial_expired_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await DB.database;
-
   final license = await LicenseService.getLicense();
 
   if (license != null && license.isActive) {
+    await DB.database;
     runApp(const ColonelApp());
     return;
   }
 
-  final trial = await TrialService.status();
-
-  if (!trial.active) {
-    runApp(
-      TrialExpiredApp(
-        expiresAt: trial.expiresAt,
-      ),
-    );
-    return;
-  }
-
-  runApp(const ColonelApp());
+  // Trial 7 hari dihapus. Aktivasi wajib sebelum login/POS.
+  runApp(const ActivationApp());
 }
 
-class TrialExpiredApp extends StatelessWidget {
-  final DateTime expiresAt;
-
-  const TrialExpiredApp({
-    super.key,
-    required this.expiresAt,
-  });
+class ActivationApp extends StatelessWidget {
+  const ActivationApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: TrialExpiredPage(
-        expiresAt: expiresAt,
-      ),
+      home: ActivationPage(),
     );
   }
 }

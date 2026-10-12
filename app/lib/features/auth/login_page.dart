@@ -193,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 4),
                   const Text(
-                    'Professional Point of Sale • V6.5',
+                    'CP COLONEL POS V.7.2',
                     style: TextStyle(color: inkMuted, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 22),
