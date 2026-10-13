@@ -23,6 +23,24 @@ jobs:
       - name: Generate Android platform files
         working-directory: app
         run: flutter create --platforms android .
+      - name: Ensure Android camera permission
+        working-directory: app
+        run: |
+          python3 - <<'PYTHON'
+          from pathlib import Path
+          p = Path('android/app/src/main/AndroidManifest.xml')
+          s = p.read_text(encoding='utf-8')
+          permission = '    <uses-permission android:name="android.permission.CAMERA" />'
+          if 'android.permission.CAMERA' not in s:
+              marker = '    <application'
+              if marker not in s:
+                  raise SystemExit('ERROR: tag application tidak ditemukan')
+              s = s.replace(marker, permission + chr(10) + marker, 1)
+              p.write_text(s, encoding='utf-8')
+              print('Izin CAMERA ditambahkan.')
+          else:
+              print('Izin CAMERA sudah tersedia.')
+          PYTHON
 
       - name: Remove generated default test
         working-directory: app
@@ -59,6 +77,24 @@ jobs:
       - name: Generate Android platform files
         working-directory: app
         run: flutter create --platforms android .
+      - name: Ensure Android camera permission
+        working-directory: app
+        run: |
+          python3 - <<'PYTHON'
+          from pathlib import Path
+          p = Path('android/app/src/main/AndroidManifest.xml')
+          s = p.read_text(encoding='utf-8')
+          permission = '    <uses-permission android:name="android.permission.CAMERA" />'
+          if 'android.permission.CAMERA' not in s:
+              marker = '    <application'
+              if marker not in s:
+                  raise SystemExit('ERROR: tag application tidak ditemukan')
+              s = s.replace(marker, permission + chr(10) + marker, 1)
+              p.write_text(s, encoding='utf-8')
+              print('Izin CAMERA ditambahkan.')
+          else:
+              print('Izin CAMERA sudah tersedia.')
+          PYTHON
 
       - name: Remove generated default test
         working-directory: app
