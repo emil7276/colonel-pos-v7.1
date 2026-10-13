@@ -23,6 +23,29 @@ jobs:
       - name: Generate Android platform files
         working-directory: app
         run: flutter create --platforms android .
+
+      - name: Configure Android SDK and NDK for camera plugin
+        working-directory: app
+        run: |
+          python3 - <<'PYTHON'
+          from pathlib import Path
+
+          p = Path("android/app/build.gradle.kts")
+          s = p.read_text(encoding="utf-8")
+          replacements = {
+              "compileSdk = flutter.compileSdkVersion": "compileSdk = 36",
+              "ndkVersion = flutter.ndkVersion": 'ndkVersion = "27.0.12077973"',
+              "minSdk = flutter.minSdkVersion": "minSdk = 23",
+          }
+          for old, new in replacements.items():
+              if s.count(old) != 1:
+                  raise SystemExit(
+                      f"Expected one occurrence of {old!r}; found {s.count(old)}"
+                  )
+              s = s.replace(old, new, 1)
+          p.write_text(s, encoding="utf-8")
+          print("Android SDK/NDK configuration applied.")
+          PYTHON
       - name: Ensure Android camera permission
         working-directory: app
         run: |
@@ -77,6 +100,29 @@ jobs:
       - name: Generate Android platform files
         working-directory: app
         run: flutter create --platforms android .
+
+      - name: Configure Android SDK and NDK for camera plugin
+        working-directory: app
+        run: |
+          python3 - <<'PYTHON'
+          from pathlib import Path
+
+          p = Path("android/app/build.gradle.kts")
+          s = p.read_text(encoding="utf-8")
+          replacements = {
+              "compileSdk = flutter.compileSdkVersion": "compileSdk = 36",
+              "ndkVersion = flutter.ndkVersion": 'ndkVersion = "27.0.12077973"',
+              "minSdk = flutter.minSdkVersion": "minSdk = 23",
+          }
+          for old, new in replacements.items():
+              if s.count(old) != 1:
+                  raise SystemExit(
+                      f"Expected one occurrence of {old!r}; found {s.count(old)}"
+                  )
+              s = s.replace(old, new, 1)
+          p.write_text(s, encoding="utf-8")
+          print("Android SDK/NDK configuration applied.")
+          PYTHON
       - name: Ensure Android camera permission
         working-directory: app
         run: |
