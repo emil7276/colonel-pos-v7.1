@@ -1,4 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 import '../../core/constants.dart';
 import '../../core/app_localizations.dart';
 import '../../core/utils.dart';
@@ -79,10 +83,32 @@ class _MenuPageState extends State<MenuPage> {
     final nameController = TextEditingController(text: p?.name ?? '');
     final priceController = TextEditingController(text: p?.price.toString() ?? '');
     final stockController = TextEditingController(text: p?.stock.toString() ?? '0');
+    String imagePath = p?.imagePath ?? '';
+    final imagePicker = ImagePicker();
     final availableCategories = categories.where((x) => x != 'Semua').toList();
     String selectedCategory = p?.category ?? (availableCategories.isNotEmpty ? availableCategories.first : 'Ayam');
     if (!availableCategories.contains(selectedCategory)) availableCategories.add(selectedCategory);
     bool active = p?.active ?? true;
+
+    Future<void> pickProductImage(StateSetter setDialog, ImageSource source) async {
+      try {
+        final picked = await imagePicker.pickImage(source: source, imageQuality: 82, maxWidth: 1400, maxHeight: 1400);
+        if (picked == null) return;
+        final appDir = await getApplicationDocumentsDirectory();
+        final imageDir = Directory(path.join(appDir.path, 'product_images'));
+        if (!await imageDir.exists()) await imageDir.create(recursive: true);
+        final ext = path.extension(picked.path).toLowerCase();
+        if (!['.jpg', '.jpeg', '.png', '.webp'].contains(ext)) {
+          throw Exception('Format foto harus JPG, PNG, atau WebP.');
+        }
+        final target = path.join(imageDir.path, 'product_${DateTime.now().microsecondsSinceEpoch}$ext');
+        await File(picked.path).copy(target);
+        setDialog(() => imagePath = target);
+      } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Gagal memilih foto: $e')));
+      }
+    }
 
     await showDialog<void>(
       context: context,
@@ -95,6 +121,23 @@ class _MenuPageState extends State<MenuPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Container(
+                    width: double.infinity, padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(border: Border.all(color: boxBorder), borderRadius: BorderRadius.circular(12)),
+                    child: Column(children: [
+                      if (imagePath.isNotEmpty && File(imagePath).existsSync())
+                        ClipRRect(borderRadius: BorderRadius.circular(8), child: Image.file(File(imagePath), height: 130, width: double.infinity, fit: BoxFit.cover))
+                      else
+                        const SizedBox(height: 44, child: Center(child: Icon(Icons.add_photo_alternate_outlined, size: 32))),
+                      const SizedBox(height: 8),
+                      Wrap(spacing: 8, runSpacing: 4, alignment: WrapAlignment.center, children: [
+                        OutlinedButton.icon(onPressed: () => pickProductImage(setDialog, ImageSource.gallery), icon: const Icon(Icons.photo_library_outlined), label: const Text('Galeri')),
+                        OutlinedButton.icon(onPressed: () => pickProductImage(setDialog, ImageSource.camera), icon: const Icon(Icons.photo_camera_outlined), label: const Text('Kamera')),
+                        if (imagePath.isNotEmpty) TextButton.icon(onPressed: () => setDialog(() => imagePath = ''), icon: const Icon(Icons.delete_outline), label: const Text('Hapus foto')),
+                      ]),
+                    ]),
+                  ),
+                  const SizedBox(height: 10),
                   TextField(
                     controller: nameController,
                     decoration: InputDecoration(labelText: AppLocalizations.t('Nama menu', 'Menu Name')),
@@ -166,6 +209,7 @@ class _MenuPageState extends State<MenuPage> {
                       price: int.tryParse(priceController.text) ?? 0,
                       stock: int.tryParse(stockController.text) ?? 0,
                       active: active,
+                      imagePath: imagePath,
                     );
                     if (dialogContext.mounted) Navigator.pop(dialogContext);
                   } catch (e) {

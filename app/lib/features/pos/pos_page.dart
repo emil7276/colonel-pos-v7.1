@@ -1294,6 +1294,45 @@ class PosPageState extends State<PosPage> {
     );
   }
 
+  Future<void> _showProductDetails(Product p) async {
+    await showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+        title: Text(p.name, maxLines: 2, overflow: TextOverflow.ellipsis),
+        content: SingleChildScrollView(
+          child: SizedBox(
+            width: 360,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (p.imagePath.isNotEmpty && File(p.imagePath).existsSync())
+                  ClipRRect(borderRadius: BorderRadius.circular(12), child: Image.file(File(p.imagePath), width: double.infinity, height: 190, fit: BoxFit.cover))
+                else
+                  Container(width: double.infinity, height: 110,
+                    decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(12), border: Border.all(color: boxBorder)),
+                    child: const Icon(Icons.inventory_2_outlined, size: 42, color: inkMuted)),
+                const SizedBox(height: 12),
+                Text(p.category, style: const TextStyle(color: inkMuted, fontWeight: FontWeight.w600)),
+                const SizedBox(height: 6),
+                Text(rp(p.price), style: const TextStyle(color: red, fontSize: 22, fontWeight: FontWeight.w900)),
+                const SizedBox(height: 6),
+                Text('${AppLocalizations.t('Stok', 'Stock')}: ${p.stock}',
+                  style: TextStyle(color: p.stock <= 0 ? red : Colors.green.shade700, fontWeight: FontWeight.w700)),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(dialogContext), child: Text(AppLocalizations.t('Tutup', 'Close'))),
+          FilledButton.icon(onPressed: p.stock <= 0 ? null : () { Navigator.pop(dialogContext); add(p); },
+            icon: const Icon(Icons.add_shopping_cart), label: Text(AppLocalizations.t('Tambah ke keranjang', 'Add to cart'))),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final filtered = products.where((p) {
@@ -1420,8 +1459,8 @@ class PosPageState extends State<PosPage> {
                   final p = filtered[i];
                   return Card(
                     color: Colors.white,
-                    elevation: 5,
-                    shadowColor: gold.withValues(alpha: 0.38),
+                    elevation: 0,
+                    shadowColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
                       
                       side: BorderSide(
@@ -1431,7 +1470,7 @@ class PosPageState extends State<PosPage> {
                     ),
                     clipBehavior: Clip.antiAlias,
                     child: InkWell(
-                      onTap: () => add(p),
+                      onTap: () => _showProductDetails(p),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 6),
                         child: Column(
@@ -1445,9 +1484,9 @@ class PosPageState extends State<PosPage> {
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w900,
-                                fontSize: 16,
+                                fontSize: 15,
                                 color: Colors.black,
-                                height: 1.0,
+                                height: 1.12,
                               ),
                             ),
                             const SizedBox(height: 2),
@@ -1479,7 +1518,7 @@ class PosPageState extends State<PosPage> {
                                             }
                                           : null,
                                       icon: const Icon(
-                                        Icons.remove_circle,
+                                        Icons.remove_circle_outline,
                                         color: Colors.red,
                                         size: 24,
                                       ),
@@ -1547,7 +1586,7 @@ class PosPageState extends State<PosPage> {
                                     IconButton(
                                       onPressed: () => add(p),
                                       icon: const Icon(
-                                        Icons.add_circle,
+                                        Icons.add_circle_outline,
                                         color: Colors.green,
                                         size: 24,
                                       ),
@@ -1578,8 +1617,8 @@ class PosPageState extends State<PosPage> {
 
         final cartPanel = Card(
           color: Colors.white,
-          elevation: 8,
-          shadowColor: gold.withValues(alpha: 0.48),
+          elevation: 0,
+          shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
             side: BorderSide(
@@ -1627,13 +1666,6 @@ class PosPageState extends State<PosPage> {
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(14),
-                          boxShadow: [
-                            BoxShadow(
-                              color: gold.withValues(alpha: 0.18),
-                              blurRadius: 7,
-                              spreadRadius: 1,
-                            ),
-                          ],
                         ),
                         child: Autocomplete<String>(
                           optionsBuilder: (textEditingValue) {
@@ -1649,7 +1681,7 @@ class PosPageState extends State<PosPage> {
                               return Align(
                                 alignment: Alignment.topLeft,
                                 child: Material(
-                                  elevation: 4,
+                                  elevation: 0,
                                   borderRadius: BorderRadius.circular(12),
                                   child: ConstrainedBox(
                                     constraints: const BoxConstraints(
@@ -1776,13 +1808,6 @@ class PosPageState extends State<PosPage> {
                           return Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: (selected ? red : navy).withValues(alpha: 0.18),
-                                  blurRadius: 6,
-                                  spreadRadius: 1,
-                                ),
-                              ],
                             ),
                             child: ChoiceChip(
                               label: Text(type),
@@ -1983,13 +2008,6 @@ class PosPageState extends State<PosPage> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(color: red, width: 2),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.12),
-                        blurRadius: 8,
-                        offset: const Offset(0, -2),
-                      ),
-                    ],
                   ),
                   clipBehavior: Clip.antiAlias,
                   child: _cartExpanded

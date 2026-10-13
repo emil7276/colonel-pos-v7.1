@@ -23,7 +23,7 @@ class DB {
 
     _db = await openDatabase(
       path.join(dir, 'colonel_pos_v64.db'),
-      version: 6,
+      version: 7,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE products(
@@ -32,7 +32,8 @@ class DB {
             category TEXT NOT NULL,
             price INTEGER NOT NULL,
             stock INTEGER NOT NULL DEFAULT 0,
-            active INTEGER NOT NULL DEFAULT 1
+            active INTEGER NOT NULL DEFAULT 1,
+            image_path TEXT NOT NULL DEFAULT ''
           )
         ''');
 
@@ -172,6 +173,9 @@ class DB {
             "ALTER TABLE sales ADD COLUMN receivable_status TEXT NOT NULL DEFAULT 'Belum Lunas'",
           );
         }
+        if (oldVersion < 7) {
+          await db.execute("ALTER TABLE products ADD COLUMN image_path TEXT NOT NULL DEFAULT ''");
+        }
       },
     );
 
@@ -228,6 +232,7 @@ class DB {
     required int price,
     required int stock,
     required bool active,
+    String? imagePath,
   }) async {
     final db = await database;
 
@@ -254,6 +259,8 @@ class DB {
       'stock': stock,
       'active': active ? 1 : 0,
     };
+    // null berarti pertahankan foto lama, termasuk saat toggle Aktif.
+    if (imagePath != null) data['image_path'] = imagePath;
 
     if (id == null) {
       await db.insert('products', data);

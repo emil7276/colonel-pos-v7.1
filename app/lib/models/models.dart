@@ -1,7 +1,7 @@
 class Product {
-  final int id; final String name; final String category; final int price; final int stock; final bool active;
-  Product({required this.id, required this.name, required this.category, required this.price, required this.stock, required this.active});
-  factory Product.fromMap(Map<String,dynamic> m) => Product(id:m['id'] as int,name:m['name'] as String,category:m['category'] as String,price:m['price'] as int,stock:m['stock'] as int,active:m['active']==1);
+  final int id; final String name; final String category; final int price; final int stock; final bool active; final String imagePath;
+  Product({required this.id, required this.name, required this.category, required this.price, required this.stock, required this.active, this.imagePath = ''});
+  factory Product.fromMap(Map<String,dynamic> m) => Product(id:m['id'] as int,name:m['name'] as String,category:m['category'] as String,price:m['price'] as int,stock:m['stock'] as int,active:m['active']==1,imagePath:(m['image_path'] ?? '').toString());
 }
 
 class CartLine { final Product product; int qty; CartLine(this.product,this.qty); }
