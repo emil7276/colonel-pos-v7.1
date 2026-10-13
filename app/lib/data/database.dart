@@ -23,7 +23,7 @@ class DB {
 
     _db = await openDatabase(
       path.join(dir, 'colonel_pos_v64.db'),
-      version: 7,
+      version: 8,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE products(
@@ -33,9 +33,12 @@ class DB {
             price INTEGER NOT NULL,
             stock INTEGER NOT NULL DEFAULT 0,
             active INTEGER NOT NULL DEFAULT 1,
-            image_path TEXT NOT NULL DEFAULT ''
+            image_path TEXT NOT NULL DEFAULT '',
+            barcode TEXT NOT NULL DEFAULT ''
           )
         ''');
+
+        await db.execute("CREATE UNIQUE INDEX idx_products_barcode_unique ON products(barcode) WHERE barcode <> ''");
 
         await db.execute('''
           CREATE TABLE users(
@@ -176,6 +179,10 @@ class DB {
         if (oldVersion < 7) {
           await db.execute("ALTER TABLE products ADD COLUMN image_path TEXT NOT NULL DEFAULT ''");
         }
+        if (oldVersion < 8) {
+          await db.execute("ALTER TABLE products ADD COLUMN barcode TEXT NOT NULL DEFAULT ''");
+          await db.execute("CREATE UNIQUE INDEX idx_products_barcode_unique ON products(barcode) WHERE barcode <> ''");
+        }
       },
     );
 
@@ -233,6 +240,7 @@ class DB {
     required int stock,
     required bool active,
     String? imagePath,
+    String? barcode,
   }) async {
     final db = await database;
 
@@ -252,8 +260,19 @@ class DB {
       throw Exception('Stok tidak boleh negatif.');
     }
 
+    final cleanBarcode = (barcode ?? '').trim();
+    if (cleanBarcode.isNotEmpty) {
+      final duplicate = await db.query(
+        'products', columns: ['id'],
+        where: id == null ? 'barcode=?' : 'barcode=? AND id<>?',
+        whereArgs: id == null ? [cleanBarcode] : [cleanBarcode, id], limit: 1,
+      );
+      if (duplicate.isNotEmpty) throw Exception('Barcode sudah digunakan produk lain.');
+    }
+
     final data = {
       'name': name.trim(),
+      'barcode': cleanBarcode,
       'category': category.trim(),
       'price': price,
       'stock': stock,

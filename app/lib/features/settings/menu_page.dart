@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import '../../core/constants.dart';
@@ -79,8 +80,24 @@ class _MenuPageState extends State<MenuPage> {
     return value;
   }
 
+  Future<String?> _scanBarcodeCamera() async {
+    return showDialog<String>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Pindai barcode produk'),
+        content: SizedBox(width: 360, height: 360, child: MobileScanner(onDetect: (capture) {
+          if (capture.barcodes.isEmpty) return;
+          final value = capture.barcodes.first.rawValue?.trim();
+          if (value != null && value.isNotEmpty && dialogContext.mounted) Navigator.of(dialogContext).pop(value);
+        })),
+        actions: [TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text('Batal'))],
+      ),
+    );
+  }
+
   Future<void> edit([Product? p]) async {
     final nameController = TextEditingController(text: p?.name ?? '');
+    final barcodeController = TextEditingController(text: p?.barcode ?? '');
     final priceController = TextEditingController(text: p?.price.toString() ?? '');
     final stockController = TextEditingController(text: p?.stock.toString() ?? '0');
     String imagePath = p?.imagePath ?? '';
@@ -115,10 +132,12 @@ class _MenuPageState extends State<MenuPage> {
       builder: (dialogContext) => StatefulBuilder(
         builder: (context, setDialog) {
           return AlertDialog(
-            insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+            insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             title: Text(p == null ? AppLocalizations.t('Tambah Menu', 'Add Menu') : AppLocalizations.t('Edit Menu', 'Edit Menu')),
-            content: SingleChildScrollView(
-              child: Column(
+            content: SizedBox(
+              width: 420,
+              child: SingleChildScrollView(
+                child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
@@ -183,6 +202,37 @@ class _MenuPageState extends State<MenuPage> {
                     decoration: InputDecoration(labelText: AppLocalizations.t('Harga', 'Price')),
                   ),
                   const SizedBox(height: 10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: barcodeController,
+                          textInputAction: TextInputAction.done,
+                          decoration: const InputDecoration(
+                            labelText: 'Barcode / kode barang (opsional)',
+                            hintText: 'Masukkan kode barang',
+                            prefixIcon: Icon(Icons.qr_code_2),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: IconButton.filledTonal(
+                          tooltip: 'Scan barcode dengan kamera',
+                          icon: const Icon(Icons.photo_camera_outlined),
+                          onPressed: () async {
+                            final code = await _scanBarcodeCamera();
+                            if (code != null && code.trim().isNotEmpty) {
+                              setDialog(() => barcodeController.text = code.trim());
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
                   TextField(
                     controller: stockController,
                     keyboardType: TextInputType.number,
@@ -195,6 +245,7 @@ class _MenuPageState extends State<MenuPage> {
                     title: Text(AppLocalizations.t('Aktif', 'Active')),
                   ),
                 ],
+                ),
               ),
             ),
             actions: [
@@ -210,6 +261,7 @@ class _MenuPageState extends State<MenuPage> {
                       stock: int.tryParse(stockController.text) ?? 0,
                       active: active,
                       imagePath: imagePath,
+                      barcode: barcodeController.text.trim(),
                     );
                     if (dialogContext.mounted) Navigator.pop(dialogContext);
                   } catch (e) {
@@ -226,6 +278,7 @@ class _MenuPageState extends State<MenuPage> {
     );
 
     nameController.dispose();
+    barcodeController.dispose();
     priceController.dispose();
     stockController.dispose();
     await load();

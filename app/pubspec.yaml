@@ -25,6 +25,7 @@ dependencies:
   path_provider: ^2.1.5
   file_picker: ^10.3.6
   image_picker: ^1.1.2
+  mobile_scanner: ^6.0.2
   pdf: ^3.11.3
   printing: ^5.14.2
   audioplayers: ^6.1.0

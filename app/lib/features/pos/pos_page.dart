@@ -6,6 +6,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:printing/printing.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter/material.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants.dart';
 import '../../core/app_localizations.dart';
@@ -38,6 +39,7 @@ class PosPageState extends State<PosPage> {
   final TextEditingController customerNameController = TextEditingController();
   final TextEditingController customerPhoneController = TextEditingController();
   final TextEditingController searchController = TextEditingController();
+  final TextEditingController barcodeController = TextEditingController();
   TextEditingController? _customerAutocompleteController;
 
 
@@ -50,6 +52,7 @@ class PosPageState extends State<PosPage> {
     customerNameController.dispose();
     customerPhoneController.dispose();
     searchController.dispose();
+    barcodeController.dispose();
     super.dispose();
   }
 
@@ -256,6 +259,35 @@ class PosPageState extends State<PosPage> {
 
       setState(() => line.qty++);
     }
+  }
+
+  void _addScannedBarcode(String rawCode) {
+    final code = rawCode.trim();
+    barcodeController.clear();
+    if (code.isEmpty || !mounted) return;
+    final matches = products.where((p) => p.active && p.barcode.trim() == code);
+    if (matches.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Produk belum terdaftar untuk barcode: $code')));
+      return;
+    }
+    // Gunakan aturan add() yang sama untuk validasi stok dan tambah kuantitas.
+    add(matches.first);
+  }
+
+  Future<void> _scanBarcodeForSale() async {
+    final code = await showDialog<String>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Scan barcode belanja'),
+        content: SizedBox(width: 360, height: 360, child: MobileScanner(onDetect: (capture) {
+          if (capture.barcodes.isEmpty) return;
+          final value = capture.barcodes.first.rawValue?.trim();
+          if (value != null && value.isNotEmpty && dialogContext.mounted) Navigator.of(dialogContext).pop(value);
+        })),
+        actions: [TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text('Batal'))],
+      ),
+    );
+    if (code != null && mounted) _addScannedBarcode(code);
   }
 
   void minus(CartLine line) {
@@ -1390,6 +1422,17 @@ class PosPageState extends State<PosPage> {
                   ),
                 ],
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(4, 0, 4, 6),
+              child: Row(children: [
+                Expanded(child: TextField(
+                  controller: barcodeController, textInputAction: TextInputAction.done, onSubmitted: _addScannedBarcode,
+                  decoration: InputDecoration(hintText: 'Scan barcode untuk tambah belanja', prefixIcon: const Icon(Icons.qr_code_scanner), isDense: true, contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12), border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+                )),
+                const SizedBox(width: 6),
+                IconButton(tooltip: 'Scan dengan kamera', onPressed: _scanBarcodeForSale, icon: const Icon(Icons.photo_camera_outlined)),
+              ]),
             ),
             SizedBox(
               height: 40,

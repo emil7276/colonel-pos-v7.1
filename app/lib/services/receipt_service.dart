@@ -236,7 +236,7 @@ Future<List<int>> _escPosReceipt(SaleModel sale, {required String paper, int cop
     }
     bytes.addAll(generator.feed(2));
     bytes.addAll(generator.text('Terima kasih', styles: PosStyles(align: PosAlign.center, bold: true)));
-    bytes.addAll(generator.text('CP Colonel POS V6.5', styles: PosStyles(align: PosAlign.center)));
+    bytes.addAll(generator.text('CP COLONEL POS V.7.2', styles: PosStyles(align: PosAlign.center)));
     bytes.addAll(generator.feed(2));
     bytes.addAll(generator.cut());
   }
@@ -600,7 +600,7 @@ Future<void> testPrinterReceipt() async {
           pw.SizedBox(height: 12),
           pw.Text('Kertas: $paper'),
           pw.SizedBox(height: 14),
-          pw.Text('CP Colonel POS V6.5'),
+          pw.Text('CP COLONEL POS V.7.2'),
         ],
       ),
     ),
