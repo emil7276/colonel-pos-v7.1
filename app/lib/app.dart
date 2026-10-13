@@ -19,12 +19,12 @@ class ColonelApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'CP COLONEL POS V.7.2',
+      title: 'COLONEL POS UI.1',
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: scheme,
         scaffoldBackgroundColor: pageBg,
-        fontFamily: 'sans-serif-condensed',
+        fontFamily: 'sans-serif',
         visualDensity: VisualDensity.standard,
         textTheme: const TextTheme(
           displaySmall: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: -.4),
@@ -54,7 +54,6 @@ class ColonelApp extends StatelessWidget {
           surfaceTintColor: Colors.transparent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
-            side: const BorderSide(color: boxBorder),
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(

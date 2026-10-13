@@ -797,9 +797,7 @@ class _DashboardPageState extends State<DashboardPage> {
               decoration: BoxDecoration(
                 color: const Color(0xFFF7F7F8),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: const Color(0xFFEAEAEF),
-                ),
+
               ),
               child: Row(
                 children: [
@@ -839,9 +837,7 @@ class _DashboardPageState extends State<DashboardPage> {
               decoration: BoxDecoration(
                 color: redSoft,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: const Color(0xFFEAEAEF),
-                ),
+
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
