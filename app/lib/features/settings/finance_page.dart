@@ -744,7 +744,6 @@ class _FinancePageState extends State<FinancePage> {
                       ],
                     ),
                   ),
-                ),
                 ];
               }),
           ],
