@@ -63,7 +63,7 @@ class _IntroPageState extends State<IntroPage>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: const [
-              CpLogo(size: 140),
+              CpLogo(size: 140, charcoal: true),
               SizedBox(height: 24),
               Text(
                 'COLONEL POS',

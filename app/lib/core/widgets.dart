@@ -6,16 +6,33 @@ class CpLogo extends StatelessWidget {
   final double size;
   final bool rounded;
 
-  const CpLogo({super.key, this.size = 72, this.rounded = true});
+  const CpLogo({
+    super.key,
+    this.size = 72,
+    this.rounded = true,
+    this.charcoal = false,
+  });
+
+  final bool charcoal;
 
   @override
   Widget build(BuildContext context) {
-    final image = Image.asset(
+    Widget image = Image.asset(
       logoAsset,
       width: size,
       height: size,
       fit: BoxFit.cover,
     );
+
+    if (charcoal) {
+      image = ColorFiltered(
+        colorFilter: const ColorFilter.mode(
+          Color(0xFF292D32),
+          BlendMode.srcIn,
+        ),
+        child: image,
+      );
+    }
 
     if (!rounded) return image;
 

@@ -181,7 +181,7 @@ class _LoginPageState extends State<LoginPage> {
               constraints: const BoxConstraints(maxWidth: 430),
               child: Column(
                 children: [
-                  const CpLogo(size: 118),
+                  const CpLogo(size: 118, charcoal: true),
                   const SizedBox(height: 16),
                   const Text(
                     'CP POS',
@@ -199,11 +199,11 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 22),
                   Card(
                     color: Colors.white,
-                    elevation: 6,
-                    shadowColor: red.withValues(alpha: 0.35),
+                    elevation: 0,
+                    shadowColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
-                      side: const BorderSide(color: red, width: 1.2),
+                      side: BorderSide.none,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(22),

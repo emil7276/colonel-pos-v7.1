@@ -259,78 +259,6 @@ class _DashboardPageState extends State<DashboardPage> {
 
           const SizedBox(height: 12),
 
-          CpGradientCard(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(AppLocalizations.t('AKTIVASI LISENSI', 'LICENSE ACTIVATION'), style: const TextStyle(color: Colors.white, fontSize: 19, fontWeight: FontWeight.w900)),
-                      const SizedBox(height: 4),
-                      Text(AppLocalizations.t('Berlangganan Sekarang', 'Subscribe Now'), style: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.w600)),
-                    ],
-                  ),
-                ),
-                  FilledButton.icon(
-                    onPressed: () async {
-                      final controller = TextEditingController();
-
-                      final code = await showDialog<String>(
-                        context: context,
-                        builder: (dialogContext) => AlertDialog(
-                          insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-                          title: Text(AppLocalizations.t('Aktivasi Lisensi', 'License Activation')),
-                          content: TextField(
-                            controller: controller,
-                            maxLines: 4,
-                            decoration: InputDecoration(
-                              labelText: AppLocalizations.t('Kode Aktivasi', 'Activation Code'),
-                              hintText: AppLocalizations.t('Tempel kode aktivasi di sini', 'Paste activation code here'),
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(dialogContext),
-                              child: Text(AppLocalizations.t('BATAL', 'CANCEL')),
-                            ),
-                            ElevatedButton(
-                              onPressed: () => Navigator.pop(
-                                dialogContext,
-                                controller.text.trim(),
-                              ),
-                              child: Text(AppLocalizations.t('AKTIVASI', 'ACTIVATE')),
-                            ),
-                          ],
-                        ),
-                      );
-
-                      controller.dispose();
-
-                      if (code == null || code.isEmpty || !context.mounted) return;
-
-                      final ok = await LicenseService.saveLicense(code);
-
-                      if (!context.mounted) return;
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            ok
-                                ? 'Lisensi berhasil diaktifkan.'
-                                : 'Gagal: ${LicenseService.lastError}',
-                          ),
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.key_rounded, size: 18),
-                    label: Text(AppLocalizations.t('Aktivasi', 'Activate')),
-                  ),
-              ],
-            ),
-          ),
           const SizedBox(height: 2),
           Center(
             child: TextButton(
@@ -2496,62 +2424,86 @@ class _TrendChartPainter extends CustomPainter {
 
     void drawSeries(
       List<double> values,
-      Color color,
-    ) {
-      final path = Path();
+      Color color, {
+      bool fillArea = false,
+    }) {
+      if (values.isEmpty) return;
 
-      for (var i = 0; i < values.length; i++) {
-        final point = pointOffset(i, values[i]);
+      final coordinates = List<Offset>.generate(
+        values.length,
+        (i) => pointOffset(i, values[i]),
+      );
 
-        if (i == 0) {
-          path.moveTo(point.dx, point.dy);
-          continue;
-        }
+      final path = Path()
+        ..moveTo(coordinates.first.dx, coordinates.first.dy);
 
-        final previous = pointOffset(i - 1, values[i - 1]);
-        final control = (point.dx - previous.dx) * .35;
+      for (var i = 0; i < coordinates.length - 1; i++) {
+        final p0 = coordinates[i == 0 ? i : i - 1];
+        final p1 = coordinates[i];
+        final p2 = coordinates[i + 1];
+        final p3 = coordinates[
+          i + 2 < coordinates.length ? i + 2 : i + 1
+        ];
+
+        final cp1 = Offset(
+          p1.dx + (p2.dx - p0.dx) / 6,
+          p1.dy + (p2.dy - p0.dy) / 6,
+        );
+        final cp2 = Offset(
+          p2.dx - (p3.dx - p1.dx) / 6,
+          p2.dy - (p3.dy - p1.dy) / 6,
+        );
 
         path.cubicTo(
-          previous.dx + control,
-          previous.dy,
-          point.dx - control,
-          point.dy,
-          point.dx,
-          point.dy,
+          cp1.dx, cp1.dy,
+          cp2.dx, cp2.dy,
+          p2.dx, p2.dy,
         );
       }
 
-      final paint = Paint()
-        ..color = color
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2.7
-        ..strokeCap = StrokeCap.round
-        ..strokeJoin = StrokeJoin.round;
+      if (fillArea) {
+        final areaPath = Path.from(path)
+          ..lineTo(coordinates.last.dx, top + chartHeight)
+          ..lineTo(coordinates.first.dx, top + chartHeight)
+          ..close();
 
-      canvas.drawPath(path, paint);
+        canvas.drawPath(
+          areaPath,
+          Paint()
+            ..style = PaintingStyle.fill
+            ..shader = LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                color.withValues(alpha: 0.20),
+                color.withValues(alpha: 0.015),
+              ],
+            ).createShader(
+              Rect.fromLTWH(left, top, chartWidth, chartHeight),
+            ),
+        );
+      }
+
+      canvas.drawPath(
+        path,
+        Paint()
+          ..color = color
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = fillArea ? 2.8 : 2.2
+          ..strokeCap = StrokeCap.round
+          ..strokeJoin = StrokeJoin.round,
+      );
 
       final dotPaint = Paint()..color = color;
 
-      for (var i = 0; i < values.length; i++) {
-        final point = pointOffset(i, values[i]);
+      for (var i = 0; i < coordinates.length; i++) {
+        final point = coordinates[i];
 
         if (i == selectedIndex) {
-          canvas.drawCircle(
-            point,
-            5.5,
-            Paint()..color = Colors.white,
-          );
-          canvas.drawCircle(
-            point,
-            4,
-            dotPaint,
-          );
+          canvas.drawCircle(point, 5.5, Paint()..color = Colors.white);
+          canvas.drawCircle(point, 4, dotPaint);
         } else if (points.length <= 16) {
-          canvas.drawCircle(
-            point,
-            2.2,
-            dotPaint,
-          );
+          canvas.drawCircle(point, 2.2, dotPaint);
         }
       }
     }
@@ -2559,6 +2511,7 @@ class _TrendChartPainter extends CustomPainter {
     drawSeries(
       points.map((e) => e.omzet.toDouble()).toList(),
       red,
+      fillArea: true,
     );
 
     drawSeries(

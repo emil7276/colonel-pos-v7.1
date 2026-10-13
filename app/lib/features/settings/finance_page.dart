@@ -449,9 +449,6 @@ class _FinancePageState extends State<FinancePage> {
     final net = income - (expense - debt);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.t('Keuangan', 'Finance')),
-      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showExpenseDialog(),
         backgroundColor: red,
@@ -681,20 +678,24 @@ class _FinancePageState extends State<FinancePage> {
             const SizedBox(height: 8),
 
             if (expenseRows.isEmpty)
-              Card(
-                child: ListTile(
-                  title: Text(
-                    AppLocalizations.t(
-                      'Belum ada pengeluaran pada periode ini.',
-                      'No expenses for this period.',
-                    ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: Text(
+                  AppLocalizations.t(
+                    'Belum ada pengeluaran pada periode ini.',
+                    'No expenses for this period.',
                   ),
                 ),
               )
             else
-              ...expenseRows.map(
-                (item) => Card(
-                  child: ListTile(
+              ...expenseRows.asMap().entries.expand((entry) {
+                final index = entry.key;
+                final item = entry.value;
+                return [
+                  if (index > 0)
+                    const Divider(height: 1, thickness: 0.7, color: line),
+                  ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 4),
                     leading: CircleAvatar(
                       backgroundColor: redSoft,
                       foregroundColor: red,
@@ -744,9 +745,8 @@ class _FinancePageState extends State<FinancePage> {
                     ),
                   ),
                 ),
-              ),
-
-            const SizedBox(height: 90),
+                ];
+              }),
           ],
         ),
       ),

@@ -189,9 +189,9 @@ class _HomePageState extends State<HomePage> {
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                   colors: [
-                    Color(0xFFD71920),
-                    Color(0xFFB51218),
-                    Color(0xFF650B10),
+                    Color(0xFF292D32),
+                    Color(0xFF24282D),
+                    Color(0xFF1D2126),
                   ],
                 ),
               ),
@@ -244,7 +244,7 @@ class _HomePageState extends State<HomePage> {
         leadingWidth: 58,
         leading: Padding(
           padding: const EdgeInsets.only(left: 12, top: 10, bottom: 10),
-          child: CpLogo(size: 44),
+          child: CpLogo(size: 44, charcoal: true),
         ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -261,9 +261,9 @@ class _HomePageState extends State<HomePage> {
                           : titles[index] == 'Smart Assistant'
                               ? 'COLONEL SMART ASSISTANT'
                               : AppLocalizations.t('Keuangan', 'Finance'),
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, height: 1.05, letterSpacing: 0),
             ),
-            Text('${widget.username} • ${widget.role}', style: const TextStyle(fontSize: 11, color: Colors.white70, fontWeight: FontWeight.w600)),
+
             if (_licenseInfo != null && _licenseInfo!.isActive)
               Text(
                 _licenseLabel(),

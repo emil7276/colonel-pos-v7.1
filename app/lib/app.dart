@@ -40,7 +40,7 @@ class ColonelApp extends StatelessWidget {
           labelSmall: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
         ),
         appBarTheme: const AppBarTheme(
-          backgroundColor: navy,
+          backgroundColor: const Color(0xFF292D32),
           foregroundColor: Colors.white,
           elevation: 0,
           centerTitle: false,
@@ -78,7 +78,7 @@ class ColonelApp extends StatelessWidget {
         ),
         filledButtonTheme: FilledButtonThemeData(
           style: FilledButton.styleFrom(
-            backgroundColor: gold,
+            backgroundColor: red,
             foregroundColor: ink,
             minimumSize: const Size(0, 48),
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
@@ -90,7 +90,7 @@ class ColonelApp extends StatelessWidget {
         outlinedButtonTheme: OutlinedButtonThemeData(
           style: OutlinedButton.styleFrom(
             minimumSize: const Size(0, 48),
-            foregroundColor: goldDeep,
+            foregroundColor: const Color(0xFF364152),
             side: const BorderSide(color: goldDeep),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(14),
@@ -98,14 +98,14 @@ class ColonelApp extends StatelessWidget {
           ),
         ),
         navigationBarTheme: NavigationBarThemeData(
-          height: 76,
-          backgroundColor: navy,
-          surfaceTintColor: navy,
-          indicatorColor: gold.withValues(alpha: .18),
+          height: 68,
+          backgroundColor: const Color(0xFF292D32),
+          surfaceTintColor: const Color(0xFF292D32),
+          indicatorColor: Colors.transparent,
           labelTextStyle: WidgetStateProperty.resolveWith((states) {
             final selected = states.contains(WidgetState.selected);
             return TextStyle(
-              fontSize: 12,
+              fontSize: 11,
               fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
               color: selected ? gold : Colors.white70,
             );

@@ -1504,12 +1504,8 @@ class PosPageState extends State<PosPage> {
                     color: Colors.white,
                     elevation: 0,
                     shadowColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                      
-                      side: BorderSide(
-                        color: goldDeep,
-                        width: 1.1,
-                      ),
+                    shape: const RoundedRectangleBorder(
+                      side: BorderSide.none,
                     ),
                     clipBehavior: Clip.antiAlias,
                     child: InkWell(
@@ -1663,31 +1659,30 @@ class PosPageState extends State<PosPage> {
           elevation: 0,
           shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
-            side: BorderSide(
-              color: red.withValues(alpha: 0.45),
-              width: 1.2,
+              borderRadius: BorderRadius.circular(14),
+              side: const BorderSide(color: Color(0xFF364152), width: 1),
             ),
-          ),
           child: Column(
             children: [
               ListTile(
                 dense: true,
                 contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                leading: Icon(Icons.shopping_cart_rounded, color: red, size: 20),
-                title: Text(AppLocalizations.t('Keranjang', 'Cart'), style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13, color: red)),
-                trailing: OutlinedButton(
-                  onPressed: cart.isEmpty ? null : cancelShopping,
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: red,
-                    side: const BorderSide(color: red, width: 1.2),
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    minimumSize: const Size(0, 32),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                leading: Icon(Icons.shopping_cart_rounded, color: Color(0xFF364152), size: 20),
+                title: Text(AppLocalizations.t('Keranjang', 'Cart'), style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13, color: Color(0xFF364152))),
+                trailing: FilledButton(
+                    onPressed: cart.isEmpty ? null : cancelShopping,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: Color(0xFF364152),
+                      foregroundColor: Colors.white,
+                      disabledBackgroundColor: Color(0xFFE5E7EB),
+                      disabledForegroundColor: Color(0xFF9CA3AF),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      minimumSize: const Size(0, 32),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
-                  ),
                   child: Text(
                     AppLocalizations.t(
                       'CANCEL Belanja',
@@ -1985,9 +1980,13 @@ class PosPageState extends State<PosPage> {
                           child: OutlinedButton(
                             onPressed: discountDialog,
                             style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: red, width: 1.5),
-                            ),
-                            child: Text(AppLocalizations.t('Diskon', 'Discount')),
+                                foregroundColor: Color(0xFF364152),
+                                side: const BorderSide(color: Color(0xFF364152), width: 1),
+                              ),
+                              child: Text(
+                                AppLocalizations.t('Diskon', 'Discount'),
+                                style: const TextStyle(color: Color(0xFF364152)),
+                              ),
                           ),
                         ),
                         const SizedBox(width: 7),

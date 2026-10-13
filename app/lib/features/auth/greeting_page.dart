@@ -117,7 +117,7 @@ class _GreetingPageState extends State<GreetingPage>
                   opacity: _logoFade,
                   child: ScaleTransition(
                     scale: _logoScale,
-                    child: const CpLogo(size: 120),
+                    child: const CpLogo(size: 120, charcoal: true),
                   ),
                 ),
 
