@@ -46,6 +46,34 @@ jobs:
           p.write_text(s, encoding="utf-8")
           print("Android SDK/NDK configuration applied.")
           PYTHON
+      - name: Align Kotlin Gradle plugin for mobile_scanner
+        working-directory: app
+        run: |
+          python3 - <<'PYTHON'
+          from pathlib import Path
+          import re
+
+          candidates = [
+              Path("android/settings.gradle"),
+              Path("android/settings.gradle.kts"),
+          ]
+          p = next((x for x in candidates if x.exists()), None)
+          if p is None:
+              raise SystemExit("ERROR: Android settings file tidak ditemukan")
+
+          s = p.read_text(encoding="utf-8")
+          pattern = re.compile(
+              r"""(id\s*\(?\s*['"]org\.jetbrains\.kotlin\.android['"]\)?\s+version\s+['"])([^'"]+)(['"])"""
+          )
+          updated, count = pattern.subn(
+              r"\g<1>2.1.0\g<3>", s, count=1
+          )
+          if count != 1:
+              raise SystemExit("ERROR: deklarasi plugin Kotlin tidak ditemukan")
+          p.write_text(updated, encoding="utf-8")
+          print(f"Kotlin Gradle plugin disetel ke 2.1.0 di {p}.")
+          PYTHON
+
       - name: Ensure Android camera permission
         working-directory: app
         run: |
@@ -123,6 +151,34 @@ jobs:
           p.write_text(s, encoding="utf-8")
           print("Android SDK/NDK configuration applied.")
           PYTHON
+      - name: Align Kotlin Gradle plugin for mobile_scanner
+        working-directory: app
+        run: |
+          python3 - <<'PYTHON'
+          from pathlib import Path
+          import re
+
+          candidates = [
+              Path("android/settings.gradle"),
+              Path("android/settings.gradle.kts"),
+          ]
+          p = next((x for x in candidates if x.exists()), None)
+          if p is None:
+              raise SystemExit("ERROR: Android settings file tidak ditemukan")
+
+          s = p.read_text(encoding="utf-8")
+          pattern = re.compile(
+              r"""(id\s*\(?\s*['"]org\.jetbrains\.kotlin\.android['"]\)?\s+version\s+['"])([^'"]+)(['"])"""
+          )
+          updated, count = pattern.subn(
+              r"\g<1>2.1.0\g<3>", s, count=1
+          )
+          if count != 1:
+              raise SystemExit("ERROR: deklarasi plugin Kotlin tidak ditemukan")
+          p.write_text(updated, encoding="utf-8")
+          print(f"Kotlin Gradle plugin disetel ke 2.1.0 di {p}.")
+          PYTHON
+
       - name: Ensure Android camera permission
         working-directory: app
         run: |
