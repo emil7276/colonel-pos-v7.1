@@ -448,7 +448,7 @@ class _DashboardPageState extends State<DashboardPage> {
           Text(AppLocalizations.t('Transaksi Terbaru', 'Recent Transactions'), style: TextStyle(fontSize: 19, fontWeight: FontWeight.w900)),
           const SizedBox(height: 9),
           if (recent.isEmpty)
-            Card(child: Padding(padding: const EdgeInsets.all(18), child: Text(AppLocalizations.t('Belum ada transaksi.', 'No transactions yet.'), style: Theme.of(context).textTheme.bodyMedium)))
+            Padding(padding: const EdgeInsets.all(18), child: Text(AppLocalizations.t('Belum ada transaksi.', 'No transactions yet.'), style: Theme.of(context).textTheme.bodyMedium))
           else
             ...recent.map(
               (s) => Card(

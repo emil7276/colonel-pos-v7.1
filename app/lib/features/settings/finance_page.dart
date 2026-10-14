@@ -480,6 +480,10 @@ class _FinancePageState extends State<FinancePage> {
                 const SizedBox(width: 10),
                 IconButton.filled(
                   onPressed: _pickDate,
+                  style: IconButton.styleFrom(
+                    backgroundColor: const Color(0xFF292D32),
+                    foregroundColor: Colors.white,
+                  ),
                   icon: const Icon(Icons.calendar_month),
                   tooltip: AppLocalizations.t('Pilih tanggal', 'Select date'),
                 ),

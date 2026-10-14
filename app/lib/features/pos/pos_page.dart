@@ -1490,7 +1490,7 @@ class PosPageState extends State<PosPage> {
                           Text(
                               x == 'Semua' ? AppLocalizations.t('Semua', 'All') : x,
                             style: TextStyle(
-                              color: selected ? Colors.white : Colors.black,
+                              color: selected ? const Color(0xFF292D32) : const Color(0xFF55585D),
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                               decoration: selected

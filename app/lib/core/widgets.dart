@@ -38,7 +38,7 @@ class CpBrand extends StatelessWidget {
   final double logoSize;
   final bool showVersion;
 
-  const CpBrand({super.key, this.logoSize = 46, this.showVersion = true});
+  const CpBrand({super.key, this.logoSize = 55, this.showVersion = true});
 
   @override
   Widget build(BuildContext context) {

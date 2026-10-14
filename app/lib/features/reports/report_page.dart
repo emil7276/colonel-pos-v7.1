@@ -79,7 +79,7 @@ class _ReportPageState extends State<ReportPage> {
       Text(AppLocalizations.t('Transaksi Hari Ini', "Today's Transactions"),style:const TextStyle(fontSize:18,fontWeight:FontWeight.w800)),
       const SizedBox(height:8),
       if(sales.isEmpty) Card(child:Padding(padding:const EdgeInsets.all(18),child:Text(AppLocalizations.t('Tidak ada transaksi pada ${displayDate(selectedDate)}.', 'No transactions on ${displayDate(selectedDate)}.')))),
-      ...sales.map((s)=>Card(child:ListTile(onTap:()=>saleDetail(s),leading:CircleAvatar(child:Icon(s.returned?Icons.undo:Icons.receipt_long_outlined)),title:Text(s.no,style:const TextStyle(fontWeight:FontWeight.w700)),subtitle:Text('${s.time} • ${s.cashier} • ${s.payment}'),trailing:Text(s.returned?AppLocalizations.t('RETUR', 'RETURN'):rp(s.total),style:TextStyle(fontWeight:FontWeight.w800,color:s.returned?Colors.red:null))))),
+      ...sales.map((s)=>Container(decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: line, width: 1))), child:ListTile(onTap:()=>saleDetail(s),leading:CircleAvatar(child:Icon(s.returned?Icons.undo:Icons.receipt_long_outlined)),title:Text(s.no,style:const TextStyle(fontWeight:FontWeight.w700)),subtitle:Text('${s.time} • ${s.cashier} • ${s.payment}'),trailing:Text(s.returned?AppLocalizations.t('RETUR', 'RETURN'):rp(s.total),style:TextStyle(fontWeight:FontWeight.w800,color:s.returned?Colors.red:null))))),
       const CopyrightFooter(),
     ]));
   }
