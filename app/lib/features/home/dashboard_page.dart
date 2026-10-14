@@ -542,8 +542,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           children: [
                             AnimatedContainer(
                               duration: const Duration(milliseconds: 180),
-                              width: 30,
-                              height: 30,
+                              width: 34,
+                              height: 34,
                               decoration: BoxDecoration(
                                 color: palette.primary,
                                 shape: BoxShape.circle,
@@ -577,7 +577,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             Text(
                               palette.name,
                               textAlign: TextAlign.center,
-                              maxLines: 2,
+                              maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontSize: 11,

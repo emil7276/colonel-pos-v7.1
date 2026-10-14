@@ -1680,8 +1680,8 @@ class PosPageState extends State<PosPage> {
                     style: FilledButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       foregroundColor: Colors.white,
-                      disabledBackgroundColor: Color(0xFFE5E7EB),
-                      disabledForegroundColor: Color(0xFF9CA3AF),
+                      disabledBackgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                      disabledForegroundColor: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.38),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       minimumSize: const Size(0, 32),
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -2006,7 +2006,7 @@ class PosPageState extends State<PosPage> {
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
-                                side: const BorderSide(color: Color(0xFF1976D2), width: 1),
+                                side: BorderSide(color: Theme.of(context).colorScheme.primary, width: 1),
                               ),
                             ),
                             child: Text(AppLocalizations.t('BAYAR', 'PAY')),
@@ -2087,7 +2087,7 @@ class PosPageState extends State<PosPage> {
                                           rp(total),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: Color(0xFF1976D2)),
+                                          style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: Theme.of(context).colorScheme.primary),
                                         ),
                                       ],
                                     ),

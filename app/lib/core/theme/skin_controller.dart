@@ -41,7 +41,7 @@ class SkinController {
 
   static const Map<String, SkinPalette> palettes = {
     oceanBlue: SkinPalette(
-      name: 'Ocean Blue',
+      name: 'Ocean',
       background: Color(0xFFE8EDF3),
       surface: Color(0xFFFFFFFF),
       primary: Color(0xFF3478B8),
@@ -50,7 +50,7 @@ class SkinController {
       border: Color(0xFFD1D9E2),
     ),
     colonelRed: SkinPalette(
-      name: 'Colonel Red',
+      name: 'Terracotta',
       background: Color(0xFFE8E8E8),
       surface: Color(0xFFFFFFFF),
       primary: Color(0xFFB9272D),
@@ -59,7 +59,7 @@ class SkinController {
       border: Color(0xFFD2D2D2),
     ),
     classicBrown: SkinPalette(
-      name: 'Classic Brown',
+      name: 'Brown',
       background: Color(0xFFEDE2D3),
       surface: Color(0xFFFFF9F1),
       primary: Color(0xFF896044),
@@ -68,7 +68,7 @@ class SkinController {
       border: Color(0xFFDCCBBC),
     ),
     lavenderPurple: SkinPalette(
-      name: 'Lavender Purple',
+      name: 'Lavender',
       background: Color(0xFFEAE5F5),
       surface: Color(0xFFFFFFFF),
       primary: Color(0xFF8064B5),
@@ -86,7 +86,7 @@ class SkinController {
       border: Color(0xFFE8C9D7),
     ),
     aquaTeal: SkinPalette(
-      name: 'Aqua Teal',
+      name: 'Aqua',
       background: Color(0xFFDFF2F5),
       surface: Color(0xFFFFFFFF),
       primary: Color(0xFF168F9A),
