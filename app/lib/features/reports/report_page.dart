@@ -24,6 +24,7 @@ class _ReportPageState extends State<ReportPage> {
   List<Map<String,dynamic>> best = [], hours = [];
   List<Map<String,dynamic>> customers = [], trend = [];
   int monthSales = 0;
+  String salesPeriod = 'Bulan Ini';
   String trendMode = 'Hari';
 
   DateTime get start => DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
@@ -35,9 +36,11 @@ class _ReportPageState extends State<ReportPage> {
       final summary = await DB.rangeSummary(start, end);
       final b = await DB.bestSelling(start, end);
       final h = await DB.hourly(start, end);
-      final month = await DB.monthOmzet(DateTime.now());
-      final c = await DB.customerSales(start, end);
       final now = DateTime.now();
+      final periodStart = salesPeriod == 'Minggu Ini' ? DateTime(now.year, now.month, now.day - (now.weekday - 1)) : salesPeriod == 'Tahun Ini' ? DateTime(now.year, 1, 1) : DateTime(now.year, now.month, 1);
+      final periodEnd = salesPeriod == 'Minggu Ini' ? periodStart.add(const Duration(days: 7)) : salesPeriod == 'Tahun Ini' ? DateTime(now.year + 1, 1, 1) : DateTime(now.year, now.month + 1, 1);
+      final month = (await DB.rangeSummary(periodStart, periodEnd))['omzet'] as int;
+      final c = await DB.customerSales(start, end);
       final t = trendMode == 'Hari'
           ? await DB.daily(now.subtract(const Duration(days: 29)), now.add(const Duration(days: 1)))
           : trendMode == 'Bulan'
@@ -104,7 +107,8 @@ class _ReportPageState extends State<ReportPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(AppLocalizations.t('Penjualan Bulan Ini', 'Sales This Month'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: inkMuted)),
+                  Text(AppLocalizations.t('Penjualan ' + salesPeriod, salesPeriod == 'Minggu Ini' ? 'Sales This Week' : salesPeriod == 'Tahun Ini' ? 'Sales This Year' : 'Sales This Month'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: inkMuted)),
+                  Wrap(spacing: 6, children: [for (final period in ['Minggu Ini', 'Bulan Ini', 'Tahun Ini']) ChoiceChip(label: Text(period), selected: salesPeriod == period, onSelected: (_) async { setState(() => salesPeriod = period); await load(); })]),
                   const SizedBox(height: 3),
                   Text(rp(monthSales), style: const TextStyle(fontSize: 23, fontWeight: FontWeight.w900, color: red)),
                   Text(AppLocalizations.t('Omzet bulan berjalan', 'Current Month Revenue'), style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant)),

@@ -27,9 +27,21 @@ class CpLogo extends StatelessWidget {
 
     if (!rounded) return image;
 
-    return ClipRRect(
+    final logo = ClipRRect(
       borderRadius: BorderRadius.circular(size * .22),
       child: image,
+    );
+    if (!charcoal) return logo;
+    return Container(
+      width: size,
+      height: size,
+      padding: EdgeInsets.all(size * .06),
+      decoration: BoxDecoration(
+        color: const Color(0xFF15191E),
+        borderRadius: BorderRadius.circular(size * .22),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
+      ),
+      child: logo,
     );
   }
 }

@@ -466,7 +466,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   onTap: () => _showSaleDetail(s),
                   ),
                   if (entry.key < recent.length - 1)
-                    Divider(height: 1, thickness: 0.8, color: Theme.of(context).colorScheme.outlineVariant),
+                    Divider(height: 1, thickness: 0.8, color: SkinController.current.border),
                 ],
               );
             }),
@@ -498,9 +498,11 @@ class _DashboardPageState extends State<DashboardPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  AppLocalizations.t(
-                    'Pilihan Skin Terbaik Khusus untuk Kamu',
+                Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: Text(
+                    AppLocalizations.t(
+                      'Pilihan Skin Terbaik Khusus untuk Kamu',
                     'Your Best Skin Pick',
                   ),
                   style: const TextStyle(
@@ -509,9 +511,11 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  AppLocalizations.t(
-                    'Pilih warna tampilan favoritmu',
+                Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: Text(
+                    AppLocalizations.t(
+                      'Pilih warna tampilan favoritmu',
                     'Choose your favorite look',
                   ),
                   style: TextStyle(
@@ -520,6 +524,14 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                 ),
                 const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(AppLocalizations.t('Geser warna ke samping →', 'Swipe colors sideways →'), style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.onSurfaceVariant)),
+                ),
+                ),
+                const SizedBox(height: 6),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -1027,7 +1039,7 @@ class _DashboardPageState extends State<DashboardPage> {
     final isBackup = action == 'backup';
     return Card(
       clipBehavior: Clip.antiAlias,
-      color: isBackup ? const Color(0xFF1877D2) : null,
+      color: isBackup ? SkinController.current.primaryDark : null,
       elevation: isBackup ? 3 : 1,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       child: InkWell(
@@ -1041,10 +1053,10 @@ class _DashboardPageState extends State<DashboardPage> {
                 width: 38,
                 height: 38,
                 decoration: BoxDecoration(
-                  color: isBackup ? Colors.white.withValues(alpha: 0.18) : redSoft,
+                  color: isBackup ? Colors.white.withValues(alpha: 0.18) : SkinController.current.accentSoft,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(icon, color: isBackup ? Colors.white : red, size: 20),
+                child: Icon(icon, color: isBackup ? Colors.white : SkinController.current.primary, size: 20),
               ),
               const SizedBox(width: 10),
               Expanded(

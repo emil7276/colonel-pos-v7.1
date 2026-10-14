@@ -126,7 +126,7 @@ class SkinController {
         name: 'Beige',
         background: Color(0xFFF5EDE1),
         surface: Color(0xFFFFFCF7),
-        primary: Color(0xFFD8C3A5),
+        primary: Color(0xFFB89A72),
         primaryDark: Color(0xFF80694C),
         accentSoft: Color(0xFFF5EDE1),
         border: Color(0xFFE6D7C2),

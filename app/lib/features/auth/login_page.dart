@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../core/constants.dart';
 import '../../core/widgets.dart';
+import '../../core/theme/skin_controller.dart';
 import '../../data/database.dart';
 import '../home/home_page.dart';
 import 'greeting_page.dart';
@@ -165,11 +166,13 @@ class _LoginPageState extends State<LoginPage> {
       );
     }
 
+    final skin = SkinController.current;
     return Scaffold(
+      backgroundColor: skin.background,
       body: DecoratedBox(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.white, Colors.white],
+            colors: [skin.background, skin.surface],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -183,9 +186,10 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   const CpLogo(size: 118, charcoal: true),
                   const SizedBox(height: 16),
-                  const Text(
+                  Text(
                     'CP POS',
                     style: TextStyle(
+                      color: skin.text,
                       fontSize: 30,
                       fontWeight: FontWeight.w900,
                       letterSpacing: .5,
@@ -198,12 +202,12 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 22),
                   Card(
-                    color: Colors.white,
+                    color: skin.surface,
                     elevation: 0,
                     shadowColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
-                      side: BorderSide.none,
+                      side: BorderSide(color: skin.border),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(22),
@@ -213,14 +217,18 @@ class _LoginPageState extends State<LoginPage> {
                             alignment: Alignment.centerLeft,
                             child: Text(
                               'Masuk ke sistem',
-                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                              style: TextStyle(color: skin.text, fontSize: 20, fontWeight: FontWeight.w800),
                             ),
                           ),
                           const SizedBox(height: 16),
                           TextField(
                             controller: user,
                             textInputAction: TextInputAction.next,
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
+                              labelStyle: TextStyle(color: skin.mutedText),
+                              prefixIconColor: skin.primaryDark,
+                              enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: skin.border)),
+                              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: skin.primaryDark, width: 1.6)),
                               labelText: 'Username',
                               prefixIcon: Icon(Icons.person_outline),
                             ),
@@ -229,7 +237,11 @@ class _LoginPageState extends State<LoginPage> {
                           TextField(
                             controller: pass,
                             obscureText: true,
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
+                              labelStyle: TextStyle(color: skin.mutedText),
+                              prefixIconColor: skin.primaryDark,
+                              enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: skin.border)),
+                              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: skin.primaryDark, width: 1.6)),
                               labelText: 'Password',
                               prefixIcon: Icon(Icons.lock_outline),
                             ),
@@ -238,6 +250,8 @@ class _LoginPageState extends State<LoginPage> {
                           Row(
                             children: [
                               Checkbox(
+                                activeColor: skin.primaryDark,
+                                checkColor: Colors.white,
                                 value: rememberMe,
                                 onChanged: (value) {
                                   setState(() {
@@ -253,7 +267,7 @@ class _LoginPageState extends State<LoginPage> {
                             width: double.infinity,
                             child: FilledButton.icon(
                               style: FilledButton.styleFrom(
-                                backgroundColor: const Color(0xFF1976D2),
+                                backgroundColor: skin.primaryDark,
                                 foregroundColor: Colors.white,
                               ),
                               onPressed: login,
