@@ -1473,30 +1473,16 @@ class PosPageState extends State<PosPage> {
                     child: Container(
                       
                       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(18),
-                        color: selected ? const Color(0xFF1976D2) : Colors.transparent,
-                        border: Border.all(
-                          color: selected ? const Color(0xFF1976D2) : const Color(0xFF3A414A),
-                          width: 1,
-                        ),
-                      ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          if (selected) ...[
-                            const Icon(Icons.check_rounded, size: 16, color: Colors.white),
-                            const SizedBox(width: 5),
-                          ],
                           Text(
                               x == 'Semua' ? AppLocalizations.t('Semua', 'All') : x,
                             style: TextStyle(
-                              color: selected ? Colors.white : const Color(0xFF55585D),
+                              color: selected ? const Color(0xFF2F65A5) : const Color(0xFF55585D),
                               fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
                               fontSize: 14,
-                              decoration: selected
-                                  ? TextDecoration.none
-                                  : TextDecoration.none,
+                              decoration: selected ? TextDecoration.underline : TextDecoration.none,
                             ),
                           ),
                         ],
@@ -1525,7 +1511,7 @@ class PosPageState extends State<PosPage> {
                     shadowColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
-                      side: const BorderSide(color: Color(0xFF3A414A), width: 1),
+                      side: const BorderSide(color: Color(0xFFD1D5DB), width: 1),
                     ),
                     clipBehavior: Clip.antiAlias,
                     child: InkWell(
@@ -1554,7 +1540,7 @@ class PosPageState extends State<PosPage> {
                               style: const TextStyle(
                                 fontWeight: FontWeight.w900,
                                 fontSize: 15,
-                                color: Colors.red,
+                                color: const Color(0xFF6B7280),
                                 height: 1.0,
                               ),
                             ),
@@ -1646,7 +1632,7 @@ class PosPageState extends State<PosPage> {
                                       onPressed: () => add(p),
                                       icon: const Icon(
                                         Icons.add_circle_outline,
-                                        color: Colors.green,
+                                        color: const Color(0xFF6B7280),
                                         size: 24,
                                       ),
                                       visualDensity: VisualDensity.compact,
@@ -2015,7 +2001,7 @@ class PosPageState extends State<PosPage> {
                           child: FilledButton(
                             onPressed: cart.isEmpty ? null : payment,
                             style: FilledButton.styleFrom(
-                              backgroundColor: red,
+                              backgroundColor: const Color(0xFF2F65A5),
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
@@ -2109,7 +2095,7 @@ class PosPageState extends State<PosPage> {
                                   FilledButton(
                                     onPressed: () => setState(() => _cartExpanded = true),
                                     style: FilledButton.styleFrom(
-                                      backgroundColor: Color(0xFF1976D2),
+                                      backgroundColor: const Color(0xFF2F65A5),
                                       foregroundColor: Colors.white,
                                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

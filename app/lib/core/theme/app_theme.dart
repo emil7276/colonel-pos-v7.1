@@ -14,7 +14,7 @@ class AppTheme {
       ),
       textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(foregroundColor: Color(0xFF59636F))),
       filledButtonTheme: FilledButtonThemeData(style: FilledButton.styleFrom(backgroundColor: Color(0xFF1976D2), foregroundColor: Colors.white)),
-      outlinedButtonTheme: OutlinedButtonThemeData(style: OutlinedButton.styleFrom(foregroundColor: Color(0xFF59636F), side: BorderSide(color: Color(0xFF3A414A)))),
+      outlinedButtonTheme: OutlinedButtonThemeData(style: OutlinedButton.styleFrom(foregroundColor: Color(0xFF59636F), side: BorderSide(color: Color(0xFFD1D5DB)))),
       cardColor: Colors.white,
       dividerColor: line,
       appBarTheme: const AppBarTheme(
@@ -44,7 +44,7 @@ class AppTheme {
         shadowColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
-          side: const BorderSide(color: Color(0xFF3A414A), width: 1),
+          side: const BorderSide(color: Color(0xFFD1D5DB), width: 1),
         ),
       ),
     );
@@ -62,7 +62,7 @@ class AppTheme {
       ),
       textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(foregroundColor: Color(0xFF9AA4AF))),
       filledButtonTheme: FilledButtonThemeData(style: FilledButton.styleFrom(backgroundColor: Color(0xFF1976D2), foregroundColor: Colors.white)),
-      outlinedButtonTheme: OutlinedButtonThemeData(style: OutlinedButton.styleFrom(foregroundColor: Color(0xFF9AA4AF), side: BorderSide(color: Color(0xFF3A414A)))),
+      outlinedButtonTheme: OutlinedButtonThemeData(style: OutlinedButton.styleFrom(foregroundColor: Color(0xFF9AA4AF), side: BorderSide(color: Color(0xFFD1D5DB)))),
       cardColor: navy2,
       dividerColor: Color(0xFF293849),
       appBarTheme: const AppBarTheme(
@@ -92,7 +92,7 @@ class AppTheme {
         shadowColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
-          side: const BorderSide(color: Color(0xFF3A414A), width: 1),
+          side: const BorderSide(color: Color(0xFFD1D5DB), width: 1),
         ),
       ),
     );
