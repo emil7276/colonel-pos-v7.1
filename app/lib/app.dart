@@ -133,13 +133,13 @@ class ColonelApp extends StatelessWidget {
             return TextStyle(
               fontSize: 11,
               fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
-              color: selected ? skin.primary : Colors.white70,
+              color: selected ? skin.primary : Colors.white,
             );
           }),
           iconTheme: WidgetStateProperty.resolveWith((states) {
             final selected = states.contains(WidgetState.selected);
             return IconThemeData(
-              color: selected ? skin.primary : Colors.white70,
+              color: selected ? skin.primary : Colors.white,
               size: selected ? 25 : 23,
             );
           }),

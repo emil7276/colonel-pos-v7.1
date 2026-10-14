@@ -97,20 +97,20 @@ class SkinController {
 
       green: SkinPalette(
         name: 'Green',
-        background: Color(0xFFDCFCE7),
+        background: Color(0xFFEAF6EE),
         surface: Color(0xFFFFFFFF),
         primary: Color(0xFF16A34A),
         primaryDark: Color(0xFF166534),
-        accentSoft: Color(0xFFDCFCE7),
+        accentSoft: Color(0xFFEAF6EE),
         border: Color(0xFFBBF7D0),
       ),
       orange: SkinPalette(
         name: 'Orange',
-        background: Color(0xFFFFEDD5),
+        background: Color(0xFFFFF4E8),
         surface: Color(0xFFFFFFFF),
         primary: Color(0xFFF97316),
         primaryDark: Color(0xFF9A3412),
-        accentSoft: Color(0xFFFFEDD5),
+        accentSoft: Color(0xFFFFF4E8),
         border: Color(0xFFFED7AA),
       ),
       army: SkinPalette(
