@@ -64,9 +64,9 @@ class _ReportPageState extends State<ReportPage> {
   @override Widget build(BuildContext context){
     return RefreshIndicator(onRefresh:load,child:ListView(padding:const EdgeInsets.fromLTRB(16,16,16,28),children:[
       Row(children:[Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text(AppLocalizations.t('Laporan', 'Reports'),style:const TextStyle(fontSize:23,fontWeight:FontWeight.w900)),Text('${displayDate(start)} - ${displayDate(end.subtract(const Duration(days:1)))}',style:TextStyle(color:Theme.of(context).colorScheme.onSurfaceVariant))])),OutlinedButton.icon(onPressed:pickDate,icon:const Icon(Icons.calendar_month_outlined),label:Text(AppLocalizations.t('Pilih rentang tanggal', 'Select date range')))]),
-      const SizedBox(height:16),
+      const SizedBox(height:24),
       if(loading) const LinearProgressIndicator(minHeight:3),
-      const SizedBox(height:8),
+      const SizedBox(height:12),
       LayoutBuilder(builder:(context,c){final cols=c.maxWidth>=900?4:2; return GridView.count(crossAxisCount:cols,shrinkWrap:true,physics:const NeverScrollableScrollPhysics(),crossAxisSpacing:10,mainAxisSpacing:10,childAspectRatio:2.15,children:[_metric(AppLocalizations.t('Omzet', 'Revenue'),rp(omzet),Icons.payments_outlined),_metric(AppLocalizations.t('Transaksi', 'Transactions'),'$transaksi',Icons.receipt_long_outlined,onTap:showTransactions),_metric(AppLocalizations.t('Item Terjual', 'Items Sold'),'$item',Icons.fastfood_outlined,onTap:showItemsSold),_metric(AppLocalizations.t('Retur', 'Returns'),'$retur',Icons.assignment_return_outlined,onTap:showReturns) ]);}),
       const SizedBox(height:16),
       _monthSalesCard(),

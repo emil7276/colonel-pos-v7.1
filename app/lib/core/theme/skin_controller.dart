@@ -34,6 +34,10 @@ class SkinController {
   static const String lavenderPurple = 'lavender_purple';
   static const String aquaTeal = 'aqua_teal';
   static const String pink = 'pink';
+  static const String green = 'green';
+  static const String orange = 'orange';
+  static const String army = 'army';
+  static const String beige = 'beige';
 
   static const Map<String, SkinPalette> palettes = {
     oceanBlue: SkinPalette(
@@ -90,6 +94,43 @@ class SkinController {
       accentSoft: Color(0xFFA8DCE0),
       border: Color(0xFFC5E2E6),
     ),
+
+      green: SkinPalette(
+        name: 'Green',
+        background: Color(0xFFDCFCE7),
+        surface: Color(0xFFFFFFFF),
+        primary: Color(0xFF16A34A),
+        primaryDark: Color(0xFF166534),
+        accentSoft: Color(0xFFDCFCE7),
+        border: Color(0xFFBBF7D0),
+      ),
+      orange: SkinPalette(
+        name: 'Orange',
+        background: Color(0xFFFFEDD5),
+        surface: Color(0xFFFFFFFF),
+        primary: Color(0xFFF97316),
+        primaryDark: Color(0xFF9A3412),
+        accentSoft: Color(0xFFFFEDD5),
+        border: Color(0xFFFED7AA),
+      ),
+      army: SkinPalette(
+        name: 'Army',
+        background: Color(0xFFE7EDDA),
+        surface: Color(0xFFFFFFFF),
+        primary: Color(0xFF556B2F),
+        primaryDark: Color(0xFF34451D),
+        accentSoft: Color(0xFFE7EDDA),
+        border: Color(0xFFD0DDB8),
+      ),
+      beige: SkinPalette(
+        name: 'Beige',
+        background: Color(0xFFF5EDE1),
+        surface: Color(0xFFFFFCF7),
+        primary: Color(0xFFD8C3A5),
+        primaryDark: Color(0xFF80694C),
+        accentSoft: Color(0xFFF5EDE1),
+        border: Color(0xFFE6D7C2),
+      ),
   };
 
   static final ValueNotifier<String> selectedSkin =

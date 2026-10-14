@@ -261,7 +261,7 @@ class _HomePageState extends State<HomePage> {
                           : titles[index] == 'Smart Assistant'
                               ? 'COLONEL SMART ASSISTANT'
                               : AppLocalizations.t('Keuangan', 'Finance'),
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 20, fontWeight: FontWeight.w900, height: 1.0, letterSpacing: 0),
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.white, height: 1.0, letterSpacing: 0),
             ),
 
             if (_licenseInfo != null && _licenseInfo!.isActive)
@@ -292,9 +292,9 @@ class _HomePageState extends State<HomePage> {
                 child: Text(
                   AppLocalizations.t('Berlangganan Sekarang', 'Subscribe Now'),
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 12,
                     color: Colors.white,
-                    fontWeight: FontWeight.w300,
+                    fontWeight: FontWeight.w400,
                       height: 1.0,
                     decoration: TextDecoration.underline,
                   ),

@@ -1506,7 +1506,7 @@ class PosPageState extends State<PosPage> {
                 itemBuilder: (_, i) {
                   final p = filtered[i];
                   return Card(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.82),
                     elevation: 0,
                     shadowColor: Colors.transparent,
                     shape: RoundedRectangleBorder(

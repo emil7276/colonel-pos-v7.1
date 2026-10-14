@@ -490,9 +490,9 @@ class _FinancePageState extends State<FinancePage> {
               ],
             ),
 
+            const SizedBox(height: 18),
             Row(
               children: [
-            const SizedBox(height: 16),
                 Expanded(
                   child: _metric(
                     AppLocalizations.t('Pendapatan', 'Revenue'),
@@ -519,7 +519,7 @@ class _FinancePageState extends State<FinancePage> {
               ],
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 14),
 
             Row(
               children: [
@@ -541,8 +541,7 @@ class _FinancePageState extends State<FinancePage> {
               ],
             ),
 
-            const SizedBox(height: 8),
-            const SizedBox(height: 14),
+            const SizedBox(height: 20),
 
             Card(
               child: ExpansionTile(
