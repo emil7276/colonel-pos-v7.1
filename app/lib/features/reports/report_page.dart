@@ -96,8 +96,8 @@ class _ReportPageState extends State<ReportPage> {
             Container(
               width: 48,
               height: 48,
-              decoration: BoxDecoration(color: const Color(0xFFEAF2FC), borderRadius: BorderRadius.circular(14)),
-              child: const Icon(Icons.calendar_month_rounded, color: const Color(0xFF1976D2)),
+              decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(14)),
+              child: Icon(Icons.calendar_month_rounded, color: Theme.of(context).colorScheme.primary),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -386,10 +386,10 @@ class _ReportPageState extends State<ReportPage> {
                 width: 34,
                 height: 34,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFEAF2FC),
+                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(icon, color: const Color(0xFF1976D2), size: 18),
+                child: Icon(icon, color: Theme.of(context).colorScheme.primary, size: 18),
               ),
               const SizedBox(width: 8),
               Expanded(

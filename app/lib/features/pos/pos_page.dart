@@ -1479,7 +1479,7 @@ class PosPageState extends State<PosPage> {
                           Text(
                               x == 'Semua' ? AppLocalizations.t('Semua', 'All') : x,
                             style: TextStyle(
-                              color: selected ? const Color(0xFF2F65A5) : const Color(0xFF55585D),
+                              color: selected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurfaceVariant,
                               fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
                               fontSize: 14,
                               decoration: selected ? TextDecoration.underline : TextDecoration.none,
@@ -1511,7 +1511,7 @@ class PosPageState extends State<PosPage> {
                     shadowColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
-                      side: const BorderSide(color: Color(0xFFD1D5DB), width: 1),
+                      side: BorderSide(color: Theme.of(context).colorScheme.outline, width: 1),
                     ),
                     clipBehavior: Clip.antiAlias,
                     child: InkWell(
@@ -1661,24 +1661,24 @@ class PosPageState extends State<PosPage> {
         );
 
         final cartPanel = Card(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           elevation: 0,
           shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(14),
-              side: const BorderSide(color: Color(0xFF292D32), width: 1),
+              side: BorderSide(color: Theme.of(context).colorScheme.outline, width: 1),
             ),
           child: Column(
             children: [
               ListTile(
                 dense: true,
                 contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                leading: Icon(Icons.shopping_cart_rounded, color: Color(0xFF364152), size: 20),
-                title: Text(AppLocalizations.t('Keranjang', 'Cart'), style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13, color: Color(0xFF364152))),
+                leading: Icon(Icons.shopping_cart_rounded, color: Theme.of(context).colorScheme.primary, size: 20),
+                title: Text(AppLocalizations.t('Keranjang', 'Cart'), style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13, color: Theme.of(context).colorScheme.onSurface)),
                 trailing: FilledButton(
                     onPressed: cart.isEmpty ? null : cancelShopping,
                     style: FilledButton.styleFrom(
-                      backgroundColor: Color(0xFF364152),
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                       foregroundColor: Colors.white,
                       disabledBackgroundColor: Color(0xFFE5E7EB),
                       disabledForegroundColor: Color(0xFF9CA3AF),
@@ -2001,7 +2001,7 @@ class PosPageState extends State<PosPage> {
                           child: FilledButton(
                             onPressed: cart.isEmpty ? null : payment,
                             style: FilledButton.styleFrom(
-                              backgroundColor: const Color(0xFF2F65A5),
+                              backgroundColor: Theme.of(context).colorScheme.primary,
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
@@ -2053,9 +2053,9 @@ class PosPageState extends State<PosPage> {
                       ? (cart.isEmpty ? 250 : 305)
                       : 78,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.surface,
                     borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: const Color(0xFF1976D2), width: 1.5),
+                    border: Border.all(color: Theme.of(context).colorScheme.primary, width: 1.5),
                   ),
                   clipBehavior: Clip.antiAlias,
                   child: _cartExpanded
@@ -2068,7 +2068,7 @@ class PosPageState extends State<PosPage> {
                               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                               child: Row(
                                 children: [
-                                  const Icon(Icons.shopping_cart_outlined, color: Color(0xFF1976D2), size: 25),
+                                  Icon(Icons.shopping_cart_outlined, color: Theme.of(context).colorScheme.primary, size: 25),
                                   const SizedBox(width: 10),
                                   Expanded(
                                     child: Column(
@@ -2095,7 +2095,7 @@ class PosPageState extends State<PosPage> {
                                   FilledButton(
                                     onPressed: () => setState(() => _cartExpanded = true),
                                     style: FilledButton.styleFrom(
-                                      backgroundColor: const Color(0xFF2F65A5),
+                                      backgroundColor: Theme.of(context).colorScheme.primary,
                                       foregroundColor: Colors.white,
                                       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

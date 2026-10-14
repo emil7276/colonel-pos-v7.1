@@ -263,6 +263,7 @@ class _DashboardPageState extends State<DashboardPage> {
           const SizedBox(height: 4),
           const SizedBox(height: 4),
                     _skinSelector(),
+          const SizedBox(height: 16),
           LayoutBuilder(
             builder: (context, c) {
               final cross = c.maxWidth > 700 ? 4 : 2;
@@ -1076,8 +1077,8 @@ class _DashboardPageState extends State<DashboardPage> {
               Container(
                 width: 36,
                 height: 36,
-                decoration: BoxDecoration(color: primary ? redSoft : const Color(0xFFF3F3F5), borderRadius: BorderRadius.circular(11)),
-                child: Icon(icon, color: primary ? red : ink, size: 19),
+                decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary.withValues(alpha: primary ? 0.18 : 0.10), borderRadius: BorderRadius.circular(11)),
+                child: Icon(icon, color: Theme.of(context).colorScheme.primary, size: 19),
               ),
               const SizedBox(width: 8),
               Expanded(
