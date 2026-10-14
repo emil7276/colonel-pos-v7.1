@@ -199,7 +199,7 @@ class _ReportPageState extends State<ReportPage> {
       ..sort((a, b) => a['customer_name'].toString().toLowerCase()
           .compareTo(b['customer_name'].toString().toLowerCase()));
 
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 12),
       child: ExpansionTile(
         initiallyExpanded: true,
@@ -246,7 +246,7 @@ class _ReportPageState extends State<ReportPage> {
     final sortedItems = List<Map<String,dynamic>>.from(best)
       ..sort((a, b) => (b['qty'] as num).compareTo(a['qty'] as num));
 
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 12),
       child: ExpansionTile(
         initiallyExpanded: true,
@@ -287,7 +287,7 @@ class _ReportPageState extends State<ReportPage> {
 
   Widget _paymentSummary() {
     final total = payments.values.fold<int>(0, (a, b) => a + b);
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 12),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),

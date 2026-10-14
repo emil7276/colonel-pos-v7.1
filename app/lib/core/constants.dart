@@ -7,14 +7,14 @@ const navy2 = Color(0xFF151F2B);
 const redSoft = Color(0xFFFFE5E7);
 const bg = Color(0xFFF4F1EF);
 const pageBg = Color(0xFFECEFF1);
-const boxBorder = Color(0xFFE7C8A0);
+const boxBorder = Color(0xFF3A414A);
 const gold = Color(0xFFFFD45A);
 const goldDeep = Color(0xFFC99A2E);
 const goldSoft = Color(0xFFFFF1B8);
 const goldPanel = Color(0xFF11151B);
 const ink = Color(0xFF171719);
 const inkMuted = Color(0xFF6F7177);
-const line = Color(0xFF34383D);
+const line = Color(0xFF3A414A);
 
 const copyright1 = 'Copyright © CP Colonel Pos';
 const copyright2 = 'Hak cipta dilindungi Undang-Undang';

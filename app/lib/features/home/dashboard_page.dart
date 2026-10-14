@@ -446,23 +446,27 @@ class _DashboardPageState extends State<DashboardPage> {
           ],
           const SizedBox(height: 20),
           Text(AppLocalizations.t('Transaksi Terbaru', 'Recent Transactions'), style: TextStyle(fontSize: 19, fontWeight: FontWeight.w900)),
-          const SizedBox(height: 9),
+          const SizedBox(height: 4),
           if (recent.isEmpty)
             Padding(padding: const EdgeInsets.all(18), child: Text(AppLocalizations.t('Belum ada transaksi.', 'No transactions yet.'), style: Theme.of(context).textTheme.bodyMedium))
           else
-            ...recent.map(
-              (s) => Card(
-                margin: const EdgeInsets.only(bottom: 8),
-                child: ListTile(
+            ...recent.asMap().entries.map((entry) {
+              final s = entry.value;
+              return Column(
+                children: [
+                  ListTile(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
                   leading: CircleAvatar(backgroundColor: redSoft, foregroundColor: red, child: const Icon(Icons.receipt_long_rounded)),
                   title: Text(s.no, style: const TextStyle(fontWeight: FontWeight.w800)),
                   subtitle: Text('${s.time} • ${s.cashier}'),
                   trailing: Text(rp(s.total), style: const TextStyle(fontWeight: FontWeight.w900)),
                   onTap: () => _showSaleDetail(s),
-                ),
-              ),
-            ),
+                  ),
+                  if (entry.key < recent.length - 1)
+                    const Divider(height: 1, thickness: 0.8, color: Color(0xFF3A414A)),
+                ],
+              );
+            }),
           const CopyrightFooter(),
         ],
       ),

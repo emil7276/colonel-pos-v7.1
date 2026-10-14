@@ -7,11 +7,14 @@ class AppTheme {
       brightness: Brightness.light,
       scaffoldBackgroundColor: bg,
       colorScheme: ColorScheme.light(
-        primary: red,
-        secondary: navy,
+        primary: Color(0xFF1976D2),
+        secondary: Color(0xFF3A414A),
         surface: Colors.white,
         onSurface: ink,
       ),
+      textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(foregroundColor: Color(0xFF59636F))),
+      filledButtonTheme: FilledButtonThemeData(style: FilledButton.styleFrom(backgroundColor: Color(0xFF1976D2), foregroundColor: Colors.white)),
+      outlinedButtonTheme: OutlinedButtonThemeData(style: OutlinedButton.styleFrom(foregroundColor: Color(0xFF59636F), side: BorderSide(color: Color(0xFF3A414A)))),
       cardColor: Colors.white,
       dividerColor: line,
       appBarTheme: const AppBarTheme(
@@ -37,10 +40,11 @@ class AppTheme {
       ),
       cardTheme: CardThemeData(
         color: Colors.white,
-        elevation: 2,
-        shadowColor: red.withValues(alpha: .10),
+        elevation: 0,
+        shadowColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(14),
+          side: const BorderSide(color: Color(0xFF3A414A), width: 1),
         ),
       ),
     );
@@ -51,11 +55,14 @@ class AppTheme {
       brightness: Brightness.dark,
       scaffoldBackgroundColor: navy,
       colorScheme: const ColorScheme.dark(
-        primary: red,
-        secondary: Color(0xFF4DA3FF),
+        primary: Color(0xFF1976D2),
+        secondary: Color(0xFF3A414A),
         surface: navy2,
         onSurface: Colors.white,
       ),
+      textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(foregroundColor: Color(0xFF9AA4AF))),
+      filledButtonTheme: FilledButtonThemeData(style: FilledButton.styleFrom(backgroundColor: Color(0xFF1976D2), foregroundColor: Colors.white)),
+      outlinedButtonTheme: OutlinedButtonThemeData(style: OutlinedButton.styleFrom(foregroundColor: Color(0xFF9AA4AF), side: BorderSide(color: Color(0xFF3A414A)))),
       cardColor: navy2,
       dividerColor: Color(0xFF293849),
       appBarTheme: const AppBarTheme(
@@ -81,11 +88,11 @@ class AppTheme {
       ),
       cardTheme: CardThemeData(
         color: navy2,
-        elevation: 3,
-        shadowColor: const Color(0xFF4DA3FF).withValues(alpha: .16),
+        elevation: 0,
+        shadowColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          side: const BorderSide(color: Color(0xFF263B50)),
+          borderRadius: BorderRadius.circular(14),
+          side: const BorderSide(color: Color(0xFF3A414A), width: 1),
         ),
       ),
     );

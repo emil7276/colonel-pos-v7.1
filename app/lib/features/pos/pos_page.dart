@@ -1461,7 +1461,7 @@ class PosPageState extends State<PosPage> {
                 separatorBuilder: (_, __) => Container(
                   width: 1,
                   height: 28,
-                  color: Colors.black26,
+                  color: const Color(0xFF3A414A),
                   margin: const EdgeInsets.symmetric(horizontal: 8),
                 ),
                 itemBuilder: (_, i) {
@@ -1474,11 +1474,12 @@ class PosPageState extends State<PosPage> {
                       
                       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: selected ? red : Colors.transparent,
-                        
-                        
-                        
+                        borderRadius: BorderRadius.circular(18),
+                        color: selected ? const Color(0xFF1976D2) : Colors.transparent,
+                        border: Border.all(
+                          color: selected ? const Color(0xFF1976D2) : const Color(0xFF3A414A),
+                          width: 1,
+                        ),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -1490,9 +1491,9 @@ class PosPageState extends State<PosPage> {
                           Text(
                               x == 'Semua' ? AppLocalizations.t('Semua', 'All') : x,
                             style: TextStyle(
-                              color: selected ? const Color(0xFF292D32) : const Color(0xFF55585D),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                              color: selected ? Colors.white : const Color(0xFF55585D),
+                              fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
+                              fontSize: 14,
                               decoration: selected
                                   ? TextDecoration.none
                                   : TextDecoration.none,
@@ -1522,8 +1523,9 @@ class PosPageState extends State<PosPage> {
                     color: Colors.white,
                     elevation: 0,
                     shadowColor: Colors.transparent,
-                    shape: const RoundedRectangleBorder(
-                      side: BorderSide.none,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      side: const BorderSide(color: Color(0xFF3A414A), width: 1),
                     ),
                     clipBehavior: Clip.antiAlias,
                     child: InkWell(
@@ -2067,7 +2069,7 @@ class PosPageState extends State<PosPage> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: red, width: 2),
+                    border: Border.all(color: const Color(0xFF1976D2), width: 1.5),
                   ),
                   clipBehavior: Clip.antiAlias,
                   child: _cartExpanded
@@ -2075,65 +2077,52 @@ class PosPageState extends State<PosPage> {
                       : Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            onTap: () => setState(
-                              () => _cartExpanded = true,
-                            ),
-                            child: Column(
-                              children: [
-                                const SizedBox(height: 8),
-                                Container(
-                                  width: 42,
-                                  height: 5,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade400,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 14,
-                                    ),
-                                    child: Row(
+                            onTap: () => setState(() => _cartExpanded = true),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.shopping_cart_outlined, color: Color(0xFF1976D2), size: 25),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Icon(
-                                          Icons.shopping_cart_rounded,
-                                          color: red,
+                                        Text(
+                                          '${AppLocalizations.t('Keranjang', 'Cart')} ($totalItems)',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
                                         ),
-                                        const SizedBox(width: 8),
-                                        Expanded(
-                                          child: Text(
-                                            '${AppLocalizations.t('Keranjang', 'Cart')} ($totalItems)',
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w800,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Flexible(
-                                          child: Text(
-                                            rp(total),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w900,
-                                              color: red,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 6),
-                                        Icon(
-                                          Icons.keyboard_arrow_up_rounded,
-                                          color: red,
+                                        const SizedBox(height: 3),
+                                        Text(
+                                          rp(total),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: Color(0xFF1976D2)),
                                         ),
                                       ],
                                     ),
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(width: 10),
+                                  FilledButton(
+                                    onPressed: () => setState(() => _cartExpanded = true),
+                                    style: FilledButton.styleFrom(
+                                      backgroundColor: Color(0xFF1976D2),
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                    ),
+                                    child: Text(
+                                      AppLocalizations.t('Review & Checkout', 'Review & Checkout'),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
