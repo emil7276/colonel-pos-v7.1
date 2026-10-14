@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'core/constants.dart';
+import 'core/theme/skin_controller.dart';
 import 'core/language_service.dart';
 import 'features/auth/intro_page.dart';
 
@@ -10,12 +11,23 @@ class ColonelApp extends StatelessWidget {
   Widget build(BuildContext context) {
     LanguageService.load();
     return ValueListenableBuilder<String>(
+      valueListenable: SkinController.selectedSkin,
+      builder: (context, skinId, _) {
+        final skin = SkinController.current;
+        return ValueListenableBuilder<String>(
       valueListenable: LanguageService.language,
       builder: (context, language, _) {
         final scheme = ColorScheme.fromSeed(
-      seedColor: red,
-      brightness: Brightness.light,
-    );
+          seedColor: skin.primary,
+          brightness: Brightness.light,
+        ).copyWith(
+          primary: skin.primary,
+          secondary: skin.primaryDark,
+          surface: skin.surface,
+          outline: skin.border,
+          outlineVariant: skin.border,
+          onSurface: skin.text,
+        );
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -23,13 +35,20 @@ class ColonelApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: scheme,
-        dialogTheme: const DialogThemeData(
-          backgroundColor: Color(0xFFF1F1F3),
+        dialogTheme: DialogThemeData(
+          backgroundColor: skin.surface,
           surfaceTintColor: Colors.transparent,
-          titleTextStyle: TextStyle(color: Color(0xFF292D32), fontSize: 20, fontWeight: FontWeight.w800),
-          contentTextStyle: TextStyle(color: Color(0xFF364152), fontSize: 15),
+          titleTextStyle: TextStyle(
+            color: skin.text,
+            fontSize: 20,
+            fontWeight: FontWeight.w800,
+          ),
+          contentTextStyle: TextStyle(
+            color: skin.text,
+            fontSize: 15,
+          ),
         ),
-        scaffoldBackgroundColor: pageBg,
+        scaffoldBackgroundColor: skin.background,
         fontFamily: 'sans-serif',
         visualDensity: VisualDensity.standard,
         textTheme: const TextTheme(
@@ -45,8 +64,8 @@ class ColonelApp extends StatelessWidget {
           labelMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
           labelSmall: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
         ),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: const Color(0xFF292D32),
+        appBarTheme: AppBarTheme(
+          backgroundColor: skin.primaryDark,
           foregroundColor: Colors.white,
           elevation: 0,
           centerTitle: false,
@@ -56,15 +75,16 @@ class ColonelApp extends StatelessWidget {
         cardTheme: CardThemeData(
           elevation: 0,
           margin: EdgeInsets.zero,
-          color: Colors.white,
+          color: skin.surface,
           surfaceTintColor: Colors.transparent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
+            side: BorderSide(color: skin.border, width: 1),
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          fillColor: Colors.white,
+          fillColor: skin.surface,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 14,
@@ -75,16 +95,16 @@ class ColonelApp extends StatelessWidget {
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(color: line),
+            borderSide: BorderSide(color: skin.border),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(color: red, width: 1.5),
+            borderSide: BorderSide(color: skin.primary, width: 1.5),
           ),
         ),
         filledButtonTheme: FilledButtonThemeData(
           style: FilledButton.styleFrom(
-            backgroundColor: red,
+            backgroundColor: skin.primary,
             foregroundColor: Colors.white,
             minimumSize: const Size(0, 48),
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
@@ -96,8 +116,8 @@ class ColonelApp extends StatelessWidget {
         outlinedButtonTheme: OutlinedButtonThemeData(
           style: OutlinedButton.styleFrom(
             minimumSize: const Size(0, 48),
-            foregroundColor: const Color(0xFF364152),
-            side: const BorderSide(color: line),
+            foregroundColor: skin.text,
+            side: BorderSide(color: skin.border),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(14),
             ),
@@ -105,42 +125,44 @@ class ColonelApp extends StatelessWidget {
         ),
         navigationBarTheme: NavigationBarThemeData(
           height: 68,
-          backgroundColor: const Color(0xFF292D32),
-          surfaceTintColor: const Color(0xFF292D32),
+          backgroundColor: skin.primaryDark,
+          surfaceTintColor: skin.primaryDark,
           indicatorColor: Colors.transparent,
           labelTextStyle: WidgetStateProperty.resolveWith((states) {
             final selected = states.contains(WidgetState.selected);
             return TextStyle(
               fontSize: 11,
               fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
-              color: selected ? red : Colors.white70,
+              color: selected ? skin.primary : Colors.white70,
             );
           }),
           iconTheme: WidgetStateProperty.resolveWith((states) {
             final selected = states.contains(WidgetState.selected);
             return IconThemeData(
-              color: selected ? red : Colors.white70,
+              color: selected ? skin.primary : Colors.white70,
               size: selected ? 25 : 23,
             );
           }),
         ),
         chipTheme: ChipThemeData(
-          backgroundColor: Colors.white,
-          selectedColor: red.withValues(alpha: .12),
-          side: const BorderSide(color: line),
+          backgroundColor: skin.surface,
+          selectedColor: skin.accentSoft,
+          side: BorderSide(color: skin.border),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          labelStyle: const TextStyle(fontWeight: FontWeight.w700, color: ink),
+          labelStyle: TextStyle(fontWeight: FontWeight.w700, color: skin.text),
         ),
-        dividerTheme: const DividerThemeData(
-          color: line,
+        dividerTheme: DividerThemeData(
+          color: skin.border,
           space: 1,
           thickness: 1,
         ),
       ),
         home: const IntroPage(),
       );
+      },
+    );
       },
     );
   }

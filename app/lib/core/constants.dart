@@ -14,7 +14,7 @@ const goldSoft = Color(0xFFFFF1B8);
 const goldPanel = Color(0xFF11151B);
 const ink = Color(0xFF171719);
 const inkMuted = Color(0xFF6F7177);
-const line = Color(0xFF3A414A);
+const line = Color(0xFFD1D5DB);
 
 const copyright1 = 'Copyright © CP Colonel Pos';
 const copyright2 = 'Hak cipta dilindungi Undang-Undang';

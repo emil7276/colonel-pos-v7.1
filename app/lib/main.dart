@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'app.dart';
 import 'data/database.dart';
 import 'core/license/license_service.dart';
+import 'core/theme/skin_controller.dart';
 import 'features/auth/trial_expired_page.dart';
 
 Future<void> main() async {
@@ -11,6 +12,7 @@ Future<void> main() async {
 
   if (license != null && license.isActive) {
     await DB.database;
+    await SkinController.load();
     runApp(const ColonelApp());
     return;
   }

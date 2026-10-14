@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/constants.dart';
+import '../../core/theme/skin_controller.dart';
 import '../../core/app_localizations.dart';
 import '../../core/license/license_service.dart';
 import '../../core/utils.dart';
@@ -261,7 +262,8 @@ class _DashboardPageState extends State<DashboardPage> {
 
           const SizedBox(height: 4),
           const SizedBox(height: 4),
-                    LayoutBuilder(
+                    _skinSelector(),
+          LayoutBuilder(
             builder: (context, c) {
               final cross = c.maxWidth > 700 ? 4 : 2;
               final slot = (c.maxWidth - (cross - 1) * 8) / cross;
@@ -482,6 +484,117 @@ class _DashboardPageState extends State<DashboardPage> {
       case _TrendMode.month: return AppLocalizations.t('Per bulan', 'Monthly');
       case _TrendMode.year: return AppLocalizations.t('Per tahun', 'Yearly');
     }
+  }
+
+
+  Widget _skinSelector() {
+    return ValueListenableBuilder<String>(
+      valueListenable: SkinController.selectedSkin,
+      builder: (context, selectedSkin, _) {
+        return Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppLocalizations.t(
+                    'Pilihan Skin Terbaik Khusus untuk Kamu',
+                    'Your Best Skin Pick',
+                  ),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  AppLocalizations.t(
+                    'Pilih warna tampilan favoritmu',
+                    'Choose your favorite look',
+                  ),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Wrap(
+                  alignment: WrapAlignment.spaceAround,
+                  spacing: 12,
+                  runSpacing: 14,
+                  children: SkinController.palettes.entries.map((entry) {
+                    final isSelected = selectedSkin == entry.key;
+                    final palette = entry.value;
+
+                    return InkWell(
+                      borderRadius: BorderRadius.circular(14),
+                      onTap: () async {
+                        await SkinController.setSkin(entry.key);
+                      },
+                      child: SizedBox(
+                        width: 76,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 180),
+                              width: 46,
+                              height: 46,
+                              decoration: BoxDecoration(
+                                color: palette.primary,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: isSelected
+                                      ? palette.primaryDark
+                                      : palette.border,
+                                  width: isSelected ? 3 : 1,
+                                ),
+                                boxShadow: isSelected
+                                    ? [
+                                        BoxShadow(
+                                          color: palette.primary.withValues(
+                                            alpha: 0.25,
+                                          ),
+                                          blurRadius: 7,
+                                          spreadRadius: 1,
+                                        ),
+                                      ]
+                                    : null,
+                              ),
+                              child: isSelected
+                                  ? const Icon(
+                                      Icons.check_rounded,
+                                      color: Colors.white,
+                                      size: 24,
+                                    )
+                                  : null,
+                            ),
+                            const SizedBox(height: 7),
+                            Text(
+                              palette.name,
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 10.5,
+                                fontWeight: isSelected
+                                    ? FontWeight.w800
+                                    : FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Widget _trendChartCard() {
