@@ -492,6 +492,8 @@ class _DashboardPageState extends State<DashboardPage> {
     return ValueListenableBuilder<String>(
       valueListenable: SkinController.selectedSkin,
       builder: (context, selectedSkin, _) {
+        final subtitleColor =
+            Theme.of(context).colorScheme.onSurfaceVariant;
         return Card(
           child: Padding(
             padding: const EdgeInsets.all(10),
@@ -503,11 +505,12 @@ class _DashboardPageState extends State<DashboardPage> {
                   child: Text(
                     AppLocalizations.t(
                       'Pilihan Skin Terbaik Khusus untuk Kamu',
-                    'Your Best Skin Pick',
-                  ),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
+                      'Your Best Skin Pick',
+                    ),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -516,11 +519,9 @@ class _DashboardPageState extends State<DashboardPage> {
                   child: Text(
                     AppLocalizations.t(
                       'Pilih warna tampilan favoritmu',
-                    'Choose your favorite look',
-                  ),
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      'Choose your favorite look',
+                    ),
+                    style: TextStyle(fontSize: 12, color: subtitleColor),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -528,82 +529,86 @@ class _DashboardPageState extends State<DashboardPage> {
                   padding: const EdgeInsets.only(left: 12),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(AppLocalizations.t('Geser warna ke samping →', 'Swipe colors sideways →'), style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.onSurfaceVariant)),
-                ),
+                    child: Text(
+                      AppLocalizations.t(
+                        'Geser warna ke samping →',
+                        'Swipe colors sideways →',
+                      ),
+                      style: TextStyle(fontSize: 11, color: subtitleColor),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 6),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: [
-                  ...SkinController.palettes.entries.map((entry) {
-                    final isSelected = selectedSkin == entry.key;
-                    final palette = entry.value;
-
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: InkWell(
-                      borderRadius: BorderRadius.circular(14),
-                      onTap: () async {
-                        await SkinController.setSkin(entry.key);
-                      },
-                      child: SizedBox(
-                        width: 58,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            AnimatedContainer(
-                              duration: const Duration(milliseconds: 180),
-                              width: 34,
-                              height: 34,
-                              decoration: BoxDecoration(
-                                color: palette.primary,
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: isSelected
-                                      ? palette.primaryDark
-                                      : palette.border,
-                                  width: isSelected ? 3 : 1,
+                    children: SkinController.palettes.entries.map((entry) {
+                      final isSelected = selectedSkin == entry.key;
+                      final palette = entry.value;
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(14),
+                          onTap: () async {
+                            await SkinController.setSkin(entry.key);
+                          },
+                          child: SizedBox(
+                            width: 58,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                AnimatedContainer(
+                                  duration: const Duration(milliseconds: 180),
+                                  width: 34,
+                                  height: 34,
+                                  decoration: BoxDecoration(
+                                    color: palette.primary,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: isSelected
+                                          ? palette.primaryDark
+                                          : palette.border,
+                                      width: isSelected ? 3 : 1,
+                                    ),
+                                    boxShadow: isSelected
+                                        ? [
+                                            BoxShadow(
+                                              color: palette.primary.withValues(
+                                                alpha: 0.25,
+                                              ),
+                                              blurRadius: 7,
+                                              spreadRadius: 1,
+                                            ),
+                                          ]
+                                        : null,
+                                  ),
+                                  child: isSelected
+                                      ? const Icon(
+                                          Icons.check_rounded,
+                                          color: Colors.white,
+                                          size: 18,
+                                        )
+                                      : null,
                                 ),
-                                boxShadow: isSelected
-                                    ? [
-                                        BoxShadow(
-                                          color: palette.primary.withValues(
-                                            alpha: 0.25,
-                                          ),
-                                          blurRadius: 7,
-                                          spreadRadius: 1,
-                                        ),
-                                      ]
-                                    : null,
-                              ),
-                              child: isSelected
-                                  ? const Icon(
-                                      Icons.check_rounded,
-                                      color: Colors.white,
-                                      size: 18,
-                                    )
-                                  : null,
+                                const SizedBox(height: 4),
+                                Text(
+                                  palette.name,
+                                  textAlign: TextAlign.center,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: isSelected
+                                        ? FontWeight.w800
+                                        : FontWeight.w500,
+                                  ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(height: 4),
-                            Text(
-                              palette.name,
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: isSelected
-                                    ? FontWeight.w800
-                                    : FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    );
-                  }).toList(),
-                    ],
+                      );
+                    }).toList(),
                   ),
                 ),
               ],
@@ -613,7 +618,6 @@ class _DashboardPageState extends State<DashboardPage> {
       },
     );
   }
-
   Widget _trendChartCard() {
     if (trendPoints.isEmpty) {
       return Card(
