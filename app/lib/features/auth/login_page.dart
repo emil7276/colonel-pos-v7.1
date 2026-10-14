@@ -213,7 +213,7 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.all(22),
                       child: Column(
                         children: [
-                          const Align(
+                          Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                               'Masuk ke sistem',
