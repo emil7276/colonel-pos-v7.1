@@ -351,8 +351,8 @@ class _MenuPageState extends State<MenuPage> {
                           Container(
                             width: 46,
                             height: 46,
-                            decoration: BoxDecoration(color: redSoft, borderRadius: BorderRadius.circular(13)),
-                            child: const Icon(Icons.fastfood_rounded, color: red, size: 22),
+                            decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(13)),
+                            child: Icon(Icons.fastfood_rounded, color: Theme.of(context).colorScheme.primary, size: 22),
                           ),
                           const SizedBox(width: 11),
                           Expanded(
@@ -389,8 +389,8 @@ class _MenuPageState extends State<MenuPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: red,
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         onPressed: () => edit(),
         icon: const Icon(Icons.add_rounded),
         label: const Text('Tambah Menu'),

@@ -1953,16 +1953,16 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(children: [
-                const Icon(Icons.support_agent_rounded, color: Colors.green),
+                Icon(Icons.support_agent_rounded, color: colors.primary),
                 const SizedBox(width: 8),
                 Expanded(child: Text(
                   AppLocalizations.t('Colonel Smart Assistant', 'Colonel Smart Assistant'),
-                  style: const TextStyle(fontFamily: 'sans-serif-condensed', fontSize: 18, fontWeight: FontWeight.w800, color: Colors.red),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
                 )),
                 Container(
                   width: 9,
                   height: 9,
-                  decoration: const BoxDecoration(color: Colors.green, shape: BoxShape.circle),
+                  decoration: BoxDecoration(color: colors.primary, shape: BoxShape.circle),
                 ),
               ]),
               const SizedBox(height: 7),
@@ -1978,7 +1978,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.chat_bubble_outline_rounded, color: Colors.green, size: 28),
+                            Icon(Icons.chat_bubble_outline_rounded, color: colors.primary, size: 28),
                             const SizedBox(height: 8),
                             Text(
                               AppLocalizations.t('Tanyakan apa saja tentang data Colonel POS.', 'Ask about data saved in Colonel POS.'),
@@ -2003,12 +2003,12 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
                               constraints: const BoxConstraints(maxWidth: 290),
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                               decoration: BoxDecoration(color: colors.primaryContainer, borderRadius: BorderRadius.circular(12)),
-                              child: Text(turn.question, style: const TextStyle(fontSize: 14, height: 1.4)),
+                              child: Text(turn.question, style: Theme.of(context).textTheme.bodyMedium?.copyWith(height: 1.4)),
                             ),
                           ),
                           const SizedBox(height: 6),
                           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                            const Padding(padding: EdgeInsets.only(top: 4, right: 7), child: Icon(Icons.support_agent_rounded, color: Colors.green, size: 19)),
+                            Padding(padding: const EdgeInsets.only(top: 4, right: 7), child: Icon(Icons.support_agent_rounded, color: colors.primary, size: 19)),
                             Expanded(
                               child: Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -2017,7 +2017,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
                                     ? Row(mainAxisSize: MainAxisSize.min, children: [
                                         _TypingDots(controller: _typingController),
                                         const SizedBox(width: 8),
-                                        Text(AppLocalizations.t('Sedang menyiapkan jawaban…', 'Preparing an answer…'), style: TextStyle(fontSize: 11.5, color: colors.onSurfaceVariant)),
+                                        Text(AppLocalizations.t('Sedang menyiapkan jawaban…', 'Preparing an answer…'), style: Theme.of(context).textTheme.bodySmall?.copyWith(color: colors.onSurfaceVariant)),
                                       ])
                                     : Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -2029,7 +2029,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
                                               answer,
                                               maxLines: canCollapse && !turn.expanded ? 4 : null,
                                               overflow: canCollapse && !turn.expanded ? TextOverflow.ellipsis : TextOverflow.visible,
-                                              style: const TextStyle(fontSize: 14, height: 1.45),
+                                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(height: 1.45),
                                             ),
                                           ),
                                           if (canCollapse)
@@ -2039,7 +2039,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
                                                 style: TextButton.styleFrom(visualDensity: VisualDensity.compact, padding: const EdgeInsets.symmetric(horizontal: 4)),
                                                 onPressed: () => setState(() => turn.expanded = !turn.expanded),
                                                 icon: Icon(turn.expanded ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded, size: 18),
-                                                label: Text(turn.expanded ? AppLocalizations.t('Ringkas', 'Show less') : AppLocalizations.t('Buka jawaban', 'Read more'), style: const TextStyle(fontSize: 11)),
+                                                label: Text(turn.expanded ? AppLocalizations.t('Ringkas', 'Show less') : AppLocalizations.t('Buka jawaban', 'Read more'), style: Theme.of(context).textTheme.labelSmall),
                                               ),
                                             ),
                                         ],
@@ -2064,7 +2064,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
                     onSubmitted: (_) => _ask(),
                     decoration: InputDecoration(
                       hintText: AppLocalizations.t('Assalamualaikum.. 👋', 'Assalamualaikum.. 👋'),
-                      hintStyle: const TextStyle(color: Color(0xFF9CA3AF)),
+                      hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: colors.onSurfaceVariant),
                       isDense: true,
                       border: const OutlineInputBorder(),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -2074,7 +2074,7 @@ class _AiAssistantPanelState extends State<AiAssistantPanel>
                 const SizedBox(width: 6),
                 IconButton.filled(
                   tooltip: AppLocalizations.t('Kirim', 'Send'),
-                  style: IconButton.styleFrom(backgroundColor: const Color(0xFF38BDF8), foregroundColor: Colors.white),
+                  style: IconButton.styleFrom(backgroundColor: colors.primary, foregroundColor: colors.onPrimary),
                   onPressed: _ask,
                   icon: const Icon(Icons.arrow_upward_rounded),
                 ),
@@ -2105,7 +2105,7 @@ class _TypingDots extends StatelessWidget {
             height: 7,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.green.withOpacity(i == active ? 1 : 0.25),
+              color: Theme.of(context).colorScheme.primary.withOpacity(i == active ? 1 : 0.25),
             ),
           );
         }));

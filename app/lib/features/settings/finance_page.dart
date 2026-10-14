@@ -417,7 +417,7 @@ class _FinancePageState extends State<FinancePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(icon, color: const Color(0xFF1976D2)),
+              Icon(icon, color: Theme.of(context).colorScheme.primary),
               const SizedBox(height: 8),
               Text(
                 title,
@@ -451,8 +451,8 @@ class _FinancePageState extends State<FinancePage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showExpenseDialog(),
-        backgroundColor: const Color(0xFF1976D2),
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         icon: const Icon(Icons.add),
         label: Text(AppLocalizations.t('Pengeluaran', 'Expenses')),
       ),
@@ -481,8 +481,8 @@ class _FinancePageState extends State<FinancePage> {
                 IconButton.filled(
                   onPressed: _pickDate,
                   style: IconButton.styleFrom(
-                    backgroundColor: const Color(0xFF292D32),
-                    foregroundColor: Colors.white,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   ),
                   icon: const Icon(Icons.calendar_month),
                   tooltip: AppLocalizations.t('Pilih tanggal', 'Select date'),
@@ -545,9 +545,9 @@ class _FinancePageState extends State<FinancePage> {
 
             Card(
               child: ExpansionTile(
-                leading: const Icon(
+                leading: Icon(
                   Icons.account_balance_rounded,
-                  color: const Color(0xFF1976D2),
+                  color: Theme.of(context).colorScheme.primary,
                 ),
                 title: Text(
                   AppLocalizations.t('Piutang', 'Receivables'),
@@ -611,9 +611,9 @@ class _FinancePageState extends State<FinancePage> {
 
             Card(
               child: ExpansionTile(
-                leading: const Icon(
+                leading: Icon(
                   Icons.receipt_long_rounded,
-                  color: const Color(0xFF1976D2),
+                  color: Theme.of(context).colorScheme.primary,
                 ),
                 title: Text(
                   AppLocalizations.t('Hutang', 'Debt'),
@@ -701,8 +701,8 @@ class _FinancePageState extends State<FinancePage> {
                   ListTile(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 4),
                     leading: CircleAvatar(
-                      backgroundColor: const Color(0xFFEAF2FC),
-                      foregroundColor: const Color(0xFF1976D2),
+                      backgroundColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
+                      foregroundColor: Theme.of(context).colorScheme.primary,
                       child: const Icon(
                         Icons.receipt_long_outlined,
                       ),

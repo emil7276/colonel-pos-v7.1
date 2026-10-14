@@ -102,7 +102,7 @@ class SettingsPage
       mainAxisSize: MainAxisSize.min,
       children: [
         ListTile(
-          leading: Icon(icon, color: red),
+          leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
           title: Text(title),
           trailing: const Icon(Icons.chevron_right),
           onTap: () {

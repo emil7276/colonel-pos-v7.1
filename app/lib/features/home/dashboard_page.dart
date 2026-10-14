@@ -458,14 +458,14 @@ class _DashboardPageState extends State<DashboardPage> {
                 children: [
                   ListTile(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
-                  leading: CircleAvatar(backgroundColor: const Color(0xFFEAF2FC), foregroundColor: const Color(0xFF1976D2), child: const Icon(Icons.receipt_long_rounded)),
+                  leading: CircleAvatar(backgroundColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12), foregroundColor: Theme.of(context).colorScheme.primary, child: const Icon(Icons.receipt_long_rounded)),
                   title: Text(s.no, style: const TextStyle(fontWeight: FontWeight.w800)),
                   subtitle: Text('${s.time} • ${s.cashier}'),
                   trailing: Text(rp(s.total), style: const TextStyle(fontWeight: FontWeight.w900)),
                   onTap: () => _showSaleDetail(s),
                   ),
                   if (entry.key < recent.length - 1)
-                    const Divider(height: 1, thickness: 0.8, color: Color(0xFF3A414A)),
+                    Divider(height: 1, thickness: 0.8, color: Theme.of(context).colorScheme.outlineVariant),
                 ],
               );
             }),
@@ -493,7 +493,7 @@ class _DashboardPageState extends State<DashboardPage> {
       builder: (context, selectedSkin, _) {
         return Card(
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -518,11 +518,11 @@ class _DashboardPageState extends State<DashboardPage> {
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
                 Wrap(
                   alignment: WrapAlignment.spaceAround,
-                  spacing: 12,
-                  runSpacing: 14,
+                  spacing: 2,
+                  runSpacing: 4,
                   children: SkinController.palettes.entries.map((entry) {
                     final isSelected = selectedSkin == entry.key;
                     final palette = entry.value;
@@ -533,14 +533,14 @@ class _DashboardPageState extends State<DashboardPage> {
                         await SkinController.setSkin(entry.key);
                       },
                       child: SizedBox(
-                        width: 76,
+                        width: 55,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             AnimatedContainer(
                               duration: const Duration(milliseconds: 180),
-                              width: 46,
-                              height: 46,
+                              width: 30,
+                              height: 30,
                               decoration: BoxDecoration(
                                 color: palette.primary,
                                 shape: BoxShape.circle,
@@ -566,18 +566,18 @@ class _DashboardPageState extends State<DashboardPage> {
                                   ? const Icon(
                                       Icons.check_rounded,
                                       color: Colors.white,
-                                      size: 24,
+                                      size: 18,
                                     )
                                   : null,
                             ),
-                            const SizedBox(height: 7),
+                            const SizedBox(height: 4),
                             Text(
                               palette.name,
                               textAlign: TextAlign.center,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                fontSize: 10.5,
+                                fontSize: 9,
                                 fontWeight: isSelected
                                     ? FontWeight.w800
                                     : FontWeight.w500,
@@ -611,12 +611,12 @@ class _DashboardPageState extends State<DashboardPage> {
                     width: 38,
                     height: 38,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFEAF2FC),
+                      color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.show_chart_rounded,
-                      color: const Color(0xFF1976D2),
+                      color: Theme.of(context).colorScheme.primary,
                       size: 21,
                     ),
                   ),
@@ -670,12 +670,12 @@ class _DashboardPageState extends State<DashboardPage> {
                   width: 38,
                   height: 38,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFEAF2FC),
+                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.show_chart_rounded,
-                    color: const Color(0xFF1976D2),
+                    color: Theme.of(context).colorScheme.primary,
                     size: 21,
                   ),
                 ),
@@ -1707,8 +1707,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           dense: true,
                           leading: CircleAvatar(
                             radius: 18,
-                            backgroundColor: const Color(0xFFEAF2FC),
-                            foregroundColor: const Color(0xFF1976D2),
+                            backgroundColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
+                            foregroundColor: Theme.of(context).colorScheme.primary,
                             child: Icon(
                               returnsOnly
                                   ? Icons.assignment_return_rounded
@@ -2214,7 +2214,7 @@ class _DashboardPageState extends State<DashboardPage> {
               if (rows.isEmpty) Padding(padding: const EdgeInsets.all(16), child: Text(AppLocalizations.t('Belum ada item terjual hari ini.', 'No items sold today.'))),
               ...rows.take(12).map((r) => ListTile(
                 dense: true,
-                leading: CircleAvatar(radius: 17, backgroundColor: const Color(0xFFEAF2FC), foregroundColor: const Color(0xFF1976D2), child: Text('${r['qty']}')),
+                leading: CircleAvatar(radius: 17, backgroundColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12), foregroundColor: Theme.of(context).colorScheme.primary, child: Text('${r['qty']}')),
                 title: Text(r['name'].toString(), style: const TextStyle(fontWeight: FontWeight.w800)),
                 trailing: Text(rp(r['omzet'] as num), style: const TextStyle(fontWeight: FontWeight.w800)),
               )),

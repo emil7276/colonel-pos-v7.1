@@ -229,7 +229,7 @@ class _QrisPageState
             onPressed: save,
             style:
                 FilledButton.styleFrom(
-              backgroundColor: red,
+              backgroundColor: Theme.of(context).colorScheme.primary,
             ),
             child:
                 Text(

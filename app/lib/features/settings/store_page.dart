@@ -156,7 +156,7 @@ class _StorePageState
             onPressed: save,
             style:
                 FilledButton.styleFrom(
-              backgroundColor: red,
+              backgroundColor: Theme.of(context).colorScheme.primary,
             ),
             child:
                 Text(AppLocalizations.t('SIMPAN', 'SAVE')),
