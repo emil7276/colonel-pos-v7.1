@@ -261,16 +261,17 @@ class _HomePageState extends State<HomePage> {
                           : titles[index] == 'Smart Assistant'
                               ? 'COLONEL SMART ASSISTANT'
                               : AppLocalizations.t('Keuangan', 'Finance'),
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, height: 1.05, letterSpacing: 0),
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 20, fontWeight: FontWeight.w900, height: 1.0, letterSpacing: 0),
             ),
 
             if (_licenseInfo != null && _licenseInfo!.isActive)
               Text(
                 _licenseLabel(),
-                style: const TextStyle(
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
                   fontSize: 10,
                   color: Colors.white,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.bold,
+                  height: 1.0,
                 ),
               ),
               TextButton(
@@ -285,7 +286,7 @@ class _HomePageState extends State<HomePage> {
                 },
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.zero,
-                  minimumSize: const Size(0, 20),
+                  minimumSize: const Size(0, 16),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 child: Text(
@@ -293,7 +294,8 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(
                     fontSize: 10,
                     color: Colors.white,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w300,
+                      height: 1.0,
                     decoration: TextDecoration.underline,
                   ),
                 ),

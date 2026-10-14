@@ -33,6 +33,7 @@ class SkinController {
   static const String classicBrown = 'classic_brown';
   static const String lavenderPurple = 'lavender_purple';
   static const String aquaTeal = 'aqua_teal';
+  static const String pink = 'pink';
 
   static const Map<String, SkinPalette> palettes = {
     oceanBlue: SkinPalette(
@@ -70,6 +71,15 @@ class SkinController {
       primaryDark: Color(0xFF44305F),
       accentSoft: Color(0xFFCFC2E8),
       border: Color(0xFFD9D0E9),
+    ),
+    pink: SkinPalette(
+      name: 'Pink',
+      background: Color(0xFFF8E7EF),
+      surface: Color(0xFFFFFFFF),
+      primary: Color(0xFFD85A91),
+      primaryDark: Color(0xFF8F315B),
+      accentSoft: Color(0xFFF3C4D8),
+      border: Color(0xFFE8C9D7),
     ),
     aquaTeal: SkinPalette(
       name: 'Aqua Teal',

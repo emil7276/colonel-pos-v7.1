@@ -521,9 +521,9 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 const SizedBox(height: 10),
                 Wrap(
-                  alignment: WrapAlignment.spaceAround,
-                  spacing: 2,
-                  runSpacing: 4,
+                  alignment: WrapAlignment.start,
+                  spacing: 8,
+                  runSpacing: 8,
                   children: SkinController.palettes.entries.map((entry) {
                     final isSelected = selectedSkin == entry.key;
                     final palette = entry.value;
@@ -534,7 +534,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         await SkinController.setSkin(entry.key);
                       },
                       child: SizedBox(
-                        width: 55,
+                        width: 62,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
