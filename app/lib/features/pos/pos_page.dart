@@ -1013,14 +1013,14 @@ class PosPageState extends State<PosPage> {
                                     }
                                     setDialog(() => method = x);
                                   },
-                            selectedColor: goldSoft,
+                            selectedColor: const Color(0xFFEAF2FC),
                             labelStyle: TextStyle(
-                              color: method == x ? red : ink,
+                              color: method == x ? const Color(0xFF1976D2) : ink,
                               fontWeight: FontWeight.w800,
                               fontSize: 12,
                             ),
                             side: BorderSide(
-                              color: method == x ? red : line,
+                              color: method == x ? const Color(0xFF1976D2) : line,
                             ),
                             visualDensity: VisualDensity.compact,
                           ),

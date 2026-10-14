@@ -498,12 +498,12 @@ class _DashboardPageState extends State<DashboardPage> {
                     width: 38,
                     height: 38,
                     decoration: BoxDecoration(
-                      color: redSoft,
+                      color: const Color(0xFFEAF2FC),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Icon(
                       Icons.show_chart_rounded,
-                      color: red,
+                      color: const Color(0xFF1976D2),
                       size: 21,
                     ),
                   ),
@@ -557,12 +557,12 @@ class _DashboardPageState extends State<DashboardPage> {
                   width: 38,
                   height: 38,
                   decoration: BoxDecoration(
-                    color: redSoft,
+                    color: const Color(0xFFEAF2FC),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(
                     Icons.show_chart_rounded,
-                    color: red,
+                    color: const Color(0xFF1976D2),
                     size: 21,
                   ),
                 ),

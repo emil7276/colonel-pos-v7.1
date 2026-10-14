@@ -417,7 +417,7 @@ class _FinancePageState extends State<FinancePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(icon, color: red),
+              Icon(icon, color: const Color(0xFF1976D2)),
               const SizedBox(height: 8),
               Text(
                 title,
@@ -547,7 +547,7 @@ class _FinancePageState extends State<FinancePage> {
               child: ExpansionTile(
                 leading: const Icon(
                   Icons.account_balance_rounded,
-                  color: red,
+                  color: const Color(0xFF1976D2),
                 ),
                 title: Text(
                   AppLocalizations.t('Piutang', 'Receivables'),
@@ -613,7 +613,7 @@ class _FinancePageState extends State<FinancePage> {
               child: ExpansionTile(
                 leading: const Icon(
                   Icons.receipt_long_rounded,
-                  color: red,
+                  color: const Color(0xFF1976D2),
                 ),
                 title: Text(
                   AppLocalizations.t('Hutang', 'Debt'),
@@ -701,8 +701,8 @@ class _FinancePageState extends State<FinancePage> {
                   ListTile(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 4),
                     leading: CircleAvatar(
-                      backgroundColor: redSoft,
-                      foregroundColor: red,
+                      backgroundColor: const Color(0xFFEAF2FC),
+                      foregroundColor: const Color(0xFF1976D2),
                       child: const Icon(
                         Icons.receipt_long_outlined,
                       ),

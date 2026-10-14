@@ -96,8 +96,8 @@ class _ReportPageState extends State<ReportPage> {
             Container(
               width: 48,
               height: 48,
-              decoration: BoxDecoration(color: redSoft, borderRadius: BorderRadius.circular(14)),
-              child: const Icon(Icons.calendar_month_rounded, color: red),
+              decoration: BoxDecoration(color: const Color(0xFFEAF2FC), borderRadius: BorderRadius.circular(14)),
+              child: const Icon(Icons.calendar_month_rounded, color: const Color(0xFF1976D2)),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -201,10 +201,6 @@ class _ReportPageState extends State<ReportPage> {
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFF3A414A), width: 1),
-        borderRadius: BorderRadius.circular(12),
-      ),
       child: ExpansionTile(
         initiallyExpanded: true,
         title: Text(
@@ -252,10 +248,6 @@ class _ReportPageState extends State<ReportPage> {
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFF3A414A), width: 1),
-        borderRadius: BorderRadius.circular(12),
-      ),
       child: ExpansionTile(
         initiallyExpanded: true,
         title: Text(
@@ -394,10 +386,10 @@ class _ReportPageState extends State<ReportPage> {
                 width: 34,
                 height: 34,
                 decoration: BoxDecoration(
-                  color: redSoft,
+                  color: const Color(0xFFEAF2FC),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(icon, color: red, size: 18),
+                child: Icon(icon, color: const Color(0xFF1976D2), size: 18),
               ),
               const SizedBox(width: 8),
               Expanded(
@@ -475,7 +467,7 @@ class _ReportPageState extends State<ReportPage> {
                         dense: true,
                         leading: const Icon(
                           Icons.assignment_return_outlined,
-                          color: red,
+                          color: const Color(0xFF1976D2),
                         ),
                         title: Text(
                           s.no,
@@ -560,7 +552,7 @@ class _ReportPageState extends State<ReportPage> {
                       return ListTile(
                         onTap: () => saleDetail(s),
                         dense: true,
-                        leading: const Icon(Icons.receipt_long_rounded, color: red),
+                        leading: const Icon(Icons.receipt_long_rounded, color: const Color(0xFF1976D2)),
                         title: Text(s.no, style: const TextStyle(fontWeight: FontWeight.w800)),
                         subtitle: Text('${s.time} • ${s.payment}'),
                         trailing: Text(
@@ -603,8 +595,8 @@ class _ReportPageState extends State<ReportPage> {
                   dense: true,
                   leading: CircleAvatar(
                     radius: 17,
-                    backgroundColor: redSoft,
-                    foregroundColor: red,
+                    backgroundColor: const Color(0xFFEAF2FC),
+                    foregroundColor: const Color(0xFF1976D2),
                     child: Text('${x['qty']}'),
                   ),
                   title: Text(x['name'].toString(), style: const TextStyle(fontWeight: FontWeight.w800)),
