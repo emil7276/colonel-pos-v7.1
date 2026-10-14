@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/app_localizations.dart';
 import '../../core/constants.dart';
+import '../../core/widgets.dart';
 
 class ContactPage extends StatelessWidget {
   const ContactPage({super.key});
@@ -8,7 +9,15 @@ class ContactPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.t('Hubungi Kami', 'Contact Us'))),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            const CpLogo(size: 30, rounded: false),
+            const SizedBox(width: 10),
+            Expanded(child: Text(AppLocalizations.t('Hubungi Kami', 'Contact Us'))),
+          ],
+        ),
+      ),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),

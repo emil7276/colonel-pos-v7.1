@@ -5,6 +5,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import '../../core/constants.dart';
+import '../../core/widgets.dart';
 import '../../core/app_localizations.dart';
 import '../../core/utils.dart';
 import '../../data/database.dart';
@@ -292,7 +293,13 @@ class _MenuPageState extends State<MenuPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.t('Menu & Harga', 'Menu & Prices')),
+        title: Row(
+          children: [
+            const CpLogo(size: 30, rounded: false),
+            const SizedBox(width: 10),
+            Expanded(child: Text(AppLocalizations.t('Menu & Harga', 'Menu & Prices'))),
+          ],
+        ),
         actions: [
           IconButton(onPressed: () => edit(), tooltip: AppLocalizations.t('Tambah menu', 'Add menu'), icon: const Icon(Icons.add_rounded)),
         ],
