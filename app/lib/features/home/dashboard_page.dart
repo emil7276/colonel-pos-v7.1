@@ -259,38 +259,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
           const SizedBox(height: 12),
 
-          const SizedBox(height: 2),
-          Center(
-            child: TextButton(
-              onPressed: () async {
-                final uri = Uri(
-                  scheme: 'mailto',
-                  path: 'cp.colonel.pos@gmail.com',
-                  queryParameters: {
-                    'subject': 'Saya ingin menambah layanan',
-                  },
-                );
-                await launchUrl(uri);
-              },
-              style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-                child: Text(
-                  AppLocalizations.t(
-                    'Berlangganan Sekarang • cp.colonel.pos@gmail.com',
-                    'Subscribe Now • cp.colonel.pos@gmail.com',
-                  ),
-                style: TextStyle(
-                  fontSize: 12,
-                  color: red,
-                  fontWeight: FontWeight.w800,
-                  decoration: TextDecoration.underline,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
           const SizedBox(height: 4),
                     LayoutBuilder(
             builder: (context, c) {

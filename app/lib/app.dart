@@ -13,7 +13,7 @@ class ColonelApp extends StatelessWidget {
       valueListenable: LanguageService.language,
       builder: (context, language, _) {
         final scheme = ColorScheme.fromSeed(
-      seedColor: gold,
+      seedColor: red,
       brightness: Brightness.light,
     );
 
@@ -23,6 +23,12 @@ class ColonelApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: scheme,
+        dialogTheme: const DialogThemeData(
+          backgroundColor: Color(0xFFF1F1F3),
+          surfaceTintColor: Colors.transparent,
+          titleTextStyle: TextStyle(color: Color(0xFF292D32), fontSize: 20, fontWeight: FontWeight.w800),
+          contentTextStyle: TextStyle(color: Color(0xFF364152), fontSize: 15),
+        ),
         scaffoldBackgroundColor: pageBg,
         fontFamily: 'sans-serif',
         visualDensity: VisualDensity.standard,
@@ -45,7 +51,7 @@ class ColonelApp extends StatelessWidget {
           elevation: 0,
           centerTitle: false,
           scrolledUnderElevation: 0,
-          titleTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: gold),
+          titleTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.white),
         ),
         cardTheme: CardThemeData(
           elevation: 0,
@@ -91,7 +97,7 @@ class ColonelApp extends StatelessWidget {
           style: OutlinedButton.styleFrom(
             minimumSize: const Size(0, 48),
             foregroundColor: const Color(0xFF364152),
-            side: const BorderSide(color: goldDeep),
+            side: const BorderSide(color: line),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(14),
             ),
@@ -107,20 +113,20 @@ class ColonelApp extends StatelessWidget {
             return TextStyle(
               fontSize: 11,
               fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
-              color: selected ? gold : Colors.white70,
+              color: selected ? red : Colors.white70,
             );
           }),
           iconTheme: WidgetStateProperty.resolveWith((states) {
             final selected = states.contains(WidgetState.selected);
             return IconThemeData(
-              color: selected ? gold : Colors.white70,
+              color: selected ? red : Colors.white70,
               size: selected ? 25 : 23,
             );
           }),
         ),
         chipTheme: ChipThemeData(
           backgroundColor: Colors.white,
-          selectedColor: gold.withValues(alpha: .18),
+          selectedColor: red.withValues(alpha: .12),
           side: const BorderSide(color: line),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),

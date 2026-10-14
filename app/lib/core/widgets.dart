@@ -17,22 +17,13 @@ class CpLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget image = Image.asset(
+    final Widget image = Image.asset(
       logoAsset,
       width: size,
       height: size,
-      fit: BoxFit.cover,
+      fit: BoxFit.contain,
+      filterQuality: FilterQuality.high,
     );
-
-    if (charcoal) {
-      image = ColorFiltered(
-        colorFilter: const ColorFilter.mode(
-          Color(0xFF292D32),
-          BlendMode.srcIn,
-        ),
-        child: image,
-      );
-    }
 
     if (!rounded) return image;
 

@@ -261,6 +261,23 @@ class PosPageState extends State<PosPage> {
     }
   }
 
+  void _handleUnifiedSearchSubmitted(String value) {
+    final code = value.trim();
+    if (code.isEmpty) return;
+
+    final matches = products.where(
+      (p) => p.active && p.barcode.trim() == code,
+    );
+
+    if (matches.isNotEmpty) {
+      searchController.clear();
+      setState(() => searchQuery = '');
+      add(matches.first);
+    } else {
+      setState(() => searchQuery = value);
+    }
+  }
+
   void _addScannedBarcode(String rawCode) {
     final code = rawCode.trim();
     barcodeController.clear();
@@ -1372,7 +1389,8 @@ class PosPageState extends State<PosPage> {
           category == 'Semua' || p.category == category;
       final query = searchQuery.trim().toLowerCase();
       final searchMatch = query.isEmpty ||
-          p.name.toLowerCase().contains(query);
+          p.name.toLowerCase().contains(query) ||
+          p.barcode.toLowerCase().contains(query);
       return categoryMatch && searchMatch;
     }).toList();
 
@@ -1393,18 +1411,29 @@ class PosPageState extends State<PosPage> {
                       onChanged: (value) {
                         setState(() => searchQuery = value);
                       },
+                      onSubmitted: _handleUnifiedSearchSubmitted,
                       decoration: InputDecoration(
                         hintText: AppLocalizations.t('Cari menu...', 'Search menu...'),
                         prefixIcon: const Icon(Icons.search),
-                        suffixIcon: searchQuery.isEmpty
-                            ? null
-                            : IconButton(
+                        suffixIcon: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              tooltip: 'Scan dengan kamera',
+                              onPressed: _scanBarcodeForSale,
+                              icon: const Icon(Icons.photo_camera_outlined),
+                            ),
+                            if (searchQuery.isNotEmpty)
+                              IconButton(
+                                tooltip: 'Hapus pencarian',
                                 icon: const Icon(Icons.clear),
                                 onPressed: () {
                                   searchController.clear();
                                   setState(() => searchQuery = '');
                                 },
                               ),
+                          ],
+                        ),
                         isDense: true,
                         contentPadding: const EdgeInsets.symmetric(
                           vertical: 10,
@@ -1422,17 +1451,6 @@ class PosPageState extends State<PosPage> {
                   ),
                 ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(4, 0, 4, 6),
-              child: Row(children: [
-                Expanded(child: TextField(
-                  controller: barcodeController, textInputAction: TextInputAction.done, onSubmitted: _addScannedBarcode,
-                  decoration: InputDecoration(hintText: 'Scan barcode untuk tambah belanja', prefixIcon: const Icon(Icons.qr_code_scanner), isDense: true, contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12), border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
-                )),
-                const SizedBox(width: 6),
-                IconButton(tooltip: 'Scan dengan kamera', onPressed: _scanBarcodeForSale, icon: const Icon(Icons.photo_camera_outlined)),
-              ]),
             ),
             SizedBox(
               height: 40,
@@ -1660,7 +1678,7 @@ class PosPageState extends State<PosPage> {
           shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(14),
-              side: const BorderSide(color: Color(0xFF364152), width: 1),
+              side: const BorderSide(color: Color(0xFF292D32), width: 1),
             ),
           child: Column(
             children: [

@@ -98,25 +98,22 @@ class SettingsPage
     IconData icon,
     Widget page,
   ) {
-    return Card(
-      child: ListTile(
-        leading: Icon(
-          icon,
-          color: red,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ListTile(
+          leading: Icon(icon, color: red),
+          title: Text(title),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => page),
+            );
+          },
         ),
-        title: Text(title),
-        trailing: const Icon(
-          Icons.chevron_right,
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => page,
-            ),
-          );
-        },
-      ),
+        const Divider(height: 1, thickness: 1, color: line),
+      ],
     );
   }
 }
