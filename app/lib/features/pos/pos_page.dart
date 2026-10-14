@@ -1857,13 +1857,14 @@ class PosPageState extends State<PosPage> {
                               label: Text(type),
                             selected: selected,
                             onSelected: (_) => setState(() => customerType = type),
-                            selectedColor: redSoft,
+                            selectedColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.16),
+                          backgroundColor: Theme.of(context).colorScheme.surface,
                             labelStyle: TextStyle(
-                              color: selected ? red : ink,
+                              color: selected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface,
                               fontWeight: FontWeight.w800,
                               fontSize: 12,
                             ),
-                            side: BorderSide(color: selected ? red : line),
+                            side: BorderSide(color: selected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.outline),
                             visualDensity: VisualDensity.compact,
                           ),
                           );

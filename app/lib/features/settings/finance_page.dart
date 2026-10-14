@@ -492,6 +492,7 @@ class _FinancePageState extends State<FinancePage> {
 
             Row(
               children: [
+            const SizedBox(height: 16),
                 Expanded(
                   child: _metric(
                     AppLocalizations.t('Pendapatan', 'Revenue'),
