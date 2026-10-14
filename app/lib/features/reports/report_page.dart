@@ -201,6 +201,10 @@ class _ReportPageState extends State<ReportPage> {
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        border: Border.all(color: const Color(0xFF3A414A), width: 1),
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: ExpansionTile(
         initiallyExpanded: true,
         title: Text(
@@ -220,8 +224,8 @@ class _ReportPageState extends State<ReportPage> {
                         dense: true,
                         leading: CircleAvatar(
                           radius: 17,
-                          backgroundColor: redSoft,
-                          foregroundColor: red,
+                          backgroundColor: const Color(0xFFEAF2FC),
+                          foregroundColor: const Color(0xFF1976D2),
                           child: const Icon(Icons.person_outline_rounded, size: 18),
                         ),
                         title: Text(
@@ -248,6 +252,10 @@ class _ReportPageState extends State<ReportPage> {
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        border: Border.all(color: const Color(0xFF3A414A), width: 1),
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: ExpansionTile(
         initiallyExpanded: true,
         title: Text(
@@ -266,6 +274,8 @@ class _ReportPageState extends State<ReportPage> {
                       return ListTile(
                         dense: true,
                         leading: CircleAvatar(
+                          backgroundColor: const Color(0xFFEAF2FC),
+                          foregroundColor: const Color(0xFF1976D2),
                           child: Text('${x['qty']}'),
                         ),
                         title: Text(

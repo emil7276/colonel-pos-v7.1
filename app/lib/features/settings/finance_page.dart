@@ -451,7 +451,7 @@ class _FinancePageState extends State<FinancePage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showExpenseDialog(),
-        backgroundColor: red,
+        backgroundColor: const Color(0xFF1976D2),
         foregroundColor: Colors.white,
         icon: const Icon(Icons.add),
         label: Text(AppLocalizations.t('Pengeluaran', 'Expenses')),

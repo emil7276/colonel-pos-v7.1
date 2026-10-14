@@ -35,7 +35,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: red, width: 1.5),
+          borderSide: const BorderSide(color: Color(0xFF1976D2), width: 1.5),
         ),
       ),
       cardTheme: CardThemeData(

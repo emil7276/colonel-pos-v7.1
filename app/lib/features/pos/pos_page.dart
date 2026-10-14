@@ -1286,7 +1286,7 @@ class PosPageState extends State<PosPage> {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.qr_code_2_rounded, color: red),
+                    const Icon(Icons.qr_code_2_rounded, color: Color(0xFF1976D2)),
                     const SizedBox(width: 8),
                     const Expanded(
                       child: Text(
@@ -2005,7 +2005,7 @@ class PosPageState extends State<PosPage> {
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
-                                side: const BorderSide(color: red, width: 1.5),
+                                side: const BorderSide(color: Color(0xFF1976D2), width: 1),
                               ),
                             ),
                             child: Text(AppLocalizations.t('BAYAR', 'PAY')),
@@ -2097,14 +2097,14 @@ class PosPageState extends State<PosPage> {
                                     style: FilledButton.styleFrom(
                                       backgroundColor: const Color(0xFF2F65A5),
                                       foregroundColor: Colors.white,
-                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
+                                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                     ),
                                     child: Text(
                                       AppLocalizations.t('Review & Checkout', 'Review & Checkout'),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800),
+                                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
                                     ),
                                   ),
                                 ],

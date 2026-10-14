@@ -253,7 +253,7 @@ class _LoginPageState extends State<LoginPage> {
                             width: double.infinity,
                             child: FilledButton.icon(
                               style: FilledButton.styleFrom(
-                                backgroundColor: red,
+                                backgroundColor: const Color(0xFF1976D2),
                                 foregroundColor: Colors.white,
                               ),
                               onPressed: login,

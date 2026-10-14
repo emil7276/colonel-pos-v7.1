@@ -456,7 +456,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 children: [
                   ListTile(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
-                  leading: CircleAvatar(backgroundColor: redSoft, foregroundColor: red, child: const Icon(Icons.receipt_long_rounded)),
+                  leading: CircleAvatar(backgroundColor: const Color(0xFFEAF2FC), foregroundColor: const Color(0xFF1976D2), child: const Icon(Icons.receipt_long_rounded)),
                   title: Text(s.no, style: const TextStyle(fontWeight: FontWeight.w800)),
                   subtitle: Text('${s.time} • ${s.cashier}'),
                   trailing: Text(rp(s.total), style: const TextStyle(fontWeight: FontWeight.w900)),
@@ -1594,8 +1594,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           dense: true,
                           leading: CircleAvatar(
                             radius: 18,
-                            backgroundColor: redSoft,
-                            foregroundColor: red,
+                            backgroundColor: const Color(0xFFEAF2FC),
+                            foregroundColor: const Color(0xFF1976D2),
                             child: Icon(
                               returnsOnly
                                   ? Icons.assignment_return_rounded
@@ -2101,7 +2101,7 @@ class _DashboardPageState extends State<DashboardPage> {
               if (rows.isEmpty) Padding(padding: const EdgeInsets.all(16), child: Text(AppLocalizations.t('Belum ada item terjual hari ini.', 'No items sold today.'))),
               ...rows.take(12).map((r) => ListTile(
                 dense: true,
-                leading: CircleAvatar(radius: 17, backgroundColor: redSoft, foregroundColor: red, child: Text('${r['qty']}')),
+                leading: CircleAvatar(radius: 17, backgroundColor: const Color(0xFFEAF2FC), foregroundColor: const Color(0xFF1976D2), child: Text('${r['qty']}')),
                 title: Text(r['name'].toString(), style: const TextStyle(fontWeight: FontWeight.w800)),
                 trailing: Text(rp(r['omzet'] as num), style: const TextStyle(fontWeight: FontWeight.w800)),
               )),
