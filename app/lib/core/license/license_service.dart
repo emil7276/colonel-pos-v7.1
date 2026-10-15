@@ -7,7 +7,7 @@ class LicenseInfo {
   final String licenseId;
   final String plan;
   final DateTime issuedAt;
-  final DateTime expiresAt;
+  final DateTime? expiresAt;
 
   const LicenseInfo({
     required this.licenseId,
@@ -16,14 +16,24 @@ class LicenseInfo {
     required this.expiresAt,
   });
 
-  bool get isActive => DateTime.now().isBefore(expiresAt);
+  bool get isActive {
+    final now = DateTime.now().toUtc();
+
+    if (now.isBefore(issuedAt.toUtc())) {
+      return false;
+    }
+
+    final expiry = expiresAt;
+    return expiry == null || now.isBefore(expiry.toUtc());
+  }
 }
 
 class LicenseService {
   static const String _licenseKey = 'cp_license';
 
-  // Akan kita isi dengan PUBLIC KEY resmi setelah key pair dibuat.
-  static const String publicKeyBase64 = 'ToLK9IwCbIaZSg2Emho11f6JC1KGeGO7uEtUjQNIoG4';
+  // Public key resmi yang sudah cocok dengan generator v7.2.
+  static const String publicKeyBase64 =
+      'ToLK9IwCbIaZSg2Emho11f6JC1KGeGO7uEtUjQNIoG4';
 
   static final Ed25519 _algorithm = Ed25519();
 
@@ -39,12 +49,16 @@ class LicenseService {
 
     try {
       final data = jsonDecode(raw) as Map<String, dynamic>;
+      final issuedAt = DateTime.parse(data['issuedAt'] as String);
+      final rawExpiry = data['expiresAt'];
 
       return LicenseInfo(
         licenseId: data['licenseId'] as String,
         plan: data['plan'] as String,
-        issuedAt: DateTime.parse(data['issuedAt'] as String),
-        expiresAt: DateTime.parse(data['expiresAt'] as String),
+        issuedAt: issuedAt,
+        expiresAt: rawExpiry == null
+            ? null
+            : DateTime.parse(rawExpiry as String),
       );
     } catch (_) {
       return null;
@@ -57,6 +71,13 @@ class LicenseService {
     final license = await _verifyLicense(licenseCode);
 
     if (license == null) {
+      return false;
+    }
+
+    final now = DateTime.now().toUtc();
+
+    if (now.isBefore(license.issuedAt.toUtc())) {
+      lastError = 'Lisensi belum memasuki tanggal mulai';
       return false;
     }
 
@@ -73,7 +94,7 @@ class LicenseService {
         'licenseId': license.licenseId,
         'plan': license.plan,
         'issuedAt': license.issuedAt.toIso8601String(),
-        'expiresAt': license.expiresAt.toIso8601String(),
+        'expiresAt': license.expiresAt?.toIso8601String(),
       }),
     );
 
@@ -91,7 +112,7 @@ class LicenseService {
 
     try {
       final normalizedCode =
-          licenseCode.replaceAll(RegExp(r'\\s+'), '');
+          licenseCode.replaceAll(RegExp(r'\s+'), '');
       final parts = normalizedCode.split('.');
 
       if (parts.length != 2) {
@@ -99,9 +120,12 @@ class LicenseService {
         return null;
       }
 
-      final payloadBytes = base64Url.decode(base64Url.normalize(parts[0]));
-      final signatureBytes = base64Url.decode(base64Url.normalize(parts[1]));
-      final publicKeyBytes = base64Url.decode(base64Url.normalize(publicKeyBase64));
+      final payloadBytes =
+          base64Url.decode(base64Url.normalize(parts[0]));
+      final signatureBytes =
+          base64Url.decode(base64Url.normalize(parts[1]));
+      final publicKeyBytes =
+          base64Url.decode(base64Url.normalize(publicKeyBase64));
 
       final publicKey = SimplePublicKey(
         publicKeyBytes,
@@ -126,11 +150,56 @@ class LicenseService {
       final data =
           jsonDecode(utf8.decode(payloadBytes)) as Map<String, dynamic>;
 
+      final licenseId = data['licenseId'] as String;
+      final plan = data['plan'] as String;
+      final issuedAt = DateTime.parse(data['issuedAt'] as String);
+      final rawExpiry = data['expiresAt'];
+
+      if (licenseId.trim().isEmpty) {
+        lastError = 'ID lisensi kosong';
+        return null;
+      }
+
+      const supportedPlans = {
+        '7D',
+        '1M',
+        '3M',
+        '1Y',
+        'LIFETIME',
+        'CUSTOM',
+      };
+
+      if (!supportedPlans.contains(plan)) {
+        lastError = 'Jenis lisensi tidak dikenal';
+        return null;
+      }
+
+      // Hanya LIFETIME yang boleh tidak memiliki tanggal kedaluwarsa.
+      if (plan == 'LIFETIME' && rawExpiry != null) {
+        lastError = 'Format lisensi LIFETIME tidak valid';
+        return null;
+      }
+
+      if (plan != 'LIFETIME' && rawExpiry == null) {
+        lastError = 'Tanggal kedaluwarsa tidak tersedia';
+        return null;
+      }
+
+      final expiresAt = rawExpiry == null
+          ? null
+          : DateTime.parse(rawExpiry as String);
+
+      if (expiresAt != null &&
+          !expiresAt.isAfter(issuedAt)) {
+        lastError = 'Rentang tanggal lisensi tidak valid';
+        return null;
+      }
+
       return LicenseInfo(
-        licenseId: data['licenseId'] as String,
-        plan: data['plan'] as String,
-        issuedAt: DateTime.parse(data['issuedAt'] as String),
-        expiresAt: DateTime.parse(data['expiresAt'] as String),
+        licenseId: licenseId,
+        plan: plan,
+        issuedAt: issuedAt,
+        expiresAt: expiresAt,
       );
     } catch (e) {
       lastError = 'Gagal verifikasi: $e';

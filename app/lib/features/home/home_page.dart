@@ -75,17 +75,40 @@ class _HomePageState extends State<HomePage> {
     final license = _licenseInfo;
     if (license == null || !license.isActive) return '';
 
-    final remaining = license.expiresAt.difference(DateTime.now());
-    final days = (remaining.inHours / 24).ceil().clamp(0, 9999);
-
     String planLabel;
     switch (license.plan) {
-      case '7D': planLabel = '7 HARI'; break;
-      case '1M': planLabel = '1 BULAN'; break;
-      case '3M': planLabel = '3 BULAN'; break;
-      case '1Y': planLabel = '1 TAHUN'; break;
-      default: planLabel = license.plan;
+      case '7D':
+        planLabel = '7 HARI';
+        break;
+      case '1M':
+        planLabel = '1 BULAN';
+        break;
+      case '3M':
+        planLabel = '3 BULAN';
+        break;
+      case '1Y':
+        planLabel = '1 TAHUN';
+        break;
+      case 'LIFETIME':
+        planLabel = 'SEUMUR HIDUP';
+        break;
+      case 'CUSTOM':
+        planLabel = 'CUSTOM';
+        break;
+      default:
+        planLabel = license.plan;
     }
+
+    final expiry = license.expiresAt;
+    if (expiry == null) {
+      return AppLocalizations.t(
+        'AKTIF • $planLabel',
+        'ACTIVE • $planLabel',
+      );
+    }
+
+    final remaining = expiry.difference(DateTime.now());
+    final days = (remaining.inHours / 24).ceil().clamp(0, 9999);
 
     return AppLocalizations.t(
       'AKTIF • $planLabel • Sisa $days hari',
