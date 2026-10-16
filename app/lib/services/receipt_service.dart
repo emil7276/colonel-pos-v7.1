@@ -127,15 +127,15 @@ Future<pw.Document> _buildReceipt(SaleModel sale, {int copies = 1, String? paper
       pw.Page(
         pageFormat: format,
         build: (_) => pw.DefaultTextStyle(
-            style: pw.TextStyle(fontSize: 8.4),
+            style: pw.TextStyle(fontSize: 8.8),
             child: pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.center,
           children: [
-            pw.Text(name, style: pw.TextStyle(fontSize: 11.2, fontWeight: pw.FontWeight.bold), textAlign: pw.TextAlign.center),
+            pw.Text(name, style: pw.TextStyle(fontSize: 12.0, fontWeight: pw.FontWeight.bold), textAlign: pw.TextAlign.center),
             if (address.isNotEmpty) pw.Text(address, textAlign: pw.TextAlign.center),
             if (phone.isNotEmpty) pw.Text(phone, textAlign: pw.TextAlign.center),
             pw.SizedBox(height: 7),
-            pw.Text('NOTA PENJUALAN', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+            pw.Text('NOTA PENJUALAN', style: pw.TextStyle(fontSize: 9.2, fontWeight: pw.FontWeight.bold)),
             pw.Divider(),
             pw.Align(alignment: pw.Alignment.centerLeft, child: pw.Text('${sale.no}\n${sale.time}\nKasir: ${sale.cashier}')),
             if (sale.customerName.trim().isNotEmpty &&
@@ -170,10 +170,8 @@ Future<pw.Document> _buildReceipt(SaleModel sale, {int copies = 1, String? paper
               pw.Text('Kembalian: ${rp(sale.change)}'),
             ],
             pw.SizedBox(height: 14),
-            pw.Text('Terima kasih'),
+            pw.Text('Terima Kasih'),
             pw.SizedBox(height: 10),
-            pw.Text(copyright1, style: pw.TextStyle(fontSize: 4.8)),
-            pw.Text(copyright2, style: pw.TextStyle(fontSize: 4.8)),
           ],
         ),
         ),
@@ -235,8 +233,7 @@ Future<List<int>> _escPosReceipt(SaleModel sale, {required String paper, int cop
       bytes.addAll(generator.text('Kembalian: ${rp(sale.change)}', styles: PosStyles(align: PosAlign.center)));
     }
     bytes.addAll(generator.feed(2));
-    bytes.addAll(generator.text('Terima kasih', styles: PosStyles(align: PosAlign.center, bold: true)));
-    bytes.addAll(generator.text('CP COLONEL POS V.7.2', styles: PosStyles(align: PosAlign.center)));
+    bytes.addAll(generator.text('Terima Kasih', styles: PosStyles(align: PosAlign.center, bold: true)));
     bytes.addAll(generator.feed(2));
     bytes.addAll(generator.cut());
   }

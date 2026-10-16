@@ -77,12 +77,20 @@ class _ReportPageState extends State<ReportPage> {
       _customerSection(),
       _paymentSummary(),
       _itemSalesSection(),
-      _section(AppLocalizations.t('Jam Transaksi', 'Transaction Hours'),hours.isEmpty?[ListTile(title:Text(AppLocalizations.t('Belum ada penjualan.', 'No sales yet.')))]:hours.take(8).map((x)=>ListTile(leading:const Icon(Icons.schedule_outlined),title:Text('${x['jam']}:00'),trailing:Text('${x['transaksi']} ${AppLocalizations.t('transaksi', 'transactions')}'))).toList()),
+      _plainSection(AppLocalizations.t('Jam Transaksi', 'Transaction Hours'),hours.isEmpty?[ListTile(title:Text(AppLocalizations.t('Belum ada penjualan.', 'No sales yet.')))]:hours.take(8).map((x)=>ListTile(leading:const Icon(Icons.schedule_outlined),title:Text('${x['jam']}:00'),trailing:Text('${x['transaksi']} ${AppLocalizations.t('transaksi', 'transactions')}'))).toList()),
       const SizedBox(height:6),
-      Text(AppLocalizations.t('Transaksi Hari Ini', "Today's Transactions"),style:const TextStyle(fontSize:18,fontWeight:FontWeight.w800)),
+      Text(AppLocalizations.t('Transaksi Hari Ini', "Today's Transactions"),
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900,
+          color: Theme.of(context).colorScheme.onSurface)),
+      Divider(color: Theme.of(context).dividerColor, height: 20),
       const SizedBox(height:8),
-      if(sales.isEmpty) Card(child:Padding(padding:const EdgeInsets.all(18),child:Text(AppLocalizations.t('Tidak ada transaksi pada ${displayDate(selectedDate)}.', 'No transactions on ${displayDate(selectedDate)}.')))),
-      ...sales.map((s)=>Container(decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: line, width: 1))), child:ListTile(onTap:()=>saleDetail(s),leading:CircleAvatar(child:Icon(s.returned?Icons.undo:Icons.receipt_long_outlined)),title:Text(s.no,style:const TextStyle(fontWeight:FontWeight.w700)),subtitle:Text('${s.time} • ${s.cashier} • ${s.payment}'),trailing:Text(s.returned?AppLocalizations.t('RETUR', 'RETURN'):rp(s.total),style:TextStyle(fontWeight:FontWeight.w800,color:s.returned?Colors.red:null))))),
+      if (sales.isEmpty)
+        Padding(padding: const EdgeInsets.symmetric(vertical: 18),
+          child: Text(AppLocalizations.t(
+            'Tidak ada transaksi pada ${displayDate(selectedDate)}.',
+            'No transactions on ${displayDate(selectedDate)}.'),
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant))),
+      ...sales.map((s)=>Container(decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Theme.of(context).dividerColor, width: 1))), child:ListTile(onTap:()=>saleDetail(s),leading:CircleAvatar(child:Icon(s.returned?Icons.undo:Icons.receipt_long_outlined)),title:Text(s.no,style:const TextStyle(fontWeight:FontWeight.w700)),subtitle:Text('${s.time} • ${s.cashier} • ${s.payment}'),trailing:Text(s.returned?AppLocalizations.t('RETUR', 'RETURN'):rp(s.total),style:TextStyle(fontWeight:FontWeight.w800,color:s.returned?Colors.red:null))))),
       const CopyrightFooter(),
     ]));
   }
@@ -107,11 +115,31 @@ class _ReportPageState extends State<ReportPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(AppLocalizations.t('Penjualan ' + salesPeriod, salesPeriod == 'Minggu Ini' ? 'Sales This Week' : salesPeriod == 'Tahun Ini' ? 'Sales This Year' : 'Sales This Month'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: inkMuted)),
-                  Wrap(spacing: 6, children: [for (final period in ['Minggu Ini', 'Bulan Ini', 'Tahun Ini']) ChoiceChip(label: Text(period), selected: salesPeriod == period, onSelected: (_) async { setState(() => salesPeriod = period); await load(); })]),
+                  Text(AppLocalizations.t('PENJUALAN PERIODE', 'SALES PERIOD'), style: TextStyle(fontSize: 13, fontWeight: FontWeight.w900, letterSpacing: 0.5, color: Theme.of(context).colorScheme.onSurface)),
+                  Wrap(spacing: 14, children: [
+                    for (final period in ["Minggu Ini", "Bulan Ini", "Tahun Ini"])
+                      InkWell(
+                        onTap: () async {
+                          if (salesPeriod == period) return;
+                          setState(() => salesPeriod = period);
+                          await load();
+                        },
+                        child: Column(mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start, children: [
+                            Text(period, style: TextStyle(fontSize: 12,
+                              fontWeight: salesPeriod == period ? FontWeight.w800 : FontWeight.w500,
+                              color: salesPeriod == period ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurfaceVariant)),
+                            const SizedBox(height: 5),
+                            Container(height: 2, width: 24,
+                              decoration: BoxDecoration(
+                                color: salesPeriod == period ? Theme.of(context).colorScheme.primary : Colors.transparent,
+                                borderRadius: BorderRadius.circular(2))),
+                          ]),
+                      ),
+                  ]),
                   const SizedBox(height: 3),
                   Text(rp(monthSales), style: const TextStyle(fontSize: 23, fontWeight: FontWeight.w900, color: red)),
-                  Text(AppLocalizations.t('Omzet bulan berjalan', 'Current Month Revenue'), style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant)),
+                  Text(AppLocalizations.t('Total penjualan periode', 'Total Period Sales'), style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant)),
                 ],
               ),
             ),
@@ -610,6 +638,25 @@ class _ReportPageState extends State<ReportPage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _plainSection(String title, List<Widget> children) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.w900,
+            color: Theme.of(context).colorScheme.onSurface,
+          )),
+          Divider(color: Theme.of(context).dividerColor, height: 20),
+          ...children,
+          Divider(color: Theme.of(context).dividerColor, height: 20),
+        ],
       ),
     );
   }
