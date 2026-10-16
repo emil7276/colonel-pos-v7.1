@@ -76,12 +76,10 @@ class LicenseService {
 
     final now = DateTime.now().toUtc();
 
-    if (now.isBefore(license.issuedAt.toUtc())) {
-      lastError = 'Lisensi belum memasuki tanggal mulai';
-      return false;
-    }
-
-    if (!license.isActive) {
+    // Lisensi valid boleh disimpan sebelum tanggal mulainya.
+    // Status aktif tetap ditentukan oleh LicenseInfo.isActive.
+    final expiry = license.expiresAt;
+    if (expiry != null && !now.isBefore(expiry.toUtc())) {
       lastError = 'Lisensi sudah kedaluwarsa';
       return false;
     }
