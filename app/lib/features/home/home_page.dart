@@ -165,6 +165,23 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Widget _glowingNavIcon(IconData icon) {
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.white.withValues(alpha: 0.20),
+            blurRadius: 9,
+            spreadRadius: 0.5,
+          ),
+        ],
+      ),
+      child: Icon(icon, color: Colors.white),
+    );
+  }
+
   void selectPage(int value) {
     setState(() => index = value);
     if (value == 1) {
@@ -501,34 +518,34 @@ class _HomePageState extends State<HomePage> {
         destinations: [
           NavigationDestination(
             icon: Icon(Icons.dashboard_outlined),
-            selectedIcon: Icon(Icons.dashboard_rounded),
+            selectedIcon: _glowingNavIcon(Icons.dashboard_rounded),
             label: AppLocalizations.t('Dasbor', 'Dashboard'),
           ),
           NavigationDestination(
             icon: Icon(Icons.shopping_cart_outlined),
-            selectedIcon: Icon(Icons.shopping_cart),
+            selectedIcon: _glowingNavIcon(Icons.shopping_cart),
             label: AppLocalizations.t('Transaksi', 'Transactions'),
           ),
           NavigationDestination(
             icon: const Icon(Icons.analytics_outlined),
-            selectedIcon: Icon(Icons.analytics_rounded),
+            selectedIcon: _glowingNavIcon(Icons.analytics_rounded),
             label: AppLocalizations.t('Laporan', 'Reports'),
           ),
           if (widget.role == 'Administrator')
             NavigationDestination(
               icon: const Icon(Icons.settings_outlined),
-              selectedIcon: Icon(Icons.settings_rounded),
+              selectedIcon: _glowingNavIcon(Icons.settings_rounded),
               label: AppLocalizations.t('Admin', 'Admin'),
             ),
           if (widget.role == 'Administrator')
             NavigationDestination(
               icon: Icon(Icons.account_balance_wallet_outlined),
-              selectedIcon: Icon(Icons.account_balance_wallet_rounded),
+              selectedIcon: _glowingNavIcon(Icons.account_balance_wallet_rounded),
               label: AppLocalizations.t('Keuangan', 'Finance'),
             ),
           NavigationDestination(
             icon: const Icon(Icons.support_agent_rounded),
-            selectedIcon: Icon(Icons.support_agent_rounded),
+            selectedIcon: _glowingNavIcon(Icons.support_agent_rounded),
             label: AppLocalizations.t('CS Assistant', 'CS Assistant'),
           ),
         ],

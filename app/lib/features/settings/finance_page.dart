@@ -151,9 +151,36 @@ class _FinancePageState extends State<FinancePage> {
   Future<void> _showExpenseDialog([
     Map<String, dynamic>? item,
   ]) async {
-    final category = TextEditingController(
-      text: item?['category']?.toString() ?? '',
+    final categoryRows = await (await DB.database).rawQuery(
+      """
+      SELECT DISTINCT TRIM(category) AS category
+      FROM expenses
+      WHERE TRIM(COALESCE(category, '')) <> ''
+      ORDER BY category COLLATE NOCASE
+      """,
     );
+    final categories = <String>[];
+    final seen = <String>{};
+    for (final row in categoryRows) {
+      final value = (row['category'] ?? '').toString().trim();
+      if (value.isNotEmpty && seen.add(value.toLowerCase())) {
+        categories.add(value);
+      }
+    }
+
+    final existing = item?['category']?.toString().trim() ?? '';
+    if (existing.isNotEmpty && seen.add(existing.toLowerCase())) {
+      categories.insert(0, existing);
+    }
+    const addCategoryOption = '__add_expense_category__';
+    bool isAddingNewCategory = false;
+    String? selectedCategory = existing.isEmpty
+        ? null
+        : categories.firstWhere(
+            (v) => v.toLowerCase() == existing.toLowerCase(),
+            orElse: () => existing,
+          );
+    final category = TextEditingController(text: existing);
     final note = TextEditingController(
       text: item?['note']?.toString() ?? '',
     );
@@ -187,13 +214,64 @@ class _FinancePageState extends State<FinancePage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextField(
-                      controller: category,
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.t('Kategori', 'Category'),
-                        hintText: AppLocalizations.t('Contoh: Listrik', 'Example: Electricity'),
+                    if (categories.isEmpty || isAddingNewCategory) ...[
+                      TextField(
+                        controller: category,
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.t('Kategori', 'Category'),
+                          hintText: AppLocalizations.t(
+                            'Contoh: Listrik', 'Example: Electricity'),
+                        ),
                       ),
-                    ),
+                      if (categories.isNotEmpty)
+                        TextButton(
+                          onPressed: () {
+                            setDialogState(() {
+                              isAddingNewCategory = false;
+                              category.clear();
+                              selectedCategory = null;
+                            });
+                          },
+                          child: Text(AppLocalizations.t(
+                            'Pilih kategori yang ada',
+                            'Choose an existing category')),
+                        ),
+                    ] else
+                      DropdownButtonFormField<String>(
+                        value: selectedCategory,
+                        isExpanded: true,
+                        menuMaxHeight: 280,
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.t('Kategori', 'Category'),
+                        ),
+                        hint: Text(AppLocalizations.t(
+                          'Pilih kategori', 'Select category')),
+                        items: [
+                          ...categories.map((value) =>
+                            DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value,
+                                overflow: TextOverflow.ellipsis),
+                            ),
+                          ),
+                          DropdownMenuItem<String>(
+                            value: addCategoryOption,
+                            child: Text(AppLocalizations.t(
+                              '+ Tambah kategori baru',
+                              '+ Add a new category')),
+                          ),
+                        ],
+                        onChanged: (value) {
+                          setDialogState(() {
+                            if (value == addCategoryOption) {
+                              isAddingNewCategory = true;
+                              category.clear();
+                            } else {
+                              selectedCategory = value;
+                            }
+                          });
+                        },
+                      ),
                     TextField(
                       controller: note,
                       decoration: InputDecoration(
@@ -272,7 +350,9 @@ class _FinancePageState extends State<FinancePage> {
                       await DB.saveExpense(
                         id: item?['id'] as int?,
                         date: date,
-                        category: category.text,
+                        category: categories.isEmpty || isAddingNewCategory
+                            ? category.text.trim()
+                            : (selectedCategory ?? ''),
                         note: note.text,
                         amount: nominal ?? 0,
                         paymentStatus: paymentStatus,
