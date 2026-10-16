@@ -9,6 +9,7 @@ import '../../core/widgets.dart';
 import '../../core/app_localizations.dart';
 import '../../core/utils.dart';
 import '../../core/trial_service.dart';
+import '../auth/trial_expired_page.dart';
 import '../../data/database.dart';
 import '../../models/models.dart';
 
@@ -285,16 +286,14 @@ class _MenuPageState extends State<MenuPage> {
                         );
 
                         if (choice == 'buy') {
-                          if (dialogContext.mounted) {
-                            Navigator.pop(dialogContext);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  'Buka halaman aktivasi untuk memasukkan lisensi.',
-                                ),
-                              ),
-                            );
-                          }
+                          if (!dialogContext.mounted) return;
+
+                          Navigator.pop(dialogContext);
+                          Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (_) => const ActivationPage(),
+                            ),
+                          );
                           return;
                         }
 

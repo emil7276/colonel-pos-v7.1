@@ -50,8 +50,8 @@ class _ContactPageState extends State<ContactPage> {
         _success = ok;
         _message = ok
             ? AppLocalizations.t(
-                'Aktivasi berhasil. Lisensi baru telah disimpan.',
-                'Activation successful. The new license has been saved.',
+                'Aktivasi berhasil. Silakan tutup aplikasi, lalu buka kembali untuk melanjutkan penggunaan Colonel POS.',
+                'Activation successful. Please close and reopen the app to continue using Colonel POS.',
               )
             : LicenseService.lastError;
 

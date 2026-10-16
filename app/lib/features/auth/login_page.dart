@@ -247,6 +247,20 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             onSubmitted: (_) => login(),
                           ),
+                          const SizedBox(height: 8),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Akun bawaan\n'
+                              'Administrator: admin / 1234\n'
+                              'Kasir: kasir / 1234',
+                              style: TextStyle(
+                                color: skin.mutedText,
+                                fontSize: 12,
+                                height: 1.5,
+                              ),
+                            ),
+                          ),
                           Row(
                             children: [
                               Checkbox(
