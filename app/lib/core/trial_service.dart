@@ -13,15 +13,40 @@ class TrialStatus {
 }
 
 class TrialService {
-  static const Duration trialDuration = Duration(days: 7);
+  static const Duration trialDuration = Duration(days: 3);
   static const String _startedAtKey = 'cp_trial_started_at';
 
-  static Future<TrialStatus> status() async {
+  /// Membaca status saja. Tidak memulai trial secara otomatis.
+  /// Mengembalikan null jika trial belum pernah dimulai.
+  static Future<TrialStatus?> status() async {
     final prefs = await SharedPreferences.getInstance();
-
     final saved = prefs.getString(_startedAtKey);
 
-    final DateTime startedAt;
+    if (saved == null) return null;
+
+    final startedAt = DateTime.tryParse(saved);
+    if (startedAt == null) {
+      throw StateError(
+        'Data waktu mulai trial tidak valid. Trial tidak dimulai ulang.',
+      );
+    }
+
+    final expiresAt = startedAt.add(trialDuration);
+
+    return TrialStatus(
+      active: DateTime.now().isBefore(expiresAt),
+      startedAt: startedAt,
+      expiresAt: expiresAt,
+    );
+  }
+
+  /// Memulai trial hanya jika belum pernah dimulai.
+  /// Timestamp yang sudah ada tetapi rusak tidak di-reset otomatis.
+  static Future<TrialStatus> startIfNeeded() async {
+    final prefs = await SharedPreferences.getInstance();
+    final saved = prefs.getString(_startedAtKey);
+
+    late final DateTime startedAt;
 
     if (saved == null) {
       startedAt = DateTime.now();
@@ -30,21 +55,21 @@ class TrialService {
         startedAt.toIso8601String(),
       );
     } else {
-      startedAt = DateTime.tryParse(saved) ?? DateTime.now();
+      final parsed = DateTime.tryParse(saved);
 
-      if (DateTime.tryParse(saved) == null) {
-        await prefs.setString(
-          _startedAtKey,
-          startedAt.toIso8601String(),
+      if (parsed == null) {
+        throw StateError(
+          'Data waktu mulai trial tidak valid. Trial tidak dimulai ulang.',
         );
       }
+
+      startedAt = parsed;
     }
 
     final expiresAt = startedAt.add(trialDuration);
-    final active = DateTime.now().isBefore(expiresAt);
 
     return TrialStatus(
-      active: active,
+      active: DateTime.now().isBefore(expiresAt),
       startedAt: startedAt,
       expiresAt: expiresAt,
     );

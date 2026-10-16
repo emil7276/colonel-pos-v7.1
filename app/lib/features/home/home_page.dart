@@ -288,15 +288,38 @@ class _HomePageState extends State<HomePage> {
             ),
 
             if (_licenseInfo != null && _licenseInfo!.isActive)
-              Text(
-                _licenseLabel(),
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  fontSize: 10,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  height: 1.0,
+              if (_licenseInfo!.plan == 'LIFETIME') ...[
+                Text(
+                  AppLocalizations.t('AKTIF', 'ACTIVE'),
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    fontSize: 12,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w900,
+                    height: 1.0,
+                  ),
                 ),
-              ),
+                Text(
+                  'SEUMUR HIDUP / LIFETIME',
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    fontSize: 9,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    height: 1.0,
+                  ),
+                ),
+              ]
+              else
+                Text(
+                  _licenseLabel(),
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    fontSize: 10,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    height: 1.0,
+                  ),
+                ),
+            if (!(_licenseInfo?.isActive == true &&
+                _licenseInfo?.plan == 'LIFETIME'))
               TextButton(
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -314,11 +337,11 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: Text(
                   AppLocalizations.t('Berlangganan Sekarang', 'Subscribe Now'),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 12,
                     color: Colors.white,
                     fontWeight: FontWeight.w400,
-                      height: 1.0,
+                    height: 1.0,
                     decoration: TextDecoration.underline,
                   ),
                 ),

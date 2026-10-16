@@ -5,7 +5,12 @@ import 'core/language_service.dart';
 import 'features/auth/intro_page.dart';
 
 class ColonelApp extends StatelessWidget {
-  const ColonelApp({super.key});
+  const ColonelApp({
+    super.key,
+    this.home = const IntroPage(),
+  });
+
+  final Widget home;
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +164,7 @@ class ColonelApp extends StatelessWidget {
           thickness: 1,
         ),
       ),
-        home: const IntroPage(),
+        home: home,
       );
       },
     );

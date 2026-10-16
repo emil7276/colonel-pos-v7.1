@@ -8,6 +8,7 @@ import '../../core/constants.dart';
 import '../../core/widgets.dart';
 import '../../core/app_localizations.dart';
 import '../../core/utils.dart';
+import '../../core/trial_service.dart';
 import '../../data/database.dart';
 import '../../models/models.dart';
 
@@ -254,6 +255,64 @@ class _MenuPageState extends State<MenuPage> {
               FilledButton(
                 onPressed: () async {
                   try {
+                    // Menu baru adalah titik mulai trial pertama.
+                    // Mengedit menu yang sudah ada tidak memulai trial.
+                    if (p == null) {
+                      final trial = await TrialService.status();
+
+                      if (trial == null) {
+                        if (!dialogContext.mounted) return;
+
+                        final choice = await showDialog<String>(
+                          context: dialogContext,
+                          builder: (choiceContext) => AlertDialog(
+                            title: const Text('Pilih cara melanjutkan'),
+                            content: const Text(
+                              'Coba Gratis untuk mulai masa percobaan, '
+                              'atau pilih Berlangganan / Beli untuk aktivasi.',
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(choiceContext, 'buy'),
+                                child: const Text('Berlangganan / Beli'),
+                              ),
+                              FilledButton(
+                                onPressed: () => Navigator.pop(choiceContext, 'trial'),
+                                child: const Text('Coba Gratis'),
+                              ),
+                            ],
+                          ),
+                        );
+
+                        if (choice == 'buy') {
+                          if (dialogContext.mounted) {
+                            Navigator.pop(dialogContext);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  'Buka halaman aktivasi untuk memasukkan lisensi.',
+                                ),
+                              ),
+                            );
+                          }
+                          return;
+                        }
+
+                        if (choice != 'trial') return;
+                      } else if (!trial.active) {
+                        if (!dialogContext.mounted) return;
+                        Navigator.pop(dialogContext);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Masa trial telah berakhir. Aktivasi diperlukan.',
+                            ),
+                          ),
+                        );
+                        return;
+                      }
+                    }
+
                     await DB.saveProduct(
                       id: p?.id,
                       name: nameController.text.trim(),
@@ -264,6 +323,14 @@ class _MenuPageState extends State<MenuPage> {
                       imagePath: imagePath,
                       barcode: barcodeController.text.trim(),
                     );
+
+                    if (p == null) {
+                      final trial = await TrialService.status();
+                      if (trial == null) {
+                        await TrialService.startIfNeeded();
+                      }
+                    }
+
                     if (dialogContext.mounted) Navigator.pop(dialogContext);
                   } catch (e) {
                     if (!dialogContext.mounted) return;
