@@ -55,5 +55,5 @@ flutter_launcher_icons:
   android: true
   ios: false
   image_path: assets/images/cp_logo_master.png
-  adaptive_icon_background: "#0B1017"
+  adaptive_icon_background: "#000000"
   adaptive_icon_foreground: assets/images/cp_logo_master.png

@@ -202,7 +202,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       Image.asset(
-                        'assets/images/cp_logo_master.png',
+                        'assets/images/cp_logo.png',
                         width: 118,
                         height: 118,
                         fit: BoxFit.contain,
