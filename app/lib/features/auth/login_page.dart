@@ -184,7 +184,32 @@ class _LoginPageState extends State<LoginPage> {
               constraints: const BoxConstraints(maxWidth: 430),
               child: Column(
                 children: [
-                  const CpLogo(size: 118, charcoal: true),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        width: 138,
+                        height: 138,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: RadialGradient(
+                            colors: [
+                              Color(0x332F8FE8),
+                              Color(0x142F8FE8),
+                              Color(0x002F8FE8),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Image.asset(
+                        'assets/images/cp_logo_master_before.png',
+                        width: 118,
+                        height: 118,
+                        fit: BoxFit.contain,
+                        filterQuality: FilterQuality.high,
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 16),
                   Text(
                     'CP POS',
