@@ -45,6 +45,7 @@ flutter:
     - lib/features/home/assistant_question_bank_v72.json
     - assets/images/cp_logo.png
     - assets/images/cp_logo_master.png
+    - assets/images/cp_logo_master_before.png
     - assets/images/cp_pos_transaction.png
     - assets/images/cart_icon.png
     - assets/images/cart_icon.jpg
