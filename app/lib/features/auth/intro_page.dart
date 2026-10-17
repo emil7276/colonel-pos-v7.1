@@ -116,7 +116,7 @@ class _IntroPageState extends State<IntroPage>
                     );
                   },
                   child: Image.asset(
-                    'assets/images/cp_logo_master_before.png',
+                    'assets/images/cp_logo_master.png',
                     width: 150,
                     height: 150,
                     fit: BoxFit.contain,
