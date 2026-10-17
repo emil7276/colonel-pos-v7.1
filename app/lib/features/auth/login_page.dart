@@ -201,12 +201,15 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      Image.asset(
-                        'assets/images/cp_logo_master.png',
-                        width: 118,
-                        height: 118,
-                        fit: BoxFit.contain,
-                        filterQuality: FilterQuality.high,
+                      Transform.translate(
+                        offset: const Offset(0, 10),
+                        child: Image.asset(
+                          'assets/images/cp_logo_master.png',
+                          width: 132,
+                          height: 132,
+                          fit: BoxFit.contain,
+                          filterQuality: FilterQuality.high,
+                        ),
                       ),
                     ],
                   ),
