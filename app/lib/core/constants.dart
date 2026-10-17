@@ -20,4 +20,4 @@ const copyright1 = 'Copyright © CP Colonel Pos';
 const copyright2 = 'Hak cipta dilindungi Undang-Undang';
 const appName = 'CP POS';
 const appVersion = '7.2.0';
-const logoAsset = 'assets/images/cp_logo.png';
+const logoAsset = 'assets/images/cp_logo_master.png';
